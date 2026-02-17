@@ -1,37 +1,61 @@
-@props(['title', 'icon', 'description', 'price'])
+@props([
+    'title', 
+    'desc', 
+    'img', 
+    'color' => 'primary',
+    'badge' => 'Premium Service'
+])
 
-<div class="flex flex-col group cursor-pointer">
-    <!-- Visual Box -->
-    <div class="relative aspect-square bg-[#F0F2F5] rounded-[2.5rem] mb-8 overflow-hidden transition-all duration-500 group-hover:bg-primary/5 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-primary/10">
-        <!-- Abstract Shape/Icon Container -->
-        <div class="absolute inset-0 flex items-center justify-center p-12">
-            <div class="w-full h-full bg-white rounded-3xl shadow-sm flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500 group-hover:bg-primary group-hover:text-white">
-                <div class="w-16 h-16 sm:w-20 sm:h-20">
-                    {{ $icon }}
-                </div>
-            </div>
-        </div>
+<div {{ $attributes->merge(['class' => 'group relative bg-white rounded-[2.5rem] overflow-hidden shadow-xl shadow-gray-200/50 hover:shadow-2xl transition-all duration-500 hover:-translate-y-3']) }}
+     @class([
+         'hover:shadow-primary/10' => $color === 'primary',
+         'hover:shadow-accent/10' => $color === 'accent',
+     ])>
+    
+    <!-- Image Area -->
+    <div class="h-64 overflow-hidden relative">
+        <img src="{{ $img }}" alt="{{ $title }}" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
+        <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white to-transparent"></div>
         
-        <!-- Price Tag (Float subtlely) -->
-        <div class="absolute top-6 right-6 px-4 py-1.5 bg-white/80 backdrop-blur-md rounded-full text-[10px] font-black text-secondary uppercase tracking-widest border border-white/20 shadow-sm">
-            Mulai {{ $price }}
+        <!-- Floating Category Label -->
+        <div class="absolute top-6 left-6 px-4 py-1.5 bg-white/90 backdrop-blur-md rounded-full text-[10px] font-black text-secondary uppercase tracking-widest border border-white/20 shadow-sm">
+            {{ $badge }}
         </div>
     </div>
 
-    <!-- Text Content (Below) -->
-    <div class="px-2">
-        <h3 class="font-heading font-black text-2xl text-secondary mb-3 group-hover:text-primary transition-colors tracking-tight">
-            {{ $title }}.
+    <!-- Content Area -->
+    <div class="p-10 pt-4 relative">
+        <!-- Accent Line -->
+        <div @class([
+            'w-12 h-1 rounded-full mb-6 group-hover:w-20 transition-all duration-500',
+            'bg-primary' => $color === 'primary',
+            'bg-accent' => $color === 'accent',
+        ])></div>
+        
+        <h3 @class([
+            'text-2xl font-heading font-black text-secondary mb-4 leading-tight transition-colors',
+            'group-hover:text-primary' => $color === 'primary',
+            'group-hover:text-accent' => $color === 'accent',
+        ])>
+            {{ $title }}
         </h3>
-        <p class="text-gray-500 text-base leading-relaxed font-medium opacity-80 group-hover:opacity-100 transition-opacity">
-            {{ $description }}
+        <p class="text-gray-500 text-sm leading-relaxed mb-8 opacity-80 group-hover:opacity-100 transition-opacity">
+            {{ $desc }}
         </p>
         
         <!-- CTA Link -->
-        <a href="https://wa.me/6281234567890?text=Halo+Kak,+mau+tanya+dong+tentang+{{ urlencode($title) }}" 
-           class="inline-flex items-center mt-6 text-primary font-bold text-sm group-hover:gap-3 transition-all">
-            Konsultasi Sekarang 
-            <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <a href="https://wa.me/6281234567890?text=Halo%20Rooter%20Green%2C%20mau%20order%20{{ urlencode($title) }}" 
+           @class([
+               'inline-flex items-center font-bold text-sm tracking-tight group/link',
+               'text-primary' => $color === 'primary',
+               'text-accent' => $color === 'accent',
+           ])>
+            <span @class([
+                'border-b-2 pb-1 transition-all',
+                'border-primary/20 group-hover/link:border-primary' => $color === 'primary',
+                'border-accent/20 group-hover/link:border-accent' => $color === 'accent',
+            ])>Hubungi Sekarang</span>
+            <svg class="w-4 h-4 ml-2 transform group-hover/link:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
     </div>
 </div>
