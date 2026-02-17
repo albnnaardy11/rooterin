@@ -72,48 +72,48 @@
                 <!-- Decorative Background Element -->
                 <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
                 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 relative z-10">
-                    <!-- Item 1: Tanpa Soda Api -->
-                    <div class="flex items-center gap-6 group cursor-default">
-                        <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-lg shadow-primary/5">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a2 2 0 00-1.96 1.414l-.477 2.387a2 2 0 00.547 1.962l1.414 1.414a2 2 0 002.388.547l.477-.238a2 2 0 001.022-1.547V15a2 2 0 00-2-2z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 relative z-10">
+                    <!-- Item 1: Eco-Safe -->
+                    <div class="flex flex-col items-center group cursor-default">
+                        <div class="w-20 h-20 mb-6 bg-white rounded-3xl flex items-center justify-center text-primary border border-gray-100 shadow-xl shadow-gray-200/50 transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-primary/20 group-hover:border-primary/20">
+                            <i class="ri-leaf-fill text-4xl transition-transform duration-500 group-hover:scale-110"></i>
                         </div>
-                        <div>
-                            <div class="text-secondary font-black text-sm uppercase tracking-wider mb-1">100% Eco-Safe</div>
-                            <div class="text-gray-400 text-xs font-bold font-sans">Tanpa Soda Api</div>
-                        </div>
-                    </div>
-
-                    <!-- Item 2: Teknisi Ramah -->
-                    <div class="flex items-center gap-6 group cursor-default">
-                        <div class="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all duration-500 shadow-lg shadow-accent/5">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </div>
-                        <div>
-                            <div class="text-secondary font-black text-sm uppercase tracking-wider mb-1">Expert Team</div>
-                            <div class="text-gray-400 text-xs font-bold font-sans">Teknisi Ramah</div>
+                        <div class="text-center">
+                            <div class="text-secondary font-black text-sm uppercase tracking-wider mb-1">100% Aman & Tanpa Kimia</div>
+                            <div class="text-gray-400 text-[11px] font-bold font-sans italic">Pipa Awet, Tanpa Soda Api</div>
                         </div>
                     </div>
 
-                    <!-- Item 3: Respon Cepat -->
-                    <div class="flex items-center gap-6 group cursor-default">
-                        <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-lg shadow-primary/5">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <!-- Item 2: Expert Team -->
+                    <div class="flex flex-col items-center group cursor-default">
+                        <div class="w-20 h-20 mb-6 bg-white rounded-3xl flex items-center justify-center text-accent border border-gray-100 shadow-xl shadow-gray-200/50 transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-accent/20 group-hover:border-accent/20">
+                            <i class="ri-verified-badge-fill text-4xl transition-transform duration-500 group-hover:scale-110"></i>
                         </div>
-                        <div>
-                            <div class="text-secondary font-black text-sm uppercase tracking-wider mb-1">Fast Response</div>
-                            <div class="text-gray-400 text-xs font-bold font-sans">Tiba Dalam 15 Menit</div>
+                        <div class="text-center">
+                            <div class="text-secondary font-black text-sm uppercase tracking-wider mb-1">Teknisi Ahli Terlisensi</div>
+                            <div class="text-gray-400 text-[11px] font-bold font-sans italic">Handal, Jujur, & Profesional</div>
+                        </div>
+                    </div>
+
+                    <!-- Item 3: Fast Response -->
+                    <div class="flex flex-col items-center group cursor-default">
+                        <div class="w-20 h-20 mb-6 bg-white rounded-3xl flex items-center justify-center text-primary border border-gray-100 shadow-xl shadow-gray-200/50 transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-primary/20 group-hover:border-primary/20">
+                            <i class="ri-flashlight-fill text-4xl transition-transform duration-500 group-hover:scale-110"></i>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-secondary font-black text-sm uppercase tracking-wider mb-1">Pasti Tiba 15 Menit</div>
+                            <div class="text-gray-400 text-[11px] font-bold font-sans italic">Garansi Respon Super Kilat</div>
                         </div>
                     </div>
 
                     <!-- Item 4: Langsung Chat -->
-                    <div class="flex items-center gap-6 group cursor-default">
-                        <div class="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all duration-500 shadow-lg shadow-accent/5">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <div class="flex flex-col items-center group cursor-default">
+                        <div class="w-20 h-20 mb-6 bg-white rounded-3xl flex items-center justify-center text-accent border border-gray-100 shadow-xl shadow-gray-200/50 transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-accent/20 group-hover:border-accent/20">
+                            <i class="ri-chat-voice-fill text-4xl transition-transform duration-500 group-hover:scale-110"></i>
                         </div>
-                        <div>
-                            <div class="text-secondary font-black text-sm uppercase tracking-wider mb-1">Direct Chat</div>
-                            <div class="text-gray-400 text-xs font-bold font-sans">Konsultasi Gratis</div>
+                        <div class="text-center">
+                            <div class="text-secondary font-black text-sm uppercase tracking-wider mb-1">Solusi Chat Sekarang</div>
+                            <div class="text-gray-400 text-[11px] font-bold font-sans italic">Konsultasi Gratis Tanpa Biaya</div>
                         </div>
                     </div>
                 </div>

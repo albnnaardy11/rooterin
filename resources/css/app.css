@@ -1,5 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap');
 @import 'tailwindcss';
+@import 'remixicon/fonts/remixicon.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -14,4 +15,27 @@
     --color-secondary: #0F2A44;
     --color-accent: #2EC5FF;
     --color-neutral: #F4F6F8;
+}
+
+/* Global Firm Typography */
+@layer base {
+    html {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+    
+    body {
+        @apply font-sans font-semibold text-secondary;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-heading font-black tracking-tight;
+    }
+
+    /* Prevent icon fonts from being 'faux-bolded' which causes pixelation */
+    [class^="ri-"], [class*=" ri-"] {
+        font-weight: normal !important;
+        -webkit-font-smoothing: antialiased;
+    }
 }
