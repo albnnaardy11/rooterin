@@ -1,130 +1,124 @@
-<section class="py-32 bg-stone-50 overflow-hidden relative">
-    <!-- Eco-Friendly Background DNA -->
-    <div class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none"></div>
-    <div class="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px] -translate-x-1/2 pointer-events-none"></div>
+<section class="py-32 bg-secondary relative overflow-hidden">
+    <!-- 1. Cinematic Background Decor -->
+    <div class="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none"></div>
+    <div class="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-accent/10 rounded-full blur-[150px] pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="flex flex-col lg:flex-row gap-20 items-stretch">
+        <!-- Section Header: Centered & High Impact -->
+        <div class="text-center mb-24">
+            <div class="inline-flex items-center gap-4 mb-6 px-6 py-2 rounded-full border border-primary/30 bg-primary/5">
+                <i class="ri-flask-fill text-primary"></i>
+                <span class="text-primary font-black text-xs uppercase tracking-[0.5em]">Metode & Teknologi</span>
+            </div>
+            <h2 class="text-5xl sm:text-7xl font-heading font-black text-white leading-tight tracking-tighter">
+                Sains Dibalik <span class="text-primary italic">Solusi Kami.</span>
+            </h2>
+            <p class="text-gray-400 mt-6 max-w-2xl mx-auto font-medium text-lg leading-relaxed">
+                Kami menggabungkan keahlian teknis bertahun-tahun dengan peralatan mutakhir untuk memastikan saluran Anda kembali normal tanpa merusak properti.
+            </p>
+        </div>
+
+        <!-- The "Process Lab" Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
-            <!-- 1. Left: Massive Premium Imagery (Balanced Height) -->
-            <div class="w-full lg:w-5/12 relative min-h-[600px] lg:min-h-full flex">
-                <div class="relative w-full group overflow-hidden rounded-[3rem] shadow-2xl border-8 border-white">
-                    <img src="https://images.unsplash.com/photo-1542013936693-884638332954?q=80&w=1200&auto=format&fit=crop" 
-                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" 
-                         alt="Rooter Green Professional Methodology">
-                    
-                    <!-- High Contrast Benefit Box -->
-                    <div class="absolute inset-x-0 bottom-0 p-8 sm:p-12 bg-gradient-to-t from-secondary via-secondary/90 to-transparent">
-                        <div class="bg-secondary/80 backdrop-blur-3xl p-10 rounded-[2.5rem] border border-white/10 shadow-2xl">
-                            <h5 class="text-white font-heading font-black text-2xl mb-8 uppercase tracking-widest border-l-4 border-primary pl-6">
-                                Keuntungan Untuk Anda
-                            </h5>
-                            <div class="space-y-5">
-                                @foreach([
-                                    'Aman untuk septic tank & pipa rumah', 
-                                    'Tanpa penggunaan bahan kimia keras', 
-                                    'Proses pengerjaan ramah kesehatan', 
-                                    'Hasil pembersihan jauh lebih tahan lama'
-                                ] as $benefit)
-                                    <div class="flex items-center gap-5 group/item">
-                                        <div class="w-7 h-7 shrink-0 rounded-full bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/30 group-hover/item:scale-110 transition-transform">
-                                            <i class="ri-check-line text-sm font-bold"></i>
-                                        </div>
-                                        <span class="text-white font-bold text-sm sm:text-base leading-tight">{{ $benefit }}</span>
-                                    </div>
-                                @endforeach
+            <!-- A. Left Column: The 4 Core Techniques (Interactive Sidebar) -->
+            <div class="lg:col-span-5 space-y-6">
+                <h4 class="text-white/40 font-black text-xs uppercase tracking-[0.4em] mb-10 flex items-center gap-4">
+                    The Toolkit
+                    <span class="flex-grow h-[1px] bg-white/10"></span>
+                </h4>
+
+                @foreach([
+                    ['icon' => 'ri-cpu-line', 'title' => 'Mesin Rooter / Auger', 'desc' => 'Pembersihan pipa mekanik presisi tinggi tanpa perlu pembongkaran.', 'color' => 'primary'],
+                    ['icon' => 'ri-water-flash-line', 'title' => 'Jetting High Pressure', 'desc' => 'Sistem semprotan air 3000 PSI untuk menghancurkan kerak lemak.', 'color' => 'accent'],
+                    ['icon' => 'ri-guide-line', 'title' => 'Spiral Manual Teknis', 'desc' => 'Akurasi pembersihan maksimal untuk sudut pipa yang sulit dijangkau.', 'color' => 'primary text-opacity-50'],
+                    ['icon' => 'ri-eye-line', 'title' => 'Kamera Inspeksi Pipa', 'desc' => 'Visualisasi real-time dalam pipa untuk hasil kerja yang transparan.', 'color' => 'accent text-opacity-50']
+                ] as $tech)
+                    <div class="group relative p-8 rounded-[2.5rem] bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/30 transition-all duration-500 cursor-default">
+                        <!-- Glow Effect on Hover -->
+                        <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 blur-2xl transition-opacity"></div>
+                        
+                        <div class="relative z-10 flex items-start gap-6">
+                            <div class="w-16 h-16 rounded-2xl bg-secondary border border-white/10 flex items-center justify-center text-{{ $tech['color'] }} group-hover:scale-110 transition-transform shadow-2xl">
+                                <i class="{{ $tech['icon'] }} text-3xl"></i>
+                            </div>
+                            <div>
+                                <h5 class="text-white font-black text-lg mb-2 group-hover:text-primary transition-colors">{{ $tech['title'] }}</h5>
+                                <p class="text-gray-400 text-xs font-medium leading-relaxed">{{ $tech['desc'] }}</p>
                             </div>
                         </div>
                     </div>
+                @endforeach
+            </div>
 
-                    <!-- Modernized Eco Badge (Consistent Green Palette) -->
-                    <div class="absolute top-10 right-10 flex items-center gap-3">
-                        <div class="px-6 py-3 bg-primary text-white text-[10px] font-black uppercase tracking-[0.3em] rounded-full shadow-2xl shadow-primary/40 border border-white/20">
-                            100% Eco-Friendly
+            <!-- B. Right Column: The "Master View" (Large Image & Benefits) -->
+            <div class="lg:col-span-7 sticky top-32">
+                <div class="relative rounded-[4rem] overflow-hidden group shadow-2xl border-4 border-white/5 aspect-[4/5] lg:aspect-auto lg:h-[750px]">
+                    <!-- Main Immersive Image -->
+                    <img src="https://images.unsplash.com/photo-1542013936693-884638332954?q=80&w=1200" 
+                         class="w-full h-full object-cover grayscale opacity-50 transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105 group-hover:opacity-80" 
+                         alt="Scientific Plumbing Methodology">
+                    
+                    <!-- Overlay: Trust Manifesto -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/40 to-transparent"></div>
+                    
+                    <!-- Floating Logic Cards -->
+                    <div class="absolute inset-x-8 bottom-8 p-10 bg-white/10 backdrop-blur-3xl rounded-[3rem] border border-white/20 shadow-2xl">
+                        <div class="flex flex-col md:flex-row items-center gap-10 md:divide-x md:divide-white/10">
+                            <!-- Column 1: Eco Guarantee -->
+                            <div class="flex-1 text-center md:text-left">
+                                <div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center mb-4 mx-auto md:mx-0 shadow-lg shadow-primary/20">
+                                    <i class="ri-leaf-line text-2xl"></i>
+                                </div>
+                                <h6 class="text-white font-black text-xl mb-2 tracking-tight">100% Eco-Safe</h6>
+                                <p class="text-gray-400 text-xs font-medium">Tanpa bahan kimia keras yang merusak struktur pipa bangunan Anda.</p>
+                            </div>
+
+                            <!-- Column 2: Health Focused -->
+                            <div class="flex-1 text-center md:text-left md:pl-10">
+                                <div class="w-12 h-12 rounded-full bg-accent text-white flex items-center justify-center mb-4 mx-auto md:mx-0 shadow-lg shadow-accent/20">
+                                    <i class="ri-shield-heart-line text-2xl"></i>
+                                </div>
+                                <h6 class="text-white font-black text-xl mb-2 tracking-tight">Health First</h6>
+                                <p class="text-gray-400 text-xs font-medium">Metode pengerjaan higienis untuk menjaga keamanan penghuni rumah.</p>
+                            </div>
                         </div>
+
+                        <!-- Progress Line Indicator -->
+                        <div class="mt-10 pt-8 border-t border-white/10 flex flex-wrap justify-center md:justify-start gap-4">
+                             @foreach(['Aman & Teruji', 'Tanpa Bongkar', 'Hasil Permanen', 'Garansi Kepuasan'] as $tag)
+                                <div class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white font-black text-[9px] uppercase tracking-widest">{{ $tag }}</div>
+                             @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Modern Badge -->
+                    <div class="absolute top-10 right-10 flex flex-col items-end gap-2">
+                        <div class="px-6 py-2 bg-primary text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-2xl">Premium Quality</div>
+                        <div class="px-6 py-2 bg-secondary/80 text-white text-[10px] font-black uppercase tracking-widest rounded-full backdrop-blur-md">Trusted Method</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. Right: Content & Redesigned Hierarchy -->
-            <div class="w-full lg:w-7/12 flex flex-col justify-center">
-                <!-- Clean Professional Heading -->
-                <div class="mb-16">
-                    <div class="inline-flex items-center gap-4 mb-6">
-                        <span class="w-12 h-[2px] bg-primary"></span>
-                        <span class="text-primary font-black text-xs uppercase tracking-[0.5em]">Metode & Keunggulan</span>
+        </div>
+
+        <!-- Final Trust Row: Competitive Advantages (Clean Minimal Icons) -->
+        <div class="mt-32 grid grid-cols-2 lg:grid-cols-4 gap-8">
+            @foreach([
+                ['icon' => 'ri-sparkling-fill', 'title' => 'Kerja Bersih', 'sub' => 'Area pengerjaan rapi'],
+                ['icon' => 'ri-user-star-fill', 'title' => 'Master Technician', 'sub' => 'Sertifikasi keahlian'],
+                ['icon' => 'ri-rocket-2-fill', 'title' => 'Speed Service', 'sub' => 'Tiba dalam 45 menit'],
+                ['icon' => 'ri-verified-badge-fill', 'title' => 'Verified Results', 'sub' => 'Laporan inspeksi akhir']
+            ] as $advantage)
+                <div class="flex flex-col items-center text-center p-8 bg-white/5 rounded-[2.5rem] border border-white/10 hover:-translate-y-2 transition-transform shadow-xl">
+                    <div class="w-20 h-20 rounded-[2rem] bg-secondary flex items-center justify-center text-primary mb-6 shadow-2xl group-hover:rotate-6 transition-transform">
+                        <i class="{{ $advantage['icon'] }} text-4xl"></i>
                     </div>
-                    <h2 class="text-4xl sm:text-6xl font-heading font-black text-secondary leading-[1.1] tracking-tight">
-                        Pengerjaan Modern <br> <span class="text-primary italic">Ramah Lingkungan.</span>
-                    </h2>
+                    <h5 class="text-white font-black text-lg mb-1">{{ $advantage['title'] }}</h5>
+                    <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest">{{ $advantage['sub'] }}</p>
                 </div>
-
-                <div class="space-y-16">
-                    <!-- Section A: Technical Methods -->
-                    <div class="space-y-8">
-                        <h4 class="text-secondary/40 font-black text-xs uppercase tracking-[0.4em] flex items-center gap-4">
-                            Teknik Profesional Kami
-                            <span class="flex-grow h-[1px] bg-gray-200"></span>
-                        </h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            @foreach([
-                                ['icon' => 'ri-settings-4-fill', 'title' => 'Mesin Rooter / Auger', 'desc' => 'Pembersihan pipa mekanik tanpa bongkar.'],
-                                ['icon' => 'ri-water-flash-fill', 'title' => 'Jet Cleaner High Pressure', 'desc' => 'Semprotan air tekanan tinggi untuk lemak.'],
-                                ['icon' => 'ri-clockwise-2-fill', 'title' => 'Spiral Manual Teknis', 'desc' => 'Pembersihan detail untuk celah sempit.'],
-                                ['icon' => 'ri-camera-3-fill', 'title' => 'Kamera Inspeksi Pipa', 'desc' => 'Mendeteksi titik mampet dengan akurat.']
-                            ] as $tech)
-                                <div class="flex gap-5 p-6 rounded-3xl bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-500">
-                                    <div class="w-14 h-14 shrink-0 bg-stone-50 text-primary rounded-2xl flex items-center justify-center shadow-inner group-hover:bg-primary group-hover:text-white transition-colors">
-                                        <i class="{{ $tech['icon'] }} text-2xl"></i>
-                                    </div>
-                                    <div>
-                                        <h5 class="text-secondary font-black text-sm uppercase mb-1">{{ $tech['title'] }}</h5>
-                                        <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest leading-relaxed">{{ $tech['desc'] }}</p>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                        <div class="bg-primary/5 p-6 rounded-2xl border border-primary/10 flex items-center gap-4">
-                             <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shrink-0">
-                                <i class="ri-forbid-2-fill text-xl"></i>
-                             </div>
-                             <p class="text-secondary font-bold text-xs">
-                                <span class="text-primary font-black uppercase tracking-widest mr-2">Garansi Keamanan :</span>
-                                Tanpa soda api & minim bahan kimia keras bagi penghuni rumah.
-                             </p>
-                        </div>
-                    </div>
-
-                    <!-- Section B: Keunggulan Utama (The Hero Row) -->
-                    <div class="space-y-8 pt-8 border-t border-gray-100">
-                        <h4 class="text-secondary/40 font-black text-xs uppercase tracking-[0.4em] flex items-center gap-4">
-                            Kenapa Rooter Green?
-                            <span class="flex-grow h-[1px] bg-gray-200"></span>
-                        </h4>
-                        <!-- Large, Wide Icon Layout for Dominance -->
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-                            @foreach([
-                                ['icon' => 'ri-leaf-fill', 'text' => 'Ramah Lingkungan'],
-                                ['icon' => 'ri-sparkling-fill', 'text' => 'Pengerjaan Bersih & Rapi'],
-                                ['icon' => 'ri-user-star-fill', 'text' => 'Teknisi Profesional'],
-                                ['icon' => 'ri-heart-pulse-fill', 'text' => 'Aman & Sehat'],
-                                ['icon' => 'ri-cpu-fill', 'text' => 'Teknologi Modern'],
-                                ['icon' => 'ri-flashlight-fill', 'text' => 'Respons Cepat 24 Jam'],
-                                ['icon' => 'ri-money-dollar-circle-fill', 'text' => 'Harga Transparan'],
-                                ['icon' => 'ri-shield-check-fill', 'text' => 'Hasil Tahan Lama']
-                            ] as $item)
-                                <div class="group flex flex-col items-center p-6 bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 text-center">
-                                    <div class="w-16 h-16 bg-primary/5 text-primary rounded-full flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition-all shadow-lg shadow-primary/5">
-                                        <i class="{{ $item['icon'] }} text-3xl"></i>
-                                    </div>
-                                    <span class="text-secondary font-black text-[9px] sm:text-[10px] uppercase tracking-widest leading-tight">{{ $item['text'] }}</span>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            @endforeach
         </div>
     </div>
 </section>

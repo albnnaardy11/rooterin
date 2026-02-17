@@ -3,7 +3,7 @@
      @scroll.window="scrolled = (window.pageYOffset > 50)"
      class="fixed top-0 left-0 right-0 z-50 pt-4 sm:pt-10 px-3 sm:px-4 transition-all duration-500 ease-in-out">
     
-    <div :class="scrolled ? 'max-w-6xl py-3' : 'max-w-7xl py-5'"
+    <div :class="scrolled ? 'max-w-7xl py-3' : 'max-w-[90rem] py-5'"
          class="mx-auto bg-secondary/80 backdrop-blur-2xl border border-white/10 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500 px-6 sm:px-10 flex items-center justify-between relative">
         
         <!-- Logo Area with Aura -->
@@ -22,9 +22,9 @@
         </div>
 
         <!-- Desktop Menu: Minimal Tech Style -->
-        <div class="hidden lg:flex items-center space-x-2">
-            @foreach(['Tentang' => '/tentang', 'Layanan' => '/#services', 'Teknologi' => '/#technology', 'Wilayah' => '/#coverage'] as $label => $link)
-                <a href="{{ $link }}" class="relative px-5 py-2 text-sm font-black text-white hover:text-primary uppercase tracking-[0.15em] transition-all duration-300 group">
+        <div class="hidden lg:flex items-center space-x-4 xl:space-x-8">
+            @foreach(['Home' => route('home'), 'About Us' => route('about'), 'Service' => route('services'), 'Gallery' => route('gallery'), 'Contact' => route('contact')] as $label => $link)
+                <a href="{{ $link }}" class="relative px-3 xl:px-5 py-2 text-[11px] xl:text-xs font-black text-white hover:text-primary uppercase tracking-[0.2em] transition-all duration-300 group whitespace-nowrap">
                     <span class="relative z-10">{{ $label }}</span>
                     <span class="absolute bottom-0 left-1/2 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full group-hover:left-0 rounded-full"></span>
                 </a>
@@ -32,7 +32,7 @@
         </div>
 
         <!-- Action Area -->
-        <div class="flex items-center gap-3 sm:gap-6">
+        <div class="flex items-center gap-4 sm:gap-8">
             <a href="https://wa.me/6281234567890" 
                class="hidden md:flex group relative items-center gap-4 bg-white/5 hover:bg-primary border border-white/10 hover:border-primary px-6 py-3.5 rounded-2xl transition-all duration-500 whitespace-nowrap overflow-hidden">
                 <div class="text-left relative z-10">
@@ -72,7 +72,7 @@
         
         <div class="relative flex flex-col gap-8 z-20">
             @php $index = 1; @endphp
-            @foreach(['Tentang' => '/tentang', 'Layanan' => '/#services', 'Teknologi' => '/#technology', 'Wilayah' => '/#coverage'] as $label => $link)
+            @foreach(['Home' => route('home'), 'About Us' => route('about'), 'Service' => route('services'), 'Gallery' => route('gallery'), 'Contact' => route('contact')] as $label => $link)
                 <div x-show="open"
                      x-transition:enter="transition ease-out duration-600 delay-[{{ $index * 150 }}ms]"
                      x-transition:enter-start="opacity-0 translate-x-10 rotate-3"

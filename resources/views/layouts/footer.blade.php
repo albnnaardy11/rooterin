@@ -36,14 +36,14 @@
 
             <!-- Links Grid -->
             <div class="lg:w-3/5 grid grid-cols-2 md:grid-cols-3 gap-12 sm:gap-16">
-                <!-- Solutions -->
+                <!-- Navigation -->
                 <div>
                     <h4 class="text-white font-black text-xs uppercase tracking-[0.2em] mb-8 flex items-center gap-3">
-                        <span class="w-2 h-2 bg-primary rounded-full"></span> Solusi
+                        <span class="w-2 h-2 bg-primary rounded-full"></span> Navigasi
                     </h4>
                     <ul class="space-y-5 text-gray-400 font-bold text-sm">
-                        @foreach(['Pipa Dapur', 'Saluran Kamar Mandi', 'WC Mampet', 'Deteksi Kebocoran', 'Rooter Spiral'] as $item)
-                        <li><a href="#" class="hover:text-primary transition-colors hover:translate-x-1 inline-block transition-transform duration-300">{{ $item }}</a></li>
+                        @foreach(['Home' => '/', 'About Us' => '/tentang', 'Service' => '/layanan', 'Gallery' => '/galeri', 'Contact' => '/kontak'] as $label => $link)
+                            <li><a href="{{ $link }}" class="hover:text-primary transition-colors hover:translate-x-1 inline-block transition-transform duration-300">{{ $label }}</a></li>
                         @endforeach
                     </ul>
                 </div>

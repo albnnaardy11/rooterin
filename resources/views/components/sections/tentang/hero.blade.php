@@ -1,17 +1,8 @@
 <section class="relative bg-secondary min-h-screen flex items-center overflow-hidden pt-44 lg:pt-32 pb-20">
-    <!-- 1. Modern Dynamic Background -->
-    <div class="absolute inset-0 z-0">
-        <!-- Soft Mesh Glows -->
-        <div class="absolute top-[20%] left-[10%] w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] animate-pulse"></div>
-        <div class="absolute bottom-[10%] right-[5%] w-[400px] h-[400px] bg-accent/10 rounded-full blur-[100px]"></div>
-        
-        <!-- Large Outline Background Text (Modern Graphic Element) -->
-        <div class="absolute -right-20 top-1/2 -translate-y-1/2 select-none pointer-events-none hidden lg:block">
-            <span class="text-[20rem] font-black text-white/[0.03] leading-none tracking-tighter uppercase rotate-90 origin-center">
-                Rooter
-            </span>
-        </div>
-    </div>
+    <!-- Background Visuals (Consistent Brand DNA) -->
+    <div class="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none"></div>
+    <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-accent/10 rounded-full blur-[120px] pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-24">
