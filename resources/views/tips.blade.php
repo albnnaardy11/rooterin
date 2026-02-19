@@ -2,73 +2,6 @@
     
     @php
         $categories = ['Semua', 'Dapur', 'Kamar Mandi', 'Pipa Industri', 'Tips Hemat'];
-        $posts = [
-            [
-                'title' => 'Cara Darurat Atasi Wastafel Mampet Tanpa Bongkar',
-                'excerpt' => 'Wastafel mampet di tengah malam? Jangan panik. Berikut adalah panduan langkah demi langkah menggunakan bahan rumahan sebelum memanggil teknisi profesional.',
-                'category' => 'Dapur',
-                'readTime' => '5 min read',
-                'img' => 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200&q=80',
-                'date' => '20 Feb 2024',
-                'featured' => true
-            ],
-            [
-                'title' => '5 Tanda Pipa Pembuangan Anda Mulai Berkerak',
-                'excerpt' => 'Kenali tanda-tanda awal sebelum pipa benar-benar mampet total dan merusak lantai Anda.',
-                'category' => 'Tips Hemat',
-                'readTime' => '3 min read',
-                'img' => 'https://images.unsplash.com/photo-1585955123058-930415956a69?w=800&q=80',
-                'featured' => false
-            ],
-            [
-                'title' => 'Mengapa Grease Trap Penting Untuk Restoran?',
-                'excerpt' => 'Untuk pemilik bisnis kuliner, menjaga aliran pipa adalah kunci kelancaran operasional harian.',
-                'category' => 'Pipa Industri',
-                'readTime' => '4 min read',
-                'img' => 'https://images.unsplash.com/photo-1521207418485-99c705420785?w=800&q=80',
-                'featured' => false
-            ],
-            [
-                'title' => 'Bahaya Menggunakan Soda Api Pada Pipa PVC',
-                'excerpt' => 'Banyak yang mengira soda api adalah solusi, padahal bisa berakibat fatal bagi pipa plastik.',
-                'category' => 'Kamar Mandi',
-                'readTime' => '6 min read',
-                'img' => 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&q=80',
-                'featured' => false
-            ],
-            [
-                'title' => 'Cara Membersihkan Toren Air Agar Bebas Lumut',
-                'excerpt' => 'Panduan sterilisasi tangki air untuk menjaga kesehatan air bersih keluarga Anda.',
-                'category' => 'Tips Hemat',
-                'readTime' => '4 min read',
-                'img' => 'https://images.unsplash.com/photo-1542013936693-884638332954?w=800&q=80',
-                'featured' => false
-            ],
-            [
-                'title' => 'Peralatan Plumbing Modern yang Digunakan RooterIN',
-                'excerpt' => 'Mengetahui teknologi di balik layanan kami: dari kamera inspeksi hingga jetting machine.',
-                'category' => 'Pipa Industri',
-                'readTime' => '5 min read',
-                'img' => 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&q=80',
-                'featured' => false
-            ],
-            [
-                'title' => 'Mitos vs Fakta Seputar Saluran Pembuangan',
-                'excerpt' => 'Apakah ampas kopi benar-benar bisa membersihkan pipa? Temukan jawabannya di sini.',
-                'category' => 'Semua',
-                'readTime' => '3 min read',
-                'img' => 'https://images.unsplash.com/photo-1517646287270-a5a9ca602e5c?w=800&q=80',
-                'featured' => false
-            ],
-            [
-                'title' => 'Tips Memilih Kran Air Berkualitas untuk Kamar Mandi',
-                'excerpt' => 'Jangan biarkan kebocoran kecil merusak dompet Anda. Pilih kran yang tahan lama.',
-                'category' => 'Kamar Mandi',
-                'readTime' => '4 min read',
-                'img' => 'https://images.unsplash.com/photo-1584622781564-1d9876a13d10?w=800&q=80',
-                'featured' => false
-            ],
-        ];
     @endphp
 
     {{-- 1. Hero Section - Brand DNA Style --}}
@@ -379,7 +312,7 @@
                                             </div>
                                         </div>
                                         
-                                        <a href="{{ route('tips.detail') }}" class="group/btn flex items-center gap-4 py-4 px-8 bg-secondary text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-primary transition-all shadow-xl shadow-secondary/10 active:scale-95">
+                                        <a :href="'/tips/' + featuredPost.slug" class="group/btn flex items-center gap-4 py-4 px-8 bg-secondary text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-primary transition-all shadow-xl shadow-secondary/10 active:scale-95">
                                             <span>Baca Full Artikel</span>
                                             <div class="w-5 h-5 bg-white/10 rounded-full flex items-center justify-center group-hover/btn:translate-x-1 transition-transform">
                                                 <i class="ri-arrow-right-line text-xs"></i>
@@ -426,7 +359,7 @@
                                             <i class="ri-time-line text-primary text-base"></i>
                                             <span x-text="post.readTime"></span>
                                         </div>
-                                        <a href="{{ route('tips.detail') }}" class="btn-circle-premium w-14 h-14 rounded-2xl bg-stone-50 flex items-center justify-center text-secondary shadow-[0_0_20px_white]">
+                                        <a :href="'/tips/' + post.slug" class="btn-circle-premium w-14 h-14 rounded-2xl bg-stone-50 flex items-center justify-center text-secondary shadow-[0_0_20px_white]">
                                             <i class="ri-arrow-right-up-line text-xl hover-arrow hover-arrow-up"></i>
                                         </a>
                                     </div>
@@ -465,7 +398,7 @@
                                 </div>
                                 <h3 class="text-white font-heading font-black text-2xl mb-4 leading-tight">Pipa Mampet Parah?<br><span class="text-primary italic">Jangan Bongkar Sendiri!</span></h3>
                                 <p class="text-gray-400 text-sm mb-8">Tindakan salah bisa merusak struktur pipa. Hubungi teknisi ahli kami sekarang juga.</p>
-                                <x-button href="https://wa.me/6281234567890" variant="primary" class="w-full !py-5 !rounded-2xl group/btn overflow-hidden transition-all hover:scale-[1.02] active:scale-95">
+                                <x-button href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}" variant="primary" class="w-full !py-5 !rounded-2xl group/btn overflow-hidden transition-all hover:scale-[1.02] active:scale-95">
                                     <span class="flex items-center justify-center gap-3">
                                         <i class="ri-whatsapp-line text-xl"></i>
                                         <span class="font-black uppercase tracking-widest text-xs">Panggil Bantuan</span>
@@ -530,7 +463,7 @@
                 </h2>
                 
                 <!-- Large Prominent White Pill Button (Separate Named Group) -->
-                <a href="https://wa.me/6281234567890" 
+                <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}" 
                    class="inline-flex items-center gap-4 sm:gap-6 bg-white px-8 sm:px-12 lg:px-16 py-4 sm:py-5 lg:py-7 rounded-full shadow-[0_30px_60px_rgba(0,0,0,0.4)] hover:bg-primary transition-all duration-500 group/btn active:scale-95">
                     <span class="text-primary group-hover/btn:text-white font-black text-xs sm:text-base lg:text-xl uppercase tracking-widest transition-colors flex items-center gap-3 sm:gap-4">
                         Hubungi Tim Kami

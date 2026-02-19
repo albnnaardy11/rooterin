@@ -97,7 +97,7 @@
                     <span class="text-[8px] text-gray-400 font-black tracking-[0.3em] uppercase">Emergency Support Hub</span>
                 </div>
                 <div class="pl-4">
-                    <a href="tel:081246668749" class="text-xl sm:text-2xl font-black text-white hover:text-primary transition-all duration-300 inline-block tracking-tighter">0812-4666-8749</a>
+                    <a href="tel:{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}" class="text-xl sm:text-2xl font-black text-white hover:text-primary transition-all duration-300 inline-block tracking-tighter">{{ \App\Models\Setting::get('whatsapp_number', '0812-4666-8749') }}</a>
                 </div>
             </div>
         </div>

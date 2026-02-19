@@ -1,17 +1,8 @@
 <x-app-layout title="Cara Darurat Atasi Wastafel Mampet - Tips & Trik RooterIN">
     
-    @php
-        $post = [
-            'title' => 'Cara Darurat Atasi Wastafel Mampet Tanpa Bongkar',
-            'category' => 'Dapur',
-            'date' => '20 Feb 2024',
-            'readTime' => '5 min read',
-            'img' => 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1200&q=80',
-            'author' => 'Budi Santoso',
-            'authorRole' => 'Senior Technician RooterIN',
-            'authorImg' => 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80'
-        ];
-    @endphp
+@php
+    // $post is passed from controller
+@endphp
 
     {{-- 0. Scroll Progress Tracker --}}
     <div x-data="{ 
@@ -54,32 +45,34 @@
                         
                         {{-- Integrated Header Image & Title --}}
                         <div class="relative h-[400px] sm:h-[550px] overflow-hidden group">
-                            <img src="{{ $post['img'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3000ms]">
+                            <img src="{{ $post->featured_image }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3000ms]">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
                             
                             <div class="absolute bottom-12 left-8 right-8 sm:left-16 sm:right-16">
                                 <span class="inline-block px-5 py-2 bg-primary text-white text-[10px] font-black uppercase tracking-widest rounded-full mb-6 shadow-xl shadow-primary/20">
-                                    {{ $post['category'] }}
+                                    {{ $post->category }}
                                 </span>
                                 <h1 class="text-3xl sm:text-5xl lg:text-6xl font-heading font-black text-white leading-[1.1] mb-8 tracking-tighter">
-                                    {{ $post['title'] }}
+                                    {{ $post->title }}
                                 </h1>
                                 <div class="flex items-center gap-6">
                                     <div class="flex items-center gap-3">
-                                        <img src="{{ $post['authorImg'] }}" class="w-10 h-10 rounded-xl border-2 border-white/20 shadow-lg">
+                                        <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-black">
+                                            {{ substr($post->author ?? 'R', 0, 1) }}
+                                        </div>
                                         <div class="text-left">
-                                            <p class="text-white font-black text-[10px] uppercase tracking-wider leading-none">{{ $post['author'] }}</p>
-                                            <p class="text-white/60 text-[8px] font-bold uppercase tracking-widest mt-1">{{ $post['authorRole'] }}</p>
+                                            <p class="text-white font-black text-[10px] uppercase tracking-wider leading-none">{{ $post->author ?? 'RooterIn Team' }}</p>
+                                            <p class="text-white/60 text-[8px] font-bold uppercase tracking-widest mt-1">Plumbing Expert</p>
                                         </div>
                                     </div>
                                     <div class="w-[1px] h-6 bg-white/20"></div>
                                     <div class="text-white/80 font-black text-[9px] uppercase tracking-[0.2em] flex items-center gap-2">
                                         <i class="ri-calendar-event-line text-primary"></i>
-                                        {{ $post['date'] }}
+                                        {{ $post->created_at->format('d M Y') }}
                                     </div>
                                     <div class="text-white/80 font-black text-[9px] uppercase tracking-[0.2em] hidden sm:flex items-center gap-2">
                                         <i class="ri-time-line text-primary"></i>
-                                        {{ $post['readTime'] }}
+                                        {{ ceil(str_word_count($post->content) / 200) }} min read
                                     </div>
                                 </div>
                             </div>
@@ -88,28 +81,7 @@
                         {{-- Article Body --}}
                         <div class="p-8 sm:p-20 pt-16">
                             <div class="prose prose-xl prose-slate max-w-none prose-headings:font-heading prose-headings:font-black prose-headings:text-secondary prose-headings:tracking-tight prose-p:text-gray-600 prose-p:leading-relaxed prose-strong:text-secondary prose-img:rounded-[2.5rem] prose-blockquote:border-l-primary prose-blockquote:bg-stone-50 prose-blockquote:p-10 prose-blockquote:rounded-[2.5rem] prose-blockquote:italic prose-blockquote:font-medium">
-                                <p class="text-2xl font-medium text-gray-500 italic mb-16 border-l-8 border-primary/20 pl-10">
-                                    Wastafel mampet di tengah malam? Jangan panik. Berikut adalah panduan langkah demi langkah menggunakan bahan rumahan sebelum memanggil teknisi profesional.
-                                </p>
-
-                                <h2>1. Gunakan Air Mendidih Secara Berkala</h2>
-                                <p>Langkah termudah yang sering dilupakan adalah menggunakan air panas. Lemak dan sisa sabun yang menumpuk di pipa bisa melunak jika terpapar panas yang cukup tinggi.</p>
-                                <ul>
-                                    <li>Rebus air hingga mendidih (sekitar 2-3 liter).</li>
-                                    <li>Tuangkan secara perlahan ke lubang wastafel.</li>
-                                    <li>Ulangi 2-3 kali hingga air mulai mengalir lancar.</li>
-                                </ul>
-
-                                <h2>2. Campuran Baking Soda dan Cuka</h2>
-                                <p>Reaksi kimia antara bahan basa dan asam dapat menghasilkan tekanan gas yang membantu mendorong penyumbatan ringan.</p>
-                                <blockquote>
-                                    "Jangan pernah mencampur bahan kimia keras seperti soda api dengan cuka, karena reaksi berlebihan dapat menghasilkan gas beracun atau merusak pipa PVC Anda."
-                                </blockquote>
-                                
-                                <img src="https://images.unsplash.com/photo-1542013936693-884638332954?w=1200&q=80" alt="Plumbing check" class="my-16 shadow-2xl">
-
-                                <h2>3. Menggunakan Plunger Profesional</h2>
-                                <p>Teknik manual ini tetap menjadi andalan. Pastikan ada sedikit genangan air agar plunger dapat bekerja secara maksimal menciptakan tekanan vakum yang kuat sehingga sumbatan terangkat.</p>
+                                {!! nl2br(e($post->content)) !!}
                                 
                                 <div class="mt-20 p-10 bg-secondary rounded-[3rem] text-white">
                                     <h3 class="text-white !mt-0">Butuh Bantuan Lebih Lanjut?</h3>
@@ -213,7 +185,7 @@
                 </h2>
                 
                 <!-- Large Prominent White Pill Button (Separate Named Group) -->
-                <a href="https://wa.me/6281234567890" 
+                <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}" 
                    class="inline-flex items-center gap-4 sm:gap-6 bg-white px-8 sm:px-12 lg:px-16 py-4 sm:py-5 lg:py-7 rounded-full shadow-[0_30px_60px_rgba(0,0,0,0.4)] hover:bg-primary transition-all duration-500 group/btn active:scale-95">
                     <span class="text-primary group-hover/btn:text-white font-black text-xs sm:text-base lg:text-xl uppercase tracking-widest transition-colors flex items-center gap-3 sm:gap-4">
                         Hubungi Tim Kami
