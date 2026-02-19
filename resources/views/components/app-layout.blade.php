@@ -5,8 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'RooterIn - Jasa Plumbing Premium') }} - Ahlinya Pipa Mampet</title>
-    <meta name="description" content="Jasa pelancaran pipa mampet tanpa bongkar pertama di Indonesia. Menggunakan teknologi modern, ramah lingkungan, dan bergaransi.">
+    {!! \Artesaos\SEOTools\Facades\SEOTools::generate() !!}
+    
+    {{-- Hreflang Automator --}}
+    {!! $hreflangTags ?? '' !!}
+    
+    {{-- Headless Semantic Entity Graph --}}
+    {!! $semanticSchema ?? '' !!}
+
+    <script>
+        function trackWhatsAppClick(source = 'general') {
+            fetch('/api/track-whatsapp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    url: window.location.href,
+                    source: source
+                })
+            });
+        }
+    </script>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

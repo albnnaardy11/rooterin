@@ -18,6 +18,7 @@
             Konsultasi Gratis, Kak 👋
         </div>
         <a href="https://wa.me/6281234567890?text=Halo%20Kak%2C%20mau%20tanya%20jasa%20pipa%20dong" 
+           onclick="trackWhatsAppClick('sticky')"
            target="_blank"
            class="flex items-center justify-center w-14 h-14 bg-[#25D366] hover:bg-[#20b85a] text-white rounded-full shadow-[0_4px_20px_rgba(37,211,102,0.4)] transition-all duration-300 transform hover:scale-110 group relative">
             <span class="absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-30 animate-ping group-hover:opacity-50"></span>

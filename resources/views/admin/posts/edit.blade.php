@@ -34,6 +34,7 @@
             </div>
 
             <x-admin.seo-fields :model="$post" />
+            <x-admin.seo-checker />
         </div>
 
         <!-- Right: Sidebar Settings -->

@@ -107,8 +107,62 @@
         </div>
     </div>
 
+    <!-- Google Search Console Section -->
+    @if($stats['gsc']['active'])
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Recent Activities -->
+        <div class="lg:col-span-2 bg-slate-900/50 p-10 rounded-[3rem] border border-white/5 backdrop-blur-xl">
+            <div class="flex items-center justify-between mb-10">
+                <div>
+                    <h3 class="text-xl font-heading font-black text-white tracking-tight">Search <span class="text-primary italic">Performance.</span></h3>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Clicks & Impressions (Last 30 Days)</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-primary"></span>
+                        <span class="text-[9px] text-slate-400 font-black uppercase">Clicks</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                        <span class="text-[9px] text-slate-400 font-black uppercase">Impressions</span>
+                    </div>
+                </div>
+            </div>
+            <div class="h-64">
+                <canvas id="gscChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-slate-900/50 p-10 rounded-[3rem] border border-white/5 backdrop-blur-xl space-y-8">
+            <h3 class="text-xl font-heading font-black text-white tracking-tight">Top <span class="text-primary italic">Queries.</span></h3>
+            <div class="space-y-4">
+                @foreach($stats['gsc']['top_queries'] as $q)
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-white truncate max-w-[70%]">{{ $q->getKeys()[0] }}</span>
+                        <span class="text-[9px] font-black text-primary px-2 py-0.5 bg-primary/10 rounded-full">
+                            Pos: {{ round($q->getPosition(), 1) }}
+                        </span>
+                    </div>
+                    <div class="flex justify-between text-[9px] font-black uppercase text-slate-500 tracking-widest">
+                        <span>Clicks: {{ $q->getClicks() }}</span>
+                        <span>CTR: {{ round($q->getCtr() * 100, 1) }}%</span>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    @else
+    <div class="p-8 bg-amber-500/10 border border-amber-500/20 rounded-3xl flex items-center gap-6">
+        <div class="w-12 h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-500">
+            <i class="ri-alert-line text-2xl"></i>
+        </div>
+        <div>
+            <h4 class="text-white font-bold">Google Search Console Not Connected</h4>
+            <p class="text-xs text-slate-500 mt-1">Please configure your Google Service Account to view live search performance metrics.</p>
+        </div>
+    </div>
+    @endif
         <div class="lg:col-span-2 space-y-6">
             <div class="flex items-center justify-between px-2">
                 <h3 class="text-xl font-heading font-black text-white tracking-tight">Recent <span class="text-primary italic">Articles.</span></h3>
@@ -213,5 +267,52 @@
             }
         }
     });
+
+    @if($stats['gsc']['active'])
+    new Chart(document.getElementById('gscChart'), {
+        type: 'line',
+        data: {
+            labels: @js($stats['gsc']['labels']),
+            datasets: [
+                {
+                    label: 'Clicks',
+                    data: @js($stats['gsc']['clicks']),
+                    borderColor: '#1FAF5A',
+                    backgroundColor: 'rgba(31, 175, 90, 0.1)',
+                    borderWidth: 4,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                },
+                {
+                    label: 'Impressions',
+                    data: @js($stats['gsc']['impressions']),
+                    borderColor: '#6366f1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.05)',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#64748b', font: { size: 10, weight: '900' } }
+                },
+                y: {
+                    grid: { color: 'rgba(255,255,255,0.05)' },
+                    ticks: { color: '#64748b', font: { size: 10, weight: '700' } }
+                }
+            }
+        }
+    });
+    @endif
 </script>
 @endpush

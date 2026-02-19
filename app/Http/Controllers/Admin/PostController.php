@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\PostRepositoryInterface;
+use App\Services\Image\ImageOptimizationService;
+use App\Services\Seo\GoogleIndexingService;
+use App\Services\Seo\SitemapService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -11,10 +14,20 @@ use Illuminate\Support\Facades\Storage;
 class PostController extends Controller
 {
     protected $postRepo;
+    protected $imageService;
+    protected $indexingService;
+    protected $sitemapService;
 
-    public function __construct(PostRepositoryInterface $postRepo)
-    {
+    public function __construct(
+        PostRepositoryInterface $postRepo,
+        ImageOptimizationService $imageService,
+        GoogleIndexingService $indexingService,
+        SitemapService $sitemapService
+    ) {
         $this->postRepo = $postRepo;
+        $this->imageService = $imageService;
+        $this->indexingService = $indexingService;
+        $this->sitemapService = $sitemapService;
     }
 
     public function index()
@@ -35,14 +48,16 @@ class PostController extends Controller
             'category' => 'required',
             'content' => 'required',
             'status' => 'required|in:draft,published',
-            'featured_image' => 'nullable|image|max:2048',
+            'featured_image' => 'nullable|image|max:5120',
         ]);
 
         $validated['slug'] = Str::slug($request->title);
         
         if ($request->hasFile('featured_image')) {
-            $path = $request->file('featured_image')->store('posts', 'public');
-            $validated['featured_image'] = '/storage/' . $path;
+            $validated['featured_image'] = $this->imageService->optimize(
+                $request->file('featured_image'), 
+                'posts'
+            );
         }
 
         $post = $this->postRepo->create($validated);
@@ -51,7 +66,13 @@ class PostController extends Controller
             $post->seo()->create($request->seo);
         }
 
-        return redirect()->route('admin.posts.index')->with('success', 'Article created successfully.');
+        // SEO Automation
+        if ($post->status === 'published') {
+            $this->sitemapService->generate();
+            $this->indexingService->updateUrl(url("/tips/{$post->slug}"));
+        }
+
+        return redirect()->route('admin.posts.index')->with('success', 'Article created and indexed successfully.');
     }
 
     public function edit($id)
@@ -69,17 +90,20 @@ class PostController extends Controller
             'category' => 'required',
             'content' => 'required',
             'status' => 'required|in:draft,published',
-            'featured_image' => 'nullable|image|max:2048',
+            'featured_image' => 'nullable|image|max:5120',
         ]);
 
         $validated['slug'] = Str::slug($request->title);
         
         if ($request->hasFile('featured_image')) {
+            // Delete old image if exists
             if ($post->featured_image && strpos($post->featured_image, '/storage/') === 0) {
                 Storage::disk('public')->delete(str_replace('/storage/', '', $post->featured_image));
             }
-            $path = $request->file('featured_image')->store('posts', 'public');
-            $validated['featured_image'] = '/storage/' . $path;
+            $validated['featured_image'] = $this->imageService->optimize(
+                $request->file('featured_image'), 
+                'posts'
+            );
         }
 
         $this->postRepo->update($id, $validated);
@@ -88,17 +112,30 @@ class PostController extends Controller
             $post->seo()->updateOrCreate([], $request->seo);
         }
 
-        return redirect()->route('admin.posts.index')->with('success', 'Article updated successfully.');
+        // SEO Automation
+        if ($validated['status'] === 'published') {
+            $this->sitemapService->generate();
+            $this->indexingService->updateUrl(url("/tips/{$post->slug}"));
+        }
+
+        return redirect()->route('admin.posts.index')->with('success', 'Article updated and re-indexed.');
     }
 
     public function destroy($id)
     {
         $post = $this->postRepo->find($id);
+        
         if ($post->featured_image && strpos($post->featured_image, '/storage/') === 0) {
             Storage::disk('public')->delete(str_replace('/storage/', '', $post->featured_image));
         }
+        
+        $url = url("/tips/{$post->slug}");
         $this->postRepo->delete($id);
 
-        return redirect()->route('admin.posts.index')->with('success', 'Article deleted successfully.');
+        // SEO Automation
+        $this->sitemapService->generate();
+        $this->indexingService->updateUrl($url, 'URL_DELETED');
+
+        return redirect()->route('admin.posts.index')->with('success', 'Article deleted and removed from index.');
     }
 }

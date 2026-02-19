@@ -33,6 +33,7 @@
             </div>
 
             <x-admin.seo-fields />
+            <x-admin.seo-checker />
         </div>
 
         <!-- Right: Sidebar Settings -->

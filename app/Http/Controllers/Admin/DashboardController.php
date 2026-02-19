@@ -8,11 +8,19 @@ use App\Models\Service;
 use App\Models\Project;
 use App\Models\Message;
 use App\Models\VisitorLog;
+use App\Services\Seo\GoogleSearchConsoleService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
+    protected $gscService;
+
+    public function __construct(GoogleSearchConsoleService $gscService)
+    {
+        $this->gscService = $gscService;
+    }
+
     public function index()
     {
         $stats = [
@@ -23,7 +31,7 @@ class DashboardController extends Controller
             'recent_posts' => Post::latest()->take(5)->get(),
             'recent_messages' => Message::latest()->take(5)->get(),
             
-            // Analytics
+            // Local Analytics
             'total_views' => VisitorLog::count(),
             'views_today' => VisitorLog::whereDate('visited_at', today())->count(),
             'top_pages' => VisitorLog::select('url', DB::raw('count(*) as total'))
@@ -32,9 +40,39 @@ class DashboardController extends Controller
                             ->take(5)
                             ->get(),
             'visitor_chart' => $this->getVisitorChartData(),
+
+            // Google Search Console integration
+            'gsc' => $this->getGscStats()
         ];
 
         return view('admin.dashboard', compact('stats'));
+    }
+
+    private function getGscStats()
+    {
+        $performance = $this->gscService->getPerformanceStats(30);
+        
+        if (!$performance['active']) {
+            return ['active' => false];
+        }
+
+        $labels = [];
+        $clicks = [];
+        $impressions = [];
+
+        foreach ($performance['rows'] as $row) {
+            $labels[] = date('M d', strtotime($row->getKeys()[0]));
+            $clicks[] = $row->getClicks();
+            $impressions[] = $row->getImpressions();
+        }
+
+        return [
+            'active' => true,
+            'labels' => $labels,
+            'clicks' => $clicks,
+            'impressions' => $impressions,
+            'top_queries' => $this->gscService->getTopQueries(5)
+        ];
     }
 
     private function getVisitorChartData()

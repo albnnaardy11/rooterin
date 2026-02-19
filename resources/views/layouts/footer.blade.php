@@ -50,12 +50,16 @@
                 <!-- Support -->
                 <div>
                     <h4 class="text-white font-black text-xs uppercase tracking-[0.2em] mb-8 flex items-center gap-3">
-                        <span class="w-2 h-2 bg-accent rounded-full"></span> Dukungan
+                        <span class="w-2 h-2 bg-accent rounded-full"></span> Jangkauan
                     </h4>
-                    <ul class="space-y-5 text-gray-400 font-bold text-sm">
-                        @foreach(['Jangkauan Wilayah', 'Daftar Harga', 'Promo Terbaru', 'Karir Teknisi'] as $item)
-                        <li><a href="#" class="hover:text-accent transition-colors hover:translate-x-1 inline-block transition-transform duration-300">{{ $item }}</a></li>
+                    <ul class="space-y-4 text-gray-400 font-bold text-[11px] uppercase tracking-wider">
+                        @php
+                            $targetCities = \App\Models\SeoCity::where('is_active', true)->limit(5)->get();
+                        @endphp
+                        @foreach($targetCities as $city)
+                        <li><a href="{{ route('local.city', $city->slug) }}" class="hover:text-accent transition-colors">RooterIn {{ $city->name }}</a></li>
                         @endforeach
+                        <li><a href="{{ route('services') }}" class="text-white/30 hover:text-accent italic">Lihat Semua Wilayah...</a></li>
                     </ul>
                 </div>
                 <!-- Contact (Unique Icon Style) -->

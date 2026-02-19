@@ -14,7 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'track' => \App\Http\Middleware\TrackVisitors::class,
         ]);
+        $middleware->append(\App\Http\Middleware\PreRenderMiddleware::class);
         $middleware->append(\App\Http\Middleware\TrackVisitors::class);
+        $middleware->append(\App\Http\Middleware\SeoRedirectMiddleware::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
