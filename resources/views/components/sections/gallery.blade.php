@@ -37,72 +37,100 @@
     
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header Section -->
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-10 mb-16 sm:mb-24">
             <div class="max-w-2xl">
                 <x-section-heading :title="$title" :subtitle="$subtitle" align="left" />
             </div>
             
-            <!-- Category Filters -->
-            <div class="relative bg-white/50 backdrop-blur-md p-1.5 rounded-full border border-gray-100 flex flex-wrap items-center gap-1 shadow-sm">
-                @foreach(['all' => 'Terbaru', 'Residential' => 'Residential', 'Commercial' => 'Commercial'] as $key => $label)
-                    <button @click="activeCategory = '{{ $key }}'" 
-                            :class="activeCategory === '{{ $key }}' ? 'text-white bg-primary shadow-lg shadow-primary/20 scale-105' : 'text-gray-400 hover:text-primary hover:bg-primary/5'"
-                            class="relative px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-[0.2em] transition-all duration-500 z-10 flex items-center gap-2">
-                        <template x-if="activeCategory === '{{ $key }}'">
-                            <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
-                        </template>
-                        {{ $label }}
-                    </button>
-                @endforeach
+            <!-- Category Filters - Enhanced for Mobile -->
+            <div class="flex items-center">
+                <div class="inline-flex bg-white/40 backdrop-blur-xl p-1.5 rounded-2xl sm:rounded-full border border-gray-100/50 shadow-sm overflow-x-auto no-scrollbar max-w-full">
+                    <div class="flex items-center gap-1 min-w-max">
+                        @foreach(['all' => 'Terbaru', 'Residential' => 'Residential', 'Commercial' => 'Commercial'] as $key => $label)
+                            <button @click="activeCategory = '{{ $key }}'" 
+                                    :class="activeCategory === '{{ $key }}' ? 'text-white bg-primary shadow-lg shadow-primary/20 scale-105' : 'text-secondary/40 hover:text-primary hover:bg-primary/5'"
+                                    class="relative px-6 sm:px-10 py-3 rounded-xl sm:rounded-full font-black text-[9px] uppercase tracking-[0.25em] transition-all duration-500 z-10 flex items-center gap-2 whitespace-nowrap">
+                                <template x-if="activeCategory === '{{ $key }}'">
+                                    <span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
+                                </template>
+                                {{ $label }}
+                                
+                                <!-- Active bar animation for mobile -->
+                                <div x-show="activeCategory === '{{ $key }}'" 
+                                     class="absolute inset-0 bg-primary -z-10 rounded-xl sm:rounded-full"
+                                     x-transition:enter="transition ease-out duration-300"
+                                     x-transition:enter-start="opacity-0 scale-90"
+                                     x-transition:enter-end="opacity-100 scale-100"></div>
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Gallery Grid - Portrait 9:16 -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-10">
-            <template x-for="(item, index) in filteredItems.slice(0, 4)" :key="index">
+        <!-- Gallery Grid - Bento Grid Style -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 auto-rows-[200px] sm:auto-rows-[300px]">
+            <template x-for="(item, index) in filteredItems" :key="index">
                 <div @click="openModal(index)"
-                     class="group relative overflow-hidden rounded-[2.5rem] aspect-[9/16] shadow-2xl shadow-gray-200/30 hover:shadow-primary/20 transition-all duration-700 cursor-pointer bg-gray-200">
+                     class="group relative overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] shadow-xl shadow-gray-200/50 hover:shadow-primary/30 transition-all duration-700 cursor-pointer bg-gray-100"
+                     :class="{
+                        'col-span-2 row-span-2': index === 0,
+                        'col-span-1 row-span-1': index === 1 || index === 2 || index === 4 || index === 6 || index === 7 || index === 8 || index === 9,
+                        'col-span-1 row-span-2': index === 3,
+                        'col-span-2 row-span-1': index === 5
+                     }">
                     
                     <img :src="item.img" :alt="item.title" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" loading="lazy">
                     
-                    <!-- Hover Content Overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-secondary/90 via-secondary/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
-                        <span class="text-accent text-[10px] font-black uppercase tracking-widest mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500" x-text="item.category"></span>
-                        <h4 class="text-white font-heading font-black text-sm sm:text-lg tracking-tight leading-tight transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75" x-text="item.title"></h4>
-                        
-                        <div class="mt-4 flex items-center gap-2 text-white/40 text-[9px] font-bold uppercase tracking-widest transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
-                            <i class="ri-zoom-in-line"></i>
-                            View Detail
+                    <!-- Premium Glass Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-secondary/95 via-secondary/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-4 sm:p-8">
+                        <div class="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+                            <span class="inline-block px-3 py-1 bg-primary/20 backdrop-blur-md rounded-full text-primary text-[8px] sm:text-[10px] font-black uppercase tracking-widest mb-2 sm:mb-3" x-text="item.category"></span>
+                            <h4 class="text-white font-heading font-black text-xs sm:text-xl tracking-tight leading-tight mb-2 sm:mb-4" x-text="item.title"></h4>
+                            
+                            <div class="flex items-center gap-2 sm:gap-3 text-white/60 text-[8px] sm:text-[11px] font-bold uppercase tracking-widest group/btn border-t border-white/10 pt-3 sm:pt-4">
+                                <span class="w-6 sm:w-10 h-[1px] bg-white/20 group-hover/btn:w-16 transition-all duration-300"></span>
+                                VIEW PROJECT
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Top Right Badge -->
-                    <div class="absolute top-4 right-4 w-10 h-10 bg-primary/90 backdrop-blur-md rounded-2xl flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-xl scale-75 group-hover:scale-100">
-                        <i class="ri-gallery-upload-line text-lg"></i>
-                    </div>
+                    <!-- Visual Accent -->
+                    <div class="absolute top-4 left-4 w-10 h-[1px] bg-white/30 transform -rotate-45 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
                 </div>
             </template>
         </div>
 
-        <!-- Conversion Section -->
-        <div class="mt-24 text-center">
+        <!-- Conversion Section - Enhanced -->
+        <div class="mt-20 sm:mt-32 text-center relative">
+             <div class="absolute left-1/2 -top-12 -translate-x-1/2 w-[1px] h-12 bg-gradient-to-b from-transparent to-gray-200 hidden sm:block"></div>
+             
              <div class="inline-block relative group">
-                <div class="absolute -inset-6 bg-primary/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div class="absolute -inset-8 bg-primary/25 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
                 
-                <x-button href="https://wa.me/6281234567890?text=Halo%20Rooter%20Green%2C%20saya%20sudah%20melihat%20galeri%20hasil%20kerja%20Anda%20dan%20ingin%20pesan%20jasa..." variant="primary" class="relative z-10 !px-16 !py-6 !rounded-full shadow-2xl shadow-primary/30 text-lg hover:scale-105 transition-transform duration-500">
+                <x-button href="https://wa.me/6281234567890?text=Halo%20Rooter%20Green%2C%20saya%20sudah%20melihat%20galeri%20hasil%20kerja%20Anda%20dan%20ingin%20pesan%20jasa..." variant="primary" class="relative z-10 !px-10 sm:!px-20 !py-4 sm:!py-7 !rounded-full shadow-2xl shadow-primary/30 text-sm sm:text-xl font-black hover:scale-105 transition-transform duration-500 overflow-hidden group/btn">
                     <span class="flex items-center gap-4">
-                        Pesan Jasa Sekarang!
-                        <i class="ri-whatsapp-line text-2xl animate-bounce-soft"></i>
+                        Konsultasi Gratis Sekarang
+                        <i class="ri-whatsapp-line text-xl sm:text-2xl animate-bounce-soft"></i>
                     </span>
+                    <div class="absolute top-0 -left-full w-full h-full bg-white/20 skew-x-[45deg] group-hover/btn:left-[150%] transition-all duration-1000 ease-in-out"></div>
                 </x-button>
              </div>
-             <p class="mt-10 text-gray-400 text-[10px] font-bold uppercase tracking-[0.3em] flex items-center justify-center gap-4">
-                 <span class="w-12 h-[1px] bg-gray-200"></span>
-                 Fast Response 24/7 Team
-                 <span class="w-12 h-[1px] bg-gray-200"></span>
-             </p>
+             
+             <div class="mt-10 sm:mt-16 flex flex-col items-center gap-4">
+                <p class="text-gray-400 text-[10px] font-black uppercase tracking-[0.4em]">
+                    Trusted by 1000+ Happy Customers
+                </p>
+                <div class="flex -space-x-3">
+                    @for($i=1; $i<=5; $i++)
+                        <img src="https://i.pravatar.cc/100?u={{ $i }}" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 sm:border-4 border-stone-50 shadow-sm" alt="User">
+                    @endfor
+                </div>
+             </div>
         </div>
     </div>
+
+
 
     <!-- Lightbox Modal -->
     <template x-teleport="body">

@@ -13,10 +13,10 @@
                 <i class="ri-flashlight-fill text-white text-xl sm:text-3xl"></i>
             </div>
             <div class="relative flex flex-col min-w-0">
-                <span class="font-heading font-black text-lg sm:text-2xl text-white tracking-widest leading-none truncate">ROOTER<span class="text-primary italic">IN</span></span>
-                <div class="hidden sm:flex items-center gap-2 mt-1">
-                    <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
-                    <span class="text-[10px] text-gray-400 font-extrabold tracking-[0.2em] uppercase">Organic Plumbing Hub</span>
+                <span class="font-heading font-black text-xl sm:text-2xl text-white tracking-[0.1em] leading-none truncate">ROOTER<span class="text-primary italic">IN</span></span>
+                <div class="hidden sm:flex items-center gap-2 mt-1.5">
+                    <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_8px_#1FAF5A]"></span>
+                    <span class="text-[9px] text-gray-400 font-black tracking-[0.3em] uppercase opacity-80">Organic Plumbing Hub</span>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
         <div class="hidden xl:flex items-center space-x-4 xl:space-x-8">
             @foreach(['Home' => route('home'), 'Tentang' => route('about'), 'Layanan' => route('services'), 'Galeri' => route('gallery'), 'Kontak' => route('contact')] as $label => $link)
                 <a href="{{ $link }}" 
-                   class="relative px-5 py-2 text-[11px] xl:text-xs font-extra-black uppercase tracking-[0.25em] transition-all duration-500 group whitespace-nowrap {{ request()->url() == $link ? 'text-white' : 'text-gray-400 hover:text-white' }}">
+                   class="relative px-5 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500 group whitespace-nowrap {{ request()->url() == $link ? 'text-white' : 'text-gray-400 hover:text-white' }}">
                     <span class="relative z-10">{{ $label }}</span>
                     
                     <!-- Background Soft Pill -->
@@ -103,11 +103,11 @@
                  x-transition:enter-start="opacity-0 translate-y-10"
                  x-transition:enter-end="opacity-100 translate-y-0">
                 <div class="flex items-center gap-3">
-                    <div class="w-2 h-2 bg-primary rounded-full animate-ping"></div>
-                    <span class="text-xs text-gray-400 font-black tracking-[0.25em] uppercase left-4">Emergency Support Hub</span>
+                    <div class="w-2 h-2 bg-primary rounded-full animate-ping shadow-[0_0_8px_#1FAF5A]"></div>
+                    <span class="text-[9px] text-gray-400 font-black tracking-[0.3em] uppercase">Emergency Support Hub</span>
                 </div>
                 <div class="pl-5">
-                    <a href="tel:081246668749" class="text-xl sm:text-4xl font-black text-white hover:text-primary transition-all duration-300 inline-block tracking-tight">0812-4666-8749</a>
+                    <a href="tel:081246668749" class="text-2xl sm:text-4xl font-black text-white hover:text-primary transition-all duration-300 inline-block tracking-tighter">0812-4666-8749</a>
                 </div>
             </div>
         </div>

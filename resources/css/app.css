@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import 'tailwindcss';
 @import 'remixicon/fonts/remixicon.css';
 
@@ -8,7 +8,7 @@
 @source '../**/*.js';
 
 @theme {
-    --font-heading: 'Poppins', sans-serif;
+    --font-heading: 'Outfit', sans-serif;
     --font-sans: 'Inter', sans-serif;
     
     --color-primary: #1FAF5A;
@@ -74,5 +74,13 @@
 
     .animate-bounce-soft {
         animation: bounceSoft 3s ease-in-out infinite;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
 }
