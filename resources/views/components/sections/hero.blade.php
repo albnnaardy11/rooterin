@@ -39,8 +39,15 @@
                 </p>
                 
                 <div class="flex flex-col sm:flex-row items-center gap-6 justify-center lg:justify-start">
-                    <x-button href="{{ $ctaLink }}" variant="primary" class="!px-10 !py-5 shadow-2xl shadow-primary/40">
-                        {{ $ctaText }}
+                    <x-button href="{{ $ctaLink }}" variant="primary" class="relative z-10 !px-12 !py-6 shadow-2xl shadow-primary/40 !rounded-full overflow-hidden group/btn">
+                        <span class="flex items-center gap-4">
+                            <i class="ri-whatsapp-line text-2xl animate-bounce-soft"></i>
+                            <span class="font-black uppercase tracking-widest text-sm lg:text-base">{{ $ctaText }}</span>
+                            <i class="ri-arrow-right-line group-hover:translate-x-2 transition-transform duration-300"></i>
+                        </span>
+                        
+                        <!-- Premium Shine Effect -->
+                        <div class="absolute top-0 -left-full w-full h-full bg-white/20 skew-x-[45deg] group-hover/btn:left-[150%] transition-all duration-1000 ease-in-out"></div>
                     </x-button>
                 </div>
             </div>

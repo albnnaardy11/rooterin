@@ -81,32 +81,58 @@
             @endforeach
         </div>
         
-        <!-- Bottom Callout -->
-        <div class="mt-24 sm:mt-32 max-w-5xl mx-auto">
-             <div class="flex flex-col lg:flex-row items-center justify-between gap-10 p-8 sm:p-6 bg-secondary rounded-[3.5rem] sm:rounded-full shadow-3xl overflow-hidden relative group">
-                 <!-- Background Shine -->
-                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
+        <!-- Bottom Callout - Premium Corporate Banner -->
+        <div class="mt-24 sm:mt-32 max-w-6xl mx-auto">
+             <div class="flex flex-col lg:flex-row items-center justify-between gap-10 p-4 sm:p-5 lg:p-6 bg-secondary rounded-[3rem] lg:rounded-full shadow-3xl shadow-secondary/20 overflow-hidden relative group border border-white/5">
+                 <!-- Modern Animated Background -->
+                 <div class="absolute inset-0 bg-gradient-to-r from-secondary via-primary/5 to-secondary group-hover:via-primary/10 transition-colors duration-1000"></div>
+                 <div class="absolute -top-1/2 -right-1/4 w-[50%] h-[200%] bg-primary/10 blur-[100px] rotate-45 pointer-events-none group-hover:translate-x-12 transition-transform duration-[3s]"></div>
                  
-                 <div class="flex flex-col sm:flex-row items-center gap-8 px-4 relative z-10 text-center sm:text-left">
-                    <div class="flex -space-x-4 shrink-0">
-                        @for($i=1; $i<=3; $i++)
-                            <img src="https://i.pravatar.cc/100?u=tech{{ $i }}" class="w-14 h-14 rounded-full border-4 border-secondary shadow-lg object-cover" alt="Expert">
-                        @endfor
+                 <div class="flex flex-col sm:flex-row items-center gap-10 px-6 relative z-10 text-center sm:text-left w-full lg:w-auto">
+                    <!-- Experts Stack with Online Indicator -->
+                    <div class="relative shrink-0">
+                        <div class="flex -space-x-5">
+                            @for($i=1; $i<=3; $i++)
+                                <div class="relative group/avatar">
+                                    <div class="absolute -inset-1 bg-gradient-to-tr from-primary to-accent rounded-full opacity-40 group-hover/avatar:opacity-100 blur-sm transition-opacity duration-500"></div>
+                                    <img src="https://i.pravatar.cc/100?u=tech{{ $i }}" class="relative w-16 h-16 rounded-full border-[6px] border-secondary shadow-2xl object-cover transition-transform duration-500 group-hover/avatar:scale-110" alt="Expert">
+                                </div>
+                            @endfor
+                        </div>
+                        <!-- Pulse Indicator -->
+                        <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-primary rounded-full border-[4px] border-secondary flex items-center justify-center">
+                            <span class="absolute w-full h-full bg-primary rounded-full animate-ping opacity-75"></span>
+                            <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-white font-black text-base sm:text-xl tracking-tight mb-1">
-                            Layanan Khusus Gedung & Korporat?
-                        </p>
-                        <p class="text-primary font-bold text-[10px] sm:text-xs uppercase tracking-[0.2em]">Ekspert kami siap melakukan survey hari ini juga</p>
+
+                    <div class="space-y-2">
+                        <h4 class="text-white font-black text-2xl lg:text-3xl tracking-tight leading-none">
+                            Layanan Khusus <span class="text-primary italic">Gedung & Korporat?</span>
+                        </h4>
+                        <div class="flex items-center justify-center sm:justify-start gap-4">
+                            <span class="w-8 h-[2px] bg-primary/40 hidden sm:block"></span>
+                            <p class="text-gray-400 font-bold text-[10px] sm:text-xs uppercase tracking-[0.3em]">Technical Experts Ready for Survey Today</p>
+                        </div>
                     </div>
                  </div>
                  
-                 <x-button variant="primary" class="relative group !px-16 !py-6 !rounded-full shadow-2xl shadow-primary/30 w-full sm:w-fit relative z-10" href="https://wa.me/6281234567890">
-                    <span class="flex items-center gap-4 font-black uppercase text-xs tracking-widest">
-                        Konsultasi Survey
-                        <i class="ri-whatsapp-line text-xl transition-transform group-hover:rotate-12"></i>
-                    </span>
-                 </x-button>
+                 <!-- Premium WhatsApp CTA -->
+                 <div class="w-full lg:w-auto px-4 sm:px-0 relative z-10">
+                    <x-button variant="primary" class="relative group/btn !px-14 !py-7 !rounded-full shadow-2xl shadow-primary/40 w-full sm:w-fit overflow-hidden" href="https://wa.me/6281234567890">
+                        <span class="relative z-10 flex items-center justify-center gap-5 text-white">
+                            <div class="relative">
+                                <i class="ri-whatsapp-line text-2xl animate-bounce-soft"></i>
+                                <div class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-white rounded-full border-2 border-primary animate-pulse"></div>
+                            </div>
+                            <span class="font-black uppercase text-sm tracking-[0.2em]">Konsultasi Survey</span>
+                            <i class="ri-arrow-right-line transition-transform duration-500 group-hover/btn:translate-x-3 text-xl"></i>
+                        </span>
+
+                        <!-- Premium Shine Animation -->
+                        <div class="absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[45deg] group-hover/btn:left-[150%] transition-all duration-1000 ease-in-out"></div>
+                    </x-button>
+                 </div>
              </div>
         </div>
     </div>
