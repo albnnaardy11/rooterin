@@ -8,40 +8,25 @@
 @php
     $servicesData = [
         [
-            'title' => 'Tembak Saluran Mampet',
-            'desc' => 'Solusi cepat untuk pipa dapur, wastafel, dan kamar mandi mampet dengan teknik tekanan tinggi.',
+            'title' => 'Saluran Pembuangan',
+            'tagline' => 'TEKNOLOGI TANPA BONGKAR',
+            'desc' => 'Solusi tuntas WC & pipa mampet dengan mesin Spiral Baja. Menghancurkan sumbatan kerak lemak tanpa merusak konstruksi.',
             'img' => 'https://images.unsplash.com/photo-1585955123058-930415956a69?w=800&fit=crop',
             'color' => 'primary'
         ],
         [
-            'title' => 'Rooter Spiral Cleaner',
-            'desc' => 'Pembersihan kerak lemak dan kotoran keras menggunakan mesin spiral modern tanpa bongkar pipa.',
+            'title' => 'Air Bersih & Toren',
+            'tagline' => 'HIGIENIS & BEBAS LUMUT',
+            'desc' => 'Normalisasi kran mampet & cuci tangki air. Teknik sterilisasi pipa untuk menjamin aliran air bersih yang sehat & lancar.',
             'img' => 'https://images.unsplash.com/photo-1542013936693-884638332954?w=800&fit=crop',
             'color' => 'accent'
         ],
         [
-            'title' => 'Deteksi Kebocoran Pipa',
-            'desc' => 'Teknologi sensor untuk menemukan titik bocor pipa dalam dinding atau lantai secara akurat.',
-            'img' => 'https://images.unsplash.com/photo-1538474705339-e51de814eaa3?w=800&fit=crop',
-            'color' => 'primary'
-        ],
-        [
-            'title' => 'Kurasi & Sedot WC',
-            'desc' => 'Layanan sedot septic tank dan pelancaran kloset mampet dengan armada bersih dan profesional.',
-            'img' => 'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&fit=crop',
-            'color' => 'accent'
-        ],
-        [
-            'title' => 'Instalasi Jalur Baru',
-            'desc' => 'Pemasangan pipa air bersih dan air kotor dengan standar teknik terbaik untuk hunian & gedung.',
+            'title' => 'Instalasi Sanitary',
+            'tagline' => 'TEKNIK PRESISI TINGGI',
+            'desc' => 'Pemasangan kran, kloset, & jalur pipa baru. Dikerjakan dengan standar profesional untuk hasil rapi, kuat, & permanen.',
             'img' => 'https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=800&fit=crop',
-            'color' => 'primary'
-        ],
-        [
-            'title' => 'Perawatan Berkala',
-            'desc' => 'Layanan maintenance rutin untuk resto, hotel, dan pabrik agar alur pipa selalu lancar.',
-            'img' => 'https://images.unsplash.com/photo-1581244276891-6bc617f77bc7?w=800&fit=crop',
-            'color' => 'accent'
+            'color' => 'secondary'
         ]
     ];
 @endphp

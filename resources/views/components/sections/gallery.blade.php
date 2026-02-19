@@ -166,12 +166,12 @@
                 <!-- Slider Area -->
                 <div class="flex-1 relative flex items-center justify-center px-4 sm:px-12 group/slider">
                     <!-- Prev -->
-                    <button @click="prev()" class="absolute left-0 z-20 w-14 h-14 bg-white/5 hover:bg-primary border border-white/10 rounded-full flex items-center justify-center text-white transition-all opacity-0 group-hover/slider:opacity-100 -translate-x-5 group-hover/slider:translate-x-10">
-                        <i class="ri-arrow-left-s-line text-3xl"></i>
+                    <button @click="prev()" class="absolute left-1 2xl:left-0 z-20 w-10 h-10 lg:w-14 lg:h-14 bg-white/20 2xl:bg-white/5 hover:bg-primary border border-white/20 2xl:border-white/10 rounded-full flex items-center justify-center text-white transition-all opacity-100 2xl:opacity-0 2xl:group-hover/slider:opacity-100 2xl:-translate-x-5 2xl:group-hover/slider:translate-x-10">
+                        <i class="ri-arrow-left-s-line text-xl lg:text-3xl"></i>
                     </button>
 
-                    <!-- Consistent 9:16 Portrait Container (Fixed Height for Floating Look) -->
-                    <div class="h-[65vh] sm:h-[70vh] aspect-[9/16] relative flex items-center justify-center overflow-hidden rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.5)] border-2 border-white/20 bg-secondary">
+                    <!-- Consistent 9:16 Portrait Container -->
+                    <div class="h-[50vh] sm:h-[60vh] md:h-[65vh] lg:h-[70vh] aspect-[9/16] relative flex items-center justify-center overflow-hidden rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.5)] border-2 border-white/20 bg-secondary">
                         <img :src="filteredItems[currentIndex]?.img" 
                                 class="w-full h-full object-cover"
                                 :key="currentIndex"
@@ -181,8 +181,8 @@
                     </div>
 
                     <!-- Next -->
-                    <button @click="next()" class="absolute right-0 z-20 w-14 h-14 bg-white/5 hover:bg-primary border border-white/10 rounded-full flex items-center justify-center text-white transition-all opacity-0 group-hover/slider:opacity-100 translate-x-5 group-hover/slider:translate-x-10">
-                        <i class="ri-arrow-right-s-line text-3xl"></i>
+                    <button @click="next()" class="absolute right-1 2xl:right-0 z-20 w-10 h-10 lg:w-14 lg:h-14 bg-white/20 2xl:bg-white/5 hover:bg-primary border border-white/20 2xl:border-white/10 rounded-full flex items-center justify-center text-white transition-all opacity-100 2xl:opacity-0 2xl:group-hover/slider:opacity-100 2xl:translate-x-5 2xl:group-hover/slider:translate-x-10">
+                        <i class="ri-arrow-right-s-line text-xl lg:text-3xl"></i>
                     </button>
                 </div>
 
