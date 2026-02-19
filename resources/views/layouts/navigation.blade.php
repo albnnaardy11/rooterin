@@ -4,7 +4,7 @@
      class="fixed top-0 left-0 right-0 z-50 pt-4 sm:pt-10 px-3 sm:px-4 transition-all duration-500 ease-in-out">
     
     <div :class="scrolled ? 'max-w-7xl py-3' : 'max-w-[90rem] py-4 sm:py-5'"
-         class="mx-auto bg-secondary/80 backdrop-blur-2xl border border-white/10 rounded-2xl sm:rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500 px-4 sm:px-10 flex items-center justify-between relative">
+         class="mx-auto bg-secondary/80 backdrop-blur-2xl border border-white/10 rounded-2xl sm:rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500 px-4 lg:px-6 xl:px-10 flex items-center justify-between relative">
         
         <!-- Logo Area with Aura -->
         <div class="flex-shrink-0 flex items-center gap-4 group cursor-pointer relative">
@@ -13,7 +13,7 @@
                 <i class="ri-flashlight-fill text-white text-xl sm:text-3xl"></i>
             </div>
             <div class="relative flex flex-col min-w-0">
-                <span class="font-heading font-black text-xl sm:text-2xl text-white tracking-[0.1em] leading-none truncate">ROOTER<span class="text-primary">IN</span></span>
+                <span class="font-heading font-black text-xl sm:text-2xl text-white tracking-[0.1em] leading-none">ROOTER<span class="text-primary text-primary">IN</span></span>
                 <div class="hidden sm:flex items-center gap-2 mt-1.5">
                     <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_8px_#1FAF5A]"></span>
                     <span class="text-[9px] text-gray-400 font-black tracking-[0.3em] uppercase opacity-80">Organic Plumbing Hub</span>
@@ -22,10 +22,10 @@
         </div>
 
         <!-- Desktop Menu: Minimal Tech Style -->
-        <div class="hidden xl:flex items-center space-x-4 xl:space-x-8">
+        <div class="hidden lg:flex items-center space-x-2 lg:space-x-4 xl:space-x-8">
             @foreach(['Home' => route('home'), 'Tentang' => route('about'), 'Layanan' => route('services'), 'Galeri' => route('gallery'), 'Kontak' => route('contact')] as $label => $link)
                 <a href="{{ $link }}" 
-                   class="relative px-5 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500 group whitespace-nowrap {{ request()->url() == $link ? 'text-white' : 'text-gray-400 hover:text-white' }}">
+                   class="relative px-3 xl:px-5 py-2 text-[10px] xl:text-[11px] font-black uppercase tracking-[0.2em] transition-all duration-500 group whitespace-nowrap {{ request()->url() == $link ? 'text-white' : 'text-gray-400 hover:text-white' }}">
                     <span class="relative z-10">{{ $label }}</span>
                     
                     <!-- Background Soft Pill -->
@@ -41,9 +41,9 @@
         </div>
 
         <!-- Action Area -->
-        <div class="flex items-center gap-4 sm:gap-8">
+        <div class="flex items-center gap-4 lg:gap-4 xl:gap-8">
             <a href="https://wa.me/6281234567890" 
-               class="hidden sm:flex group relative items-center gap-3 sm:gap-4 bg-white/5 hover:bg-primary border border-white/10 hover:border-primary px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-xl sm:rounded-2xl transition-all duration-500 whitespace-nowrap overflow-hidden">
+               class="hidden sm:flex group relative items-center gap-3 bg-white/5 hover:bg-primary border border-white/10 hover:border-primary px-4 xl:px-6 py-2.5 sm:py-3.5 rounded-xl sm:rounded-2xl transition-all duration-500 whitespace-nowrap overflow-hidden">
                 <div class="hidden xl:block text-left relative z-10">
                     <div class="text-[10px] text-gray-400 group-hover:text-white/80 font-black uppercase tracking-[0.1em] leading-none mb-1">Butuh Bantuan?</div>
                     <div class="text-white font-black text-base uppercase tracking-widest leading-none">SOS WhatsApp</div>
@@ -55,7 +55,7 @@
 
             <!-- Pop-out Hamburger -->
             <button @click="open = ! open" 
-                    class="relative xl:hidden w-11 h-11 flex items-center justify-center rounded-2xl transition-all duration-500 z-[70]"
+                    class="relative lg:hidden w-11 h-11 flex items-center justify-center rounded-2xl transition-all duration-500 z-[70]"
                     :class="open ? 'bg-primary scale-110 shadow-[0_10px_25px_rgba(31,175,90,0.4)]' : 'bg-white/10'">
                 <div class="relative w-6 h-5 flex items-center justify-center">
                     <span class="absolute h-[3px] bg-white rounded-full transition-all duration-500 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)]"
