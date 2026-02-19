@@ -13,8 +13,8 @@
             'variant' => 'accent'
         ],
         [
-            'title' => 'Pasti Tiba 15 Menit',
-            'desc' => 'Garansi Respon Super Kilat',
+            'title' => 'Fast Respon',
+            'desc' => 'Respon Cepat',
             'icon' => 'ri-flashlight-fill',
             'variant' => 'primary'
         ],

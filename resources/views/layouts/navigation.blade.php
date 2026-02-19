@@ -13,7 +13,7 @@
                 <i class="ri-flashlight-fill text-white text-xl sm:text-3xl"></i>
             </div>
             <div class="relative flex flex-col min-w-0">
-                <span class="font-heading font-black text-xl sm:text-2xl text-white tracking-[0.1em] leading-none truncate">ROOTER<span class="text-primary italic">IN</span></span>
+                <span class="font-heading font-black text-xl sm:text-2xl text-white tracking-[0.1em] leading-none truncate">ROOTER<span class="text-primary">IN</span></span>
                 <div class="hidden sm:flex items-center gap-2 mt-1.5">
                     <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_8px_#1FAF5A]"></span>
                     <span class="text-[9px] text-gray-400 font-black tracking-[0.3em] uppercase opacity-80">Organic Plumbing Hub</span>

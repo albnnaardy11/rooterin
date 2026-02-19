@@ -1,6 +1,5 @@
 <div x-data="accessibilityMenu()" 
-     class="fixed bottom-6 z-[100] transition-all duration-500"
-     :class="window.innerWidth < 640 ? 'right-6' : 'left-6'"
+     class="fixed bottom-6 left-6 z-[100] transition-all duration-500"
      id="accessibility-container">
     
     <!-- Toggle Button -->
@@ -18,8 +17,8 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 translate-y-0 scale-100"
          x-transition:leave-end="opacity-0 translate-y-10 scale-90"
-         class="absolute bottom-20 w-[90vw] sm:w-[400px] max-h-[80vh] bg-white rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden border border-gray-100"
-         :style="window.innerWidth < 640 ? 'right: 0' : 'left: 0'">
+         class="fixed sm:absolute bottom-24 sm:bottom-20 left-4 right-4 sm:left-0 sm:right-auto sm:w-[400px] max-h-[70vh] sm:max-h-[80vh] bg-white/95 backdrop-blur-xl rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.2)] flex flex-col overflow-hidden border border-gray-100"
+         @click.away="open = false">
         
         <!-- Header -->
         <div class="bg-secondary p-8 flex items-center justify-between">

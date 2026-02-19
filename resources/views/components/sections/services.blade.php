@@ -23,15 +23,31 @@
             @endforeach
         </div>
         
-        <!-- Bottom Callout -->
-        <div class="mt-24 text-center">
-             <div class="inline-flex flex-col sm:flex-row items-center gap-6 p-2 bg-white rounded-full shadow-xl border border-gray-100 pr-8">
-                 <div class="flex -space-x-3 pl-4">
-                     <img src="https://images.unsplash.com/photo-1542013936693-884638332954?w=64&h=64&fit=crop" class="w-10 h-10 rounded-full border-2 border-white object-cover" alt="Tool 1">
-                     <img src="https://images.unsplash.com/photo-1581244276891-6bc617f77bc7?w=64&h=64&fit=crop" class="w-10 h-10 rounded-full border-2 border-white object-cover" alt="Tool 2">
+        <!-- Bottom Callout - Responsive Optimized -->
+        <div class="mt-20 sm:mt-32 max-w-4xl mx-auto">
+             <div class="flex flex-col lg:flex-row items-center justify-between gap-8 p-6 sm:p-4 bg-white rounded-[2rem] sm:rounded-full shadow-2xl shadow-gray-200/50 border border-gray-100/50">
+                 <div class="flex flex-col sm:flex-row items-center gap-6 px-4">
+                    <div class="flex -space-x-4">
+                        @for($i=1; $i<=3; $i++)
+                            <img src="https://i.pravatar.cc/100?u=tech{{ $i }}" class="w-12 h-12 rounded-full border-4 border-white shadow-sm object-cover" alt="Expert">
+                        @endfor
+                    </div>
+                    <div class="text-center sm:text-left">
+                        <p class="text-secondary font-black text-sm sm:text-base tracking-tight">
+                            Masalah pipa lainnya? <span class="text-primary">Teknisi kami siap memberikan survey gratis.</span>
+                        </p>
+                        <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-1">Available 24/7 for emergency cases</p>
+                    </div>
                  </div>
-                 <p class="text-secondary font-bold text-sm">Masalah pipa lainnya? Teknisi kami siap memberikan diagnosa gratis.</p>
-                 <x-button variant="outline" class="!px-6 !py-3 text-xs" href="https://wa.me/6281234567890">Lihat Semua Solusi</x-button>
+                 <x-button variant="primary" class="relative group !px-12 !py-4.5 !rounded-full shadow-2xl shadow-primary/20 w-fit lg:w-auto overflow-hidden whitespace-nowrap" href="https://wa.me/6281234567890">
+                    <span class="relative z-10 flex items-center gap-3 font-black uppercase text-[11px] tracking-[0.2em]">
+                        Hubungi CS!
+                        <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center transition-transform group-hover:rotate-12">
+                            <i class="ri-customer-service-2-fill text-lg"></i>
+                        </div>
+                    </span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
+                 </x-button>
              </div>
         </div>
     </div>

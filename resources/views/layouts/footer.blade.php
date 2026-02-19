@@ -80,8 +80,7 @@
                                 <i class="ri-timer-flash-fill text-xl"></i>
                             </div>
                             <div>
-                                <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Respon Cepat</div>
-                                <div class="text-white font-black text-sm tracking-wide leading-none">15-30 Menit Tiba</div>
+                                <div class="text-white font-black text-sm tracking-wide leading-none">Fast Respon</div>
                             </div>
                         </div>
                     </div>
