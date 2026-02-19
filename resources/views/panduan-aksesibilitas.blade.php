@@ -1,7 +1,7 @@
 <x-app-layout title="Panduan Aksesibilitas - RooterIn">
     
     <!-- Hero Section -->
-    <section class="relative pt-32 pb-20 bg-stone-50 overflow-hidden">
+    <section class="relative pt-44 pb-32 sm:pb-48 bg-stone-50 overflow-hidden">
         <div class="absolute top-0 right-0 w-[50%] h-[50%] bg-primary/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="max-w-3xl">

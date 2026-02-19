@@ -1,4 +1,4 @@
-<section class="relative bg-secondary min-h-[70vh] flex items-center overflow-hidden pt-44 pb-48">
+<section class="relative bg-secondary min-h-[70vh] flex items-center overflow-hidden pt-44 pb-32 sm:pb-48">
     <!-- 1. Background Visuals (Matched to Home Hero) -->
     <div class="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none"></div>
     <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
@@ -43,7 +43,7 @@
 
     <!-- Section Transition (Triple-Layered Fluid Wave - Premium Service Version) -->
     <div class="absolute bottom-0 -left-[5%] w-[110%] overflow-hidden leading-[0] z-20">
-        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[100px] sm:h-[150px]">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[120px] sm:h-[180px]">
             <!-- Layer 1: Deep Blue Shadow -->
             <path fill="var(--color-primary)" opacity="0.05" d="M0,0 C200,80 400,0 600,40 C800,80 1000,0 1200,20 L1200,120 L0,120 Z" class="animate-wave-very-slow"></path>
             

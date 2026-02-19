@@ -1,4 +1,4 @@
-<section class="relative bg-secondary min-h-[85vh] flex items-center overflow-hidden pt-44 pb-32">
+<section class="relative bg-secondary min-h-[97vh] flex items-center overflow-hidden pt-44 pb-40 sm:pb-40">
     <!-- 1. Background Visuals (Standard Brand DNA) -->
     <div class="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none"></div>
     <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
@@ -56,7 +56,7 @@
 
     <!-- Section Transition (Ultra-Smooth Fluid Wave) -->
     <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-20 translate-y-[1px]">
-        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[80px] sm:h-[120px]">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[120px] sm:h-[180px]">
             <!-- Layer 1: Soft Accent Ambient -->
             <path fill="var(--color-accent)" opacity="0.1" d="M0,60 C300,120 900,0 1200,60 L1200,120 L0,120 Z" class="animate-wave-very-slow"></path>
             
