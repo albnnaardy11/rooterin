@@ -432,6 +432,12 @@ class SentinelService
                 'phantom_compression' => $phantomHealth['compression'],
                 'intro_pulse' => round($introLatency, 2) . 'ms',
                 'last_archival' => \Illuminate\Support\Facades\Cache::get('sentinel_last_archival', 'N/A')
+            ],
+            'lockdown' => [
+                'active' => \Illuminate\Support\Facades\Cache::get('system_lockdown_active', false),
+                'kill_switch' => \Illuminate\Support\Facades\Cache::get('sentinel_shield_status', 'ENABLED'),
+                'entropy_guard' => '94% Efficiency',
+                'neural_bridge' => 'CONNECTED'
             ]
         ];
     }

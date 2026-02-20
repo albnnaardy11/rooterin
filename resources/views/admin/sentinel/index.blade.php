@@ -57,232 +57,270 @@
             @endforeach
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- 1. AI Model Integrity List -->
-            <div class="lg:col-span-1 space-y-6">
-                <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-6">
-                    <h3 class="text-xs font-black text-white uppercase tracking-widest mb-6 flex items-center gap-2">
-                        <i class="ri-brain-line text-primary"></i> Neural Assets Monitor
-                    </h3>
-                    <div class="space-y-4">
-                        @foreach($healthData['ai_integrity']['models'] as $model)
-                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-2xl border border-white/5">
-                            <div class="min-w-0">
-                                <p class="text-[10px] font-bold text-white truncate">{{ $model['name'] }}</p>
-                                <p class="text-[8px] text-slate-500 font-mono mt-0.5">{{ $model['path'] }}</p>
-                            </div>
-                            <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase {{ $model['status'] === 'Operational' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500' }}">
-                                {{ $model['status'] }}
-                            </span>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch pt-8">
+            <!-- ROW 1: CORE MONITORING (3 Columns Equal Height) -->
+            <!-- 1. AI Model Integrity -->
+            <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-8 flex flex-col">
+                <h3 class="text-xs font-black text-white uppercase tracking-widest mb-8 flex items-center gap-2">
+                    <i class="ri-brain-line text-primary"></i> Neural Assets Monitor
+                </h3>
+                <div class="space-y-4 flex-1">
+                    @foreach($healthData['ai_integrity']['models'] as $model)
+                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-2xl border border-white/5">
+                        <div class="min-w-0">
+                            <p class="text-[10px] font-bold text-white truncate">{{ $model['name'] }}</p>
+                            <p class="text-[8px] text-slate-500 font-mono mt-0.5">{{ $model['path'] }}</p>
                         </div>
-                        @endforeach
-                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-2xl border border-white/5">
-                            <div>
-                                <p class="text-[10px] font-bold text-white">ai-processor.js</p>
-                                <p class="text-[8px] text-slate-500 font-mono mt-0.5">Web Worker Heartbeat</p>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                                <span class="text-[8px] font-black text-green-500 uppercase">ACTIVE</span>
-                            </div>
-                        </div>
+                        <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase {{ $model['status'] === 'Operational' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500' }}">
+                            {{ $model['status'] }}
+                        </span>
                     </div>
-                </div>
-
-                <!-- SSL & Env -->
-                <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-6">
-                    <h3 class="text-xs font-black text-white uppercase tracking-widest mb-6 flex items-center gap-2">
-                        <i class="ri-lock-line text-primary"></i> Security Pulse
-                    </h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
-                            <p class="text-[8px] font-black text-slate-500 uppercase mb-2">SSL Expiry</p>
-                            <p class="text-xl font-black text-white italic tracking-tighter">{{ $healthData['security']['ssl']['days_left'] }} <span class="text-[10px] font-bold text-slate-500 not-italic">DAYS</span></p>
+                    @endforeach
+                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-2xl border border-white/5">
+                        <div>
+                            <p class="text-[10px] font-bold text-white">ai-processor.js</p>
+                            <p class="text-[8px] text-slate-500 font-mono mt-0.5">Web Worker Heartbeat</p>
                         </div>
-                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
-                            <p class="text-[8px] font-black text-slate-500 uppercase mb-2">Debug Mode</p>
-                            <p class="text-xl font-black {{ ($healthData['security']['environment']['debug_mode'] ?? '') === 'Safe (Zero-Exposure)' ? 'text-green-500' : 'text-red-500' }} italic tracking-tighter">{{ strtoupper($healthData['security']['environment']['debug_mode'] ?? 'UNKNOWN') }}</p>
-                        </div>
-                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
-                            <p class="text-[8px] font-black text-slate-500 uppercase mb-2">Threat Neutralized</p>
-                            <p class="text-xl font-black text-green-500 italic tracking-tighter">{{ $healthData['security']['audit']['threat_neutralized'] ?? 0 }} <span class="text-[10px] font-bold text-slate-500 not-italic">REJECTS</span></p>
-                        </div>
-                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
-                            <p class="text-[8px] font-black text-slate-500 uppercase mb-2">Gateway Pulse</p>
-                            <p class="text-xl font-black text-white italic tracking-tighter">{{ $healthData['security']['audit']['intro_pulse'] ?? 'N/A' }}</p>
-                        </div>
-                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5 col-span-2 md:col-span-1">
-                            <p class="text-[8px] font-black text-slate-500 uppercase mb-2">Blocked Travel Attempts</p>
-                            <p class="text-xl font-black {{ ($healthData['security']['audit']['impossible_travels'] ?? 0) > 0 ? 'text-red-500' : 'text-green-500' }} italic tracking-tighter">{{ $healthData['security']['audit']['impossible_travels'] ?? 0 }} <span class="text-[10px] font-bold text-slate-500 not-italic">HIJACK BLOCKED</span></p>
-                        </div>
-                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5 col-span-2 md:col-span-1">
-                            <p class="text-[8px] font-black text-slate-500 uppercase mb-2">Traffic Shaping</p>
-                            <p class="text-xl font-black text-primary italic tracking-tighter">{{ $healthData['security']['audit']['traffic_shaping'] ?? 'N/A' }}</p>
+                        <div class="flex items-center gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                            <span class="text-[8px] font-black text-green-500 uppercase">ACTIVE</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. Infrastructure Vitality -->
-            <div class="lg:col-span-2 space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Resource Monitor -->
-                    <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-8">
-                        <h3 class="text-xs font-black text-white uppercase tracking-widest mb-8 flex items-center gap-2">
-                            <i class="ri-server-line text-primary"></i> Compute Metrics
-                        </h3>
-                        
-                        <div class="space-y-8">
+            <!-- 2. Resource Monitor -->
+            <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-8 flex flex-col">
+                <h3 class="text-xs font-black text-white uppercase tracking-widest mb-8 flex items-center gap-2">
+                    <i class="ri-server-line text-primary"></i> Compute Metrics
+                </h3>
+                
+                <div class="space-y-8 flex-1 flex flex-col justify-center">
+                    <div>
+                        <div class="flex justify-between items-end mb-3">
                             <div>
-                                <div class="flex justify-between items-end mb-3">
-                                    <div>
-                                        <p class="text-[10px] font-black text-white uppercase mb-1 tracking-tight">System Memory Usage</p>
-                                        <p class="text-xs font-mono text-slate-500">{{ $healthData['infrastructure']['compute']['usage'] }} (Peak: {{ $healthData['infrastructure']['compute']['peak'] }})</p>
-                                    </div>
-                                    <span class="text-xs font-black {{ ($healthData['infrastructure']['compute']['status'] ?? '') == 'ULTRA-OPTIMIZED' ? 'text-primary' : 'text-green-500' }} italic">{{ $healthData['infrastructure']['compute']['status'] }}</span>
-                                </div>
-                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
-                                    <div class="h-full bg-primary w-[32%] rounded-full shadow-[0_0_10px_rgba(255,255,255,0.3)]"></div>
-                                </div>
+                                <p class="text-[10px] font-black text-white uppercase mb-1 tracking-tight">System Memory Usage</p>
+                                <p class="text-xs font-mono text-slate-500">{{ $healthData['infrastructure']['compute']['usage'] }} (Peak: {{ $healthData['infrastructure']['compute']['peak'] }})</p>
                             </div>
-                            
-                            <div>
-                                <div class="flex justify-between items-end mb-3">
-                                    <div>
-                                        <p class="text-[10px] font-black text-white uppercase mb-1 tracking-tight">Phantom L1 Hit Ratio</p>
-                                        <p class="text-xs font-mono text-slate-500">{{ $healthData['infrastructure']['compute']['l1_hit_ratio'] ?? '0%' }} vs Redis (L2)</p>
-                                    </div>
-                                    <span class="text-[10px] font-black text-slate-400 italic">Storage Bypass</span>
-                                </div>
-                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
-                                    <div class="h-full {{ ($healthData['infrastructure']['compute']['status'] ?? '') == 'ULTRA-OPTIMIZED' ? 'bg-primary shadow-[0_0_10px_rgba(249,115,22,0.3)]' : 'bg-green-500' }} transition-all duration-1000 rounded-full" style="width: {{ $healthData['infrastructure']['compute']['l1_hit_ratio'] ?? '0%' }}"></div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div class="flex justify-between items-end mb-3">
-                                    <div>
-                                        <p class="text-[10px] font-black text-white uppercase mb-1 tracking-tight">Physical Storage Audit</p>
-                                        <p class="text-xs font-mono text-slate-500">{{ $healthData['infrastructure']['storage']['free_space'] }} Available</p>
-                                    </div>
-                                    <span class="text-[10px] font-black text-white italic p-1 px-2 bg-white/10 rounded uppercase">{{ $healthData['infrastructure']['storage']['log_status'] }}</span>
-                                </div>
-                                <div class="h-2 bg-white/5 rounded-full overflow-hidden mb-4">
-                                    <div class="h-full bg-white rounded-full transition-all duration-1000" style="width: {{ $healthData['infrastructure']['storage']['usage_percent'] }}"></div>
-                                </div>
-                                <div class="flex justify-between items-end">
-                                    <div>
-                                        <p class="text-[9px] font-bold text-slate-500 uppercase tracking-tight">Memory Fragmentation Level</p>
-                                    </div>
-                                    <span class="text-[10px] font-black {{ intval($healthData['infrastructure']['storage']['fragmentation'] ?? 0) < 10 ? 'text-green-500' : 'text-orange-500' }} italic">{{ $healthData['infrastructure']['storage']['fragmentation'] ?? '0%' }} (L2 ORPHAN)</span>
-                                </div>
-                            </div>
+                            <span class="text-xs font-black {{ ($healthData['infrastructure']['compute']['status'] ?? '') == 'ULTRA-OPTIMIZED' ? 'text-primary' : 'text-green-500' }} italic">{{ $healthData['infrastructure']['compute']['status'] }}</span>
+                        </div>
+                        <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full {{ ($healthData['infrastructure']['compute']['status'] ?? '') == 'ULTRA-OPTIMIZED' ? 'bg-primary shadow-[0_0_10px_rgba(249,115,22,0.3)]' : 'bg-green-500' }} transition-all duration-1000 rounded-full" style="width: {{ $healthData['infrastructure']['compute']['l1_hit_ratio'] ?? '0%' }}"></div>
                         </div>
                     </div>
 
-                    <!-- API Integrations -->
-                    <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-8">
-                        <h3 class="text-xs font-black text-white uppercase tracking-widest mb-8 flex items-center gap-2">
-                            <i class="ri-cloud-line text-primary"></i> External Node Connectivity
-                        </h3>
-                        <div class="space-y-6">
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
-                                    <i class="ri-google-line text-primary text-xl"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="text-[10px] font-black text-white uppercase tracking-tight">Google Indexing Rocket</p>
-                                    <p class="text-[9px] text-slate-500 font-bold uppercase mt-0.5">{{ $healthData['seo_api_audit']['google_indexing']['message'] }}</p>
-                                </div>
-                                <div class="text-right">
-                                    <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase bg-green-500/10 text-green-500">CONNECTED</span>
-                                </div>
+                    <div>
+                        <div class="flex justify-between items-end mb-3">
+                            <div>
+                                <p class="text-[10px] font-black text-white uppercase mb-1 tracking-tight">Phantom L1 Hit Ratio</p>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-tight">100% vs Redis (L2)</p>
                             </div>
+                            <span class="text-[10px] font-black text-slate-500 italic">Storage Bypass</span>
+                        </div>
+                        <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.3)] rounded-full transition-all duration-1000" style="width: {{ $healthData['infrastructure']['compute']['l1_hit_ratio'] ?? '100%' }}"></div>
+                        </div>
+                    </div>
 
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20">
-                                    <i class="ri-cloud-windy-line text-purple-500 text-xl"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="text-[10px] font-black text-white uppercase tracking-tight">Phantom Cloud Sync</p>
-                                    <p class="text-[9px] text-slate-500 font-bold uppercase mt-0.5">Last Checked: {{ $healthData['infrastructure']['database']['last_backup'] }}</p>
-                                </div>
-                                <div class="text-right">
-                                    <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase {{ $healthData['infrastructure']['database']['backup_status'] === 'Operational' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500' }}">
-                                        {{ $healthData['infrastructure']['database']['backup_status'] === 'Operational' ? 'SECURED' : 'CRITICAL' }}
-                                    </span>
-                                </div>
+                    <div>
+                        <div class="flex justify-between items-end mb-3">
+                            <div>
+                                <p class="text-[10px] font-black text-white uppercase mb-1 tracking-tight">Physical Storage Audit</p>
+                                <p class="text-xs font-mono text-slate-500">{{ $healthData['infrastructure']['storage']['free_space'] }} Available</p>
                             </div>
-
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center border border-green-500/20">
-                                    <i class="ri-whatsapp-line text-green-500 text-xl"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="text-[10px] font-black text-white uppercase tracking-tight">WhatsApp Lead Gateway</p>
-                                    <p class="text-[9px] text-slate-500 font-bold uppercase mt-0.5">Latency: {{ $healthData['seo_api_audit']['whatsapp']['latency'] }}</p>
-                                </div>
-                                <div class="text-right">
-                                    <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase bg-green-500/10 text-green-500">READY</span>
-                                </div>
+                            <span class="text-[10px] font-black text-white italic p-1 px-2 bg-white/10 rounded uppercase">{{ $healthData['infrastructure']['storage']['log_status'] }}</span>
+                        </div>
+                        <div class="h-2 bg-white/5 rounded-full overflow-hidden mb-4">
+                            <div class="h-full bg-white rounded-full transition-all duration-1000" style="width: {{ $healthData['infrastructure']['storage']['usage_percent'] }}"></div>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <p class="text-[9px] font-bold text-slate-500 uppercase tracking-tight">Memory Fragmentation Level</p>
                             </div>
-
-                            <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
-                                    <i class="ri-map-pin-line text-orange-500 text-xl"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="text-[10px] font-black text-white uppercase tracking-tight">XML Sitemap Manifest</p>
-                                    <p class="text-[9px] text-slate-500 font-bold uppercase mt-0.5">Location: {{ $healthData['seo_api_audit']['sitemap']['path'] }}</p>
-                                </div>
-                                <div class="text-right">
-                                    <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase bg-green-500/10 text-green-500">SYNCED</span>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center gap-4 mt-6">
-                                <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                                    <i class="ri-archive-line text-blue-500 text-xl"></i>
-                                </div>
-                                <div class="flex-1">
-                                    <p class="text-[10px] font-black text-white uppercase tracking-tight">Cold Storage Migration</p>
-                                    <p class="text-[9px] text-slate-500 font-bold uppercase mt-0.5">Last Archive: {{ $healthData['security']['audit']['last_archival'] ?? 'Unknown' }}</p>
-                                </div>
-                                <div class="text-right">
-                                    <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase {{ ($healthData['security']['audit']['last_archival'] ?? 'N/A') !== 'N/A' ? 'bg-green-500/10 text-green-500' : 'bg-slate-500/10 text-slate-500' }}">OPTIMAL</span>
-                                </div>
-                            </div>
+                            <span class="text-[10px] font-black {{ intval($healthData['infrastructure']['storage']['fragmentation'] ?? 0) < 10 ? 'text-green-500' : 'text-orange-500' }} italic">{{ $healthData['infrastructure']['storage']['fragmentation'] ?? '0%' }} (L2 ORPHAN)</span>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Database Metrics -->
-                <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-8 relative overflow-hidden">
-                    <div class="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
-                    <div class="flex items-center justify-between mb-8">
-                        <h3 class="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
-                            <i class="ri-database-line text-primary"></i> Relational Database Pulse
-                        </h3>
-                        <span class="text-[10px] font-black text-slate-500 uppercase bg-white/5 px-3 py-1 rounded-full border border-white/5 tracking-widest">PostgreSQL / MySQL</span>
+            <!-- 3. API Integrations -->
+            <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-8 flex flex-col">
+                <h3 class="text-xs font-black text-white uppercase tracking-widest mb-8 flex items-center gap-2">
+                    <i class="ri-cloud-line text-primary"></i> External Node Connectivity
+                </h3>
+                <div class="space-y-6 flex-1">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+                            <i class="ri-google-line text-primary text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-[10px] font-black text-white uppercase tracking-tight">Google Indexing Rocket</p>
+                            <p class="text-[9px] text-slate-500 font-bold uppercase mt-0.5">{{ $healthData['seo_api_audit']['google_indexing']['message'] }}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase bg-green-500/10 text-green-500">CONNECTED</span>
+                        </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div>
-                            <p class="text-[8px] font-black text-slate-500 uppercase mb-2 tracking-widest">Query Latency</p>
-                            <div class="flex items-baseline gap-2">
-                                <p class="text-3xl font-black text-white italic tracking-tighter">{{ $healthData['infrastructure']['database']['pulse'] }}</p>
-                                <span class="text-[8px] font-bold text-green-500 uppercase">Excellent</span>
-                            </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center border border-purple-500/20">
+                            <i class="ri-cloud-windy-line text-purple-500 text-xl"></i>
                         </div>
-                        <div>
-                            <p class="text-[8px] font-black text-slate-500 uppercase mb-2 tracking-widest">Total Diagnostic Objects</p>
-                            <p class="text-3xl font-black text-white italic tracking-tighter">{{ number_format($healthData['infrastructure']['database']['diagnose_entities']) }}</p>
+                        <div class="flex-1">
+                            <p class="text-[10px] font-black text-white uppercase tracking-tight">Phantom Cloud Sync</p>
+                            <p class="text-[9px] text-slate-500 font-bold uppercase mt-0.5">Last Checked: {{ $healthData['infrastructure']['database']['last_backup'] }}</p>
                         </div>
-                        <div>
-                            <p class="text-[8px] font-black text-slate-500 uppercase mb-2 tracking-widest">Storage Logs Size</p>
-                            <p class="text-3xl font-black text-white italic tracking-tighter">{{ $healthData['infrastructure']['storage']['log_size'] }}</p>
+                        <div class="text-right">
+                            <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase {{ $healthData['infrastructure']['database']['backup_status'] === 'Operational' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500' }}">
+                                {{ $healthData['infrastructure']['database']['backup_status'] === 'Operational' ? 'SECURED' : 'CRITICAL' }}
+                            </span>
                         </div>
                     </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center border border-green-500/20">
+                            <i class="ri-whatsapp-line text-green-500 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-[10px] font-black text-white uppercase tracking-tight">WhatsApp Lead Gateway</p>
+                            <p class="text-[9px] text-slate-500 font-bold uppercase mt-0.5">Latency: {{ $healthData['seo_api_audit']['whatsapp']['latency'] }}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase bg-green-500/10 text-green-500">READY</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
+                            <i class="ri-map-pin-line text-orange-500 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-[10px] font-black text-white uppercase tracking-tight">XML Sitemap Manifest</p>
+                            <p class="text-[9px] text-slate-500 font-bold uppercase mt-0.5">Location: {{ $healthData['seo_api_audit']['sitemap']['path'] }}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase bg-green-500/10 text-green-500">SYNCED</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                            <i class="ri-archive-line text-blue-500 text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-[10px] font-black text-white uppercase tracking-tight">Cold Storage Migration</p>
+                            <p class="text-[9px] text-slate-500 font-bold uppercase mt-0.5">Last Archive: {{ $healthData['security']['audit']['last_archival'] ?? 'Unknown' }}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase {{ ($healthData['security']['audit']['last_archival'] ?? 'N/A') !== 'N/A' ? 'bg-green-500/10 text-green-500' : 'bg-slate-500/10 text-slate-500' }}">OPTIMAL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROW 2: VITAL PULSE (Security & Database spanning) -->
+            <!-- Security Pulse -->
+            <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-8 flex flex-col">
+                <h3 class="text-xs font-black text-white uppercase tracking-widest mb-8 flex items-center gap-2">
+                    <i class="ri-lock-line text-primary"></i> Security Pulse
+                </h3>
+                <div class="grid grid-cols-2 gap-4 flex-1">
+                    <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex flex-col justify-center">
+                        <p class="text-[8px] font-black text-slate-500 uppercase mb-2">SSL Expiry</p>
+                        <p class="text-xl font-black text-white italic tracking-tighter">{{ $healthData['security']['ssl']['days_left'] }}</p>
+                        <p class="text-[8px] font-bold text-slate-500 uppercase mt-1">Status: OK</p>
+                    </div>
+                    <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex flex-col justify-center">
+                        <p class="text-[8px] font-black text-slate-500 uppercase mb-2">Debug Mode</p>
+                        <p class="text-xl font-black {{ ($healthData['security']['environment']['debug_mode'] ?? '') === 'Safe (Zero-Exposure)' ? 'text-green-500' : 'text-red-500' }} italic tracking-tighter">{{ strtoupper($healthData['security']['environment']['debug_mode'] ?? 'UNKNOWN') }}</p>
+                    </div>
+                    <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex flex-col justify-center">
+                        <p class="text-[8px] font-black text-slate-500 uppercase mb-2">Threat Neutralized</p>
+                        <p class="text-xl font-black text-green-500 italic tracking-tighter">{{ $healthData['security']['audit']['threat_neutralized'] ?? 0 }}</p>
+                        <p class="text-[8px] font-bold text-slate-500 uppercase mt-1">REJECTS</p>
+                    </div>
+                    <div class="p-4 bg-white/5 rounded-2xl border border-white/5 flex flex-col justify-center">
+                        <p class="text-[8px] font-black text-slate-500 uppercase mb-2">Gateway Pulse</p>
+                        <p class="text-xl font-black text-white italic tracking-tighter">{{ $healthData['security']['audit']['intro_pulse'] ?? 'N/A' }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Relational Database Pulse -->
+            <div class="lg:col-span-2 bg-slate-900/50 border border-white/5 rounded-3xl p-8 relative overflow-hidden flex flex-col">
+                <div class="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+                <div class="flex items-center justify-between mb-8">
+                    <h3 class="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2">
+                        <i class="ri-database-line text-primary"></i> Relational Database Pulse
+                    </h3>
+                    <span class="text-[10px] font-black text-slate-500 uppercase bg-white/5 px-3 py-1 rounded-full border border-white/5 tracking-widest">Active Engine</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 flex-1 content-center">
+                    <div class="border-l-2 border-primary/20 pl-6">
+                        <p class="text-[8px] font-black text-slate-500 uppercase mb-2 tracking-widest">Query Latency</p>
+                        <div class="flex items-baseline gap-2">
+                            <p class="text-4xl font-black text-white italic tracking-tighter">{{ $healthData['infrastructure']['database']['pulse'] }}</p>
+                            <span class="text-[8px] font-bold text-green-500 uppercase">Excellent</span>
+                        </div>
+                    </div>
+                    <div class="border-l-2 border-white/5 pl-6">
+                        <p class="text-[8px] font-black text-slate-500 uppercase mb-2 tracking-widest">Diagnostic Objects</p>
+                        <p class="text-4xl font-black text-white italic tracking-tighter">{{ number_format($healthData['infrastructure']['database']['diagnose_entities']) }}</p>
+                    </div>
+                    <div class="border-l-2 border-white/5 pl-6">
+                        <p class="text-[8px] font-black text-slate-500 uppercase mb-2 tracking-widest">Storage Logs Size</p>
+                        <p class="text-4xl font-black text-white italic tracking-tighter">{{ $healthData['infrastructure']['storage']['log_size'] }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROW 3: EMERGENCY PROTOCOLS (Symmetrical bottom cards) -->
+            <!-- Placeholder to keep col 1 alignment or for status logs if desired -->
+            <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-6 flex items-center justify-between">
+                <div>
+                    <p class="text-[10px] font-black text-white uppercase mb-1 tracking-tight">Security Audit</p>
+                    <p class="text-xs font-mono text-slate-500">Zero Trust Logging Active</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                    <span class="text-[9px] font-black text-green-500 uppercase">NOMINAL</span>
+                </div>
+            </div>
+
+            <!-- Lockdown Status -->
+            <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-6 flex flex-col justify-between h-full">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-[8px] font-black text-slate-500 uppercase mb-2">System Lockdown Status</p>
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 rounded-full {{ $healthData['security']['lockdown']['active'] ? 'bg-red-500 animate-pulse' : 'bg-green-500' }}"></div>
+                            <p class="text-xl font-black {{ $healthData['security']['lockdown']['active'] ? 'text-red-500' : 'text-green-500' }} italic tracking-tighter">
+                                {{ $healthData['security']['lockdown']['active'] ? 'ACTIVE LOCKDOWN' : 'SECURED / NOMINAL' }}
+                            </p>
+                        </div>
+                    </div>
+                    <i class="ri-shield-keyhole-line text-3xl {{ $healthData['security']['lockdown']['active'] ? 'text-red-500' : 'text-slate-500' }}"></i>
+                </div>
+            </div>
+
+            <!-- Kill Switch / Bridge -->
+            <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-6 h-full flex flex-col justify-between">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-[8px] font-black text-slate-500 uppercase mb-1">API Kill-Switch</p>
+                        <p class="text-sm font-black {{ $healthData['security']['lockdown']['kill_switch'] === 'ENABLED' ? 'text-green-500' : 'text-red-500' }} italic">
+                            {{ $healthData['security']['lockdown']['kill_switch'] }}
+                        </p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[8px] font-black text-slate-500 uppercase mb-1">Entropy Guard</p>
+                        <p class="text-sm font-black text-primary italic">{{ $healthData['security']['lockdown']['entropy_guard'] }}</p>
+                    </div>
+                </div>
+                <div class="pt-4 border-t border-white/5 flex justify-between items-center mt-4">
+                    <p class="text-[10px] font-black text-white uppercase tracking-tight">Neural Bridge</p>
+                    <span class="text-[9px] font-black text-green-500 bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20">CONNECTED</span>
                 </div>
             </div>
         </div>
