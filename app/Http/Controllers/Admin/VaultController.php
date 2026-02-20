@@ -26,6 +26,7 @@ class VaultController extends Controller
             'debug_mode' => config('app.debug'),
             'env' => config('app.env'),
             'lockdown_active' => Cache::get('system_lockdown', false),
+            'masterpiece_active' => Cache::get('masterpiece_execution_active', false),
         ];
 
         return view('admin.vault.index', compact('stats'));

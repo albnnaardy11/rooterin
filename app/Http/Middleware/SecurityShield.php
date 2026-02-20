@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Services\Security\SecurityAutomationService;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class SecurityShield
 {
@@ -32,23 +33,50 @@ class SecurityShield
             $this->security->killDebugMode();
         }
 
-        // 3. Neural Asset Protection
+        // 3. Neural Asset Protection (Handshake Required)
         if ($request->is('models/*')) {
-            $this->security->protectNeuralAssets($request);
+            if (!$this->security->verifyHandshake($request) && !$this->security->protectNeuralAssets($request)) {
+                $this->security->blockIp($request->ip(), 'Neural Handshake Failure');
+                abort(403, 'Akses model ditolak. Koneksi tidak tersinkronisasi.');
+            }
         }
 
-        // 4. Lockdown Mode Check
+        // 4. Rate-Limiting Threshold (WikiPipa Protection)
+        if ($request->is('wiki/*')) {
+            if ($this->security->checkRateLimit($request->ip(), 'WikiPipa')) {
+                abort(429, 'Terdeteksi aktivitas scraping massal. Akses ditangguhkan.');
+            }
+        }
+
+        // 5. Hotlink Prevention (IP Shield)
+        $this->preventHotlinking($request);
+
+        // 6. Lockdown Mode Check
         if (Cache::get('system_lockdown') && !$request->is('admin/*')) {
             return response()->view('errors.lockdown', [], 503);
         }
 
-        // 5. Intelligent Threat Detection (WAF Mockup)
+        // 7. Intelligent Threat Detection (WAF Mockup)
         $this->detectThreats($request);
 
-        // 6. Bot & Scraper Blocker (WikiPipa Protection)
+        // 8. Bot & Scraper Blocker (WikiPipa Protection)
         $this->blockScrapers($request);
 
         return $next($request);
+    }
+
+    protected function preventHotlinking(Request $request)
+    {
+        $referer = $request->headers->get('referer');
+        $host = $request->getHost();
+
+        if ($referer && !str_contains($referer, $host)) {
+            $path = $request->path();
+            if (str_contains($path, 'assets/wiki') || str_contains($path, 'models')) {
+                Log::warning("[SECURITY] Hotlink attempt blocked from $referer for $path");
+                abort(403, 'Hotlinking is prohibited by RooterIN IP Shield.');
+            }
+        }
     }
 
     protected function blockScrapers(Request $request)

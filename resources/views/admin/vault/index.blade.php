@@ -12,6 +12,9 @@
             <div>
                 <div class="flex items-center gap-3 mb-4">
                     <span class="px-3 py-1 bg-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.2em] rounded-full border border-primary/20">SecOps v2.4</span>
+                    @if($stats['masterpiece_active'])
+                    <span class="px-3 py-1 bg-orange-500/20 text-orange-500 text-[10px] font-black uppercase tracking-[0.2em] rounded-full border border-orange-500/20">Masterpiece Active</span>
+                    @endif
                     <span class="flex items-center gap-2 text-emerald-500 text-[10px] font-black uppercase tracking-[0.2em]">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                         Neural Shield Active

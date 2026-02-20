@@ -71,9 +71,21 @@ function _btnState(id, disabled, html) {
 }
 
 // ── STEP 1: VISION ──────────────────────────────────────────
-function rtVision() {
+async function rtVision() {
     if (_diag.busy) return;
     _diag.busy = true;
+    _btnState('btn-v', true, 'Negotiating...');
+    
+    try {
+        // HANDSHAKE PROTOCOL: Secure Token Exchange
+        const hResp = await fetch('{{ route("ai.diagnostic.handshake") }}');
+        const hData = await hResp.json();
+        _diag.handshake = hData.token;
+        _toast('Neural Handshake Active: Verified');
+    } catch (e) {
+        _toast('Handshake Failure: Using Local Cache', true);
+    }
+
     _btnState('btn-v', true, 'Menganalisa...');
     _toast('Memindai visual dengan AI...');
     if (_diag.camOn) {
@@ -231,7 +243,12 @@ function rtGenerate(){
 
     fetch('{{ route("ai.diagnostic.store") }}', {
         method: 'POST',
-        headers: { 'Content-Type':'application/json', 'X-CSRF-TOKEN':'{{ csrf_token() }}', 'Accept':'application/json' },
+        headers: { 
+            'Content-Type':'application/json', 
+            'X-CSRF-TOKEN':'{{ csrf_token() }}', 
+            'Accept':'application/json',
+            'X-Neural-Handshake': _diag.handshake || ''
+        },
         body: JSON.stringify(payload)
     })
     .then(function(r){ return r.ok ? r.json() : Promise.reject('HTTP '+r.status); })

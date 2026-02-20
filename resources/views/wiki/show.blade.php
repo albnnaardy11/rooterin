@@ -13,7 +13,19 @@
         <div class="h-full bg-primary transition-all duration-150 shadow-[0_0_15px_rgba(var(--color-primary-rgb),0.5)]" :style="`width: ${percent}%`"></div>
     </div>
 
-    <section class="bg-stone-50/50 pt-32 sm:pt-48 pb-40 min-h-screen">
+    {{-- HONEY POT: Bot Trap (Lead Cyber Security Implementation) --}}
+    <a href="{{ route('security.honeypot') }}" rel="nofollow" style="display:none; visibility:hidden; width:0; height:0;" aria-hidden="true">RooterIN Neural Asset Sync</a>
+
+    <style>
+        /* INTELLECTUAL PROPERTY SHIELD: Content Obfuscation */
+        .scrap-prevent {
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+
+    <section class="bg-stone-50/50 pt-32 sm:pt-48 pb-40 min-h-screen scrap-prevent">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
             {{-- Breadcrumb & Back --}}

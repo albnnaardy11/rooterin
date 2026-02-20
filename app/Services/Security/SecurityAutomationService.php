@@ -12,6 +12,15 @@ use Carbon\Carbon;
 class SecurityAutomationService
 {
     /**
+     * MASTERPIECE MODE: Secure Execution State
+     */
+    public function masterpieceMode()
+    {
+        Cache::put('masterpiece_execution_active', true, 3600);
+        Log::info("[SECURITY] Masterpiece Mode: DEFENSIVE_MAXIMUS Active.");
+    }
+
+    /**
      * AUTO-HEALING: Debug Mode Killer
      */
     public function killDebugMode()
@@ -138,5 +147,58 @@ class SecurityAutomationService
         
         $user = auth()->user() ? auth()->user()->email : 'Anonymous/System';
         Log::info("[AUDIT] $user performed $action from $ip");
+    }
+
+    /**
+     * HONEY POT: Bot Trap Detection
+     */
+    public function triggerHoneyPot($ip)
+    {
+        $this->blockIp($ip, 'Honey Pot Trap: Malicious Bot/Scraper Detected');
+        $this->auditLog('Honey Pot Triggered', ['ip' => $ip]);
+        return abort(403, 'Akses ilegal terdeteksi oleh RooterIN Neural Shield.');
+    }
+
+    /**
+     * RATE LIMITER: Mass Scraping Detection
+     */
+    public function checkRateLimit($ip, $section)
+    {
+        $key = "rate_limit:{$section}:{$ip}";
+        $hits = Cache::increment($key);
+        
+        if ($hits === 1) {
+            Cache::put($key, 1, 60); // 1 minute window
+        }
+
+        if ($hits > 10) {
+            $this->blockIp($ip, "Mass Scraping Detected on $section (>10 hits/min)");
+            $this->auditLog('Scraping Threshold Exceeded', ['section' => $section, 'hits' => $hits]);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * HANDSHAKE: Neural Asset Protection
+     */
+    public function verifyHandshake($request)
+    {
+        $handshake = $request->header('X-Neural-Handshake');
+        $validToken = Cache::get('active_neural_handshake');
+
+        if (!$validToken || $handshake !== $validToken) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function generateHandshake()
+    {
+        $token = bin2hex(random_bytes(16));
+        Cache::put('active_neural_handshake', $token, 300); // 5 min window
+        return $token;
     }
 }

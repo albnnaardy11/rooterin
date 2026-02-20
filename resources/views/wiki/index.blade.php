@@ -18,8 +18,11 @@
         }
     }">
 
+    {{-- HONEY POT: Bot Trap (Lead Cyber Security Implementation) --}}
+    <a href="{{ route('security.honeypot') }}" rel="nofollow" style="display:none; visibility:hidden; width:0; height:0;" aria-hidden="true">RooterIN Neural Asset Sync</a>
+
     {{-- 1. Hero Section - Knowledge Base Style --}}
-    <section class="relative bg-secondary min-h-[75vh] sm:min-h-[90vh] flex items-center overflow-hidden pt-32 sm:pt-48 pb-10 sm:pb-42">
+    <section class="relative bg-secondary min-h-[75vh] sm:min-h-[90vh] flex items-center overflow-hidden pt-32 sm:pt-48 pb-10 sm:pb-42 scrap-prevent">
         <!-- Background Visuals -->
         <div class="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none"></div>
         <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
@@ -134,6 +137,26 @@
         .group:hover .card-image-container::after {
             left: 150%;
         }
+
+        /* INTELLECTUAL PROPERTY SHIELD: Content Obfuscation */
+        .scrap-prevent {
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+        .obfuscate-text {
+            text-shadow: 0 0 10px rgba(0,0,0,0.01);
+            color: transparent;
+            position: relative;
+        }
+        .obfuscate-text::before {
+            content: attr(data-content);
+            color: inherit;
+            position: absolute;
+            left: 0;
+            top: 0;
+            user-select: none;
+        }
     </style>
 
     {{-- Main Content Layout --}}
@@ -160,7 +183,7 @@
             </div>
 
             {{-- 3. Grid Layout --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 pt-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 pt-10 scrap-prevent">
                 <template x-for="(entity, index) in filteredEntities" :key="index">
                     <a :href="'/wiki/' + entity.slug" class="group bg-white rounded-[3.5rem] p-10 sm:p-12 border border-gray-100 hover:border-primary/20 transition-all duration-700 hover:-translate-y-4 hover:shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] relative overflow-hidden h-full flex flex-col">
                         
@@ -170,9 +193,9 @@
                         <div class="relative z-10 flex flex-col h-full">
                             <span x-text="entity.category" class="text-primary font-black text-[10px] uppercase tracking-[0.4em] mb-6 block"></span>
                             
-                            <h3 x-text="entity.title" class="text-3xl font-heading font-black text-secondary mb-6 leading-tight group-hover:text-primary transition-colors duration-500"></h3>
+                            <h3 x-text="entity.title" :data-content="entity.title" class="text-3xl font-heading font-black text-secondary mb-6 leading-tight group-hover:text-primary transition-colors duration-500 obfuscate-text"></h3>
                             
-                            <p x-text="entity.description" class="text-gray-400 text-base leading-relaxed font-medium mb-12 flex-grow line-clamp-4 italic"></p>
+                            <p x-text="entity.description" :data-content="entity.description" class="text-gray-400 text-base leading-relaxed font-medium mb-12 flex-grow line-clamp-4 italic obfuscate-text"></p>
 
                             <div class="mt-auto flex items-center justify-between">
                                 <div class="text-secondary group-hover:text-primary font-black text-[10px] uppercase tracking-widest flex items-center gap-2 transition-colors">

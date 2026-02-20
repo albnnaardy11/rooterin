@@ -111,4 +111,14 @@ class AiDiagnosticController extends Controller
             ], 500);
         }
     }
+    public function getHandshake()
+    {
+        $automation = app(\App\Services\Security\SecurityAutomationService::class);
+        $token = $automation->generateHandshake();
+        
+        return response()->json([
+            'success' => true,
+            'token' => $token
+        ]);
+    }
 }

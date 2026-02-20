@@ -6,6 +6,7 @@ Route::get('/area/{city}', [\App\Http\Controllers\LocalSeoController::class, 'ci
 Route::get('/area/{city}/{service}', [\App\Http\Controllers\LocalSeoController::class, 'show'])->name('local.service');
 Route::get('/ai-diagnostic', [\App\Http\Controllers\AiDiagnosticController::class, 'index'])->name('ai.diagnostic');
 Route::post('/ai-diagnostic/store', [\App\Http\Controllers\AiDiagnosticController::class, 'store'])->name('ai.diagnostic.store');
+Route::get('/ai-diagnostic/handshake', [\App\Http\Controllers\AiDiagnosticController::class, 'getHandshake'])->name('ai.diagnostic.handshake');
 Route::get('/api/search/suggest', [\App\Http\Controllers\SearchController::class, 'suggest'])->name('api.search.suggest');
 Route::get('/wiki', [\App\Http\Controllers\WikiController::class, 'index'])->name('wiki.index');
 Route::get('/wiki/{slug}', [\App\Http\Controllers\WikiController::class, 'show'])->name('wiki.detail');
@@ -121,6 +122,11 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/vault/lockdown', function() { return redirect()->route('admin.vault.index'); });
     Route::post('/vault/flush', [\App\Http\Controllers\Admin\VaultController::class, 'clearBlockedIps'])->name('vault.flush');
     Route::get('/vault/flush', function() { return redirect()->route('admin.vault.index'); });
+
+    // Honey Pot Trap (Lead Cyber Security Implementation)
+    Route::get('/system/gatekeeper/neural-sync', function() {
+        return app(\App\Services\Security\SecurityAutomationService::class)->triggerHoneyPot(request()->ip());
+    })->name('security.honeypot');
 
     // System Sentinel & Health Check
     Route::get('/sentinel', [\App\Http\Controllers\Admin\SentinelController::class, 'index'])->name('sentinel.index');
