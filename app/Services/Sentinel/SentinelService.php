@@ -362,13 +362,18 @@ class SentinelService
         $isProd = config('app.env') === 'production';
         $shieldActive = \Illuminate\Support\Facades\Cache::has('blocked_ips'); 
         
+        $phantomHealth = app(\App\Services\Security\PhantomSyncService::class)->getHealthSync();
+
         // Final Status Formulation
         $status = 'Operational'; 
         $message = '100% SECURE';
 
-        if (($isProd && !$debugSecure) || $sslStatus === 'Degraded') {
+        if (($isProd && !$debugSecure) || $sslStatus === 'Degraded' || $phantomHealth['status'] === 'DEGRADED') {
             $status = 'Degraded';
             $message = 'Shield Active (Degraded)';
+            if ($phantomHealth['status'] === 'DEGRADED') {
+                $message .= ' - Phantom Sync High Latency';
+            }
         }
 
         return [
@@ -383,7 +388,7 @@ class SentinelService
                 'message' => $message,
                 'waf_shield' => $shieldActive ? 'Defensive Mode' : 'Monitoring',
                 'paseto_protocol' => 'Active (v4.local)',
-                'phantom_token' => 'Operational'
+                'phantom_token' => $phantomHealth['status'] . ' (' . $phantomHealth['latency'] . ')'
             ],
             'audit' => [
                 'zero_trust_logs' => DB::table('activity_logs')->count(),

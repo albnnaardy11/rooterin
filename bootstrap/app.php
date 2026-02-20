@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'shield' => \App\Http\Middleware\SecurityShield::class,
             'super_admin' => \App\Http\Middleware\SuperAdminOnly::class,
             'audit' => \App\Http\Middleware\AdminAuditLogger::class,
+            'phantom' => \App\Http\Middleware\PhantomExchangeMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
