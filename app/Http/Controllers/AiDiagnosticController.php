@@ -53,29 +53,44 @@ class AiDiagnosticController extends Controller
         $lat = -6.2 + (mt_rand(-100, 100) / 1000); 
         $lng = 106.8 + (mt_rand(-100, 100) / 1000);
 
-        $lead = AiDiagnose::create([
-            'diagnose_id' => $diagnoseId,
-            'result_label' => $validated['result_label'],
-            'confidence_score' => $vScore,
-            'final_deep_score' => $severity,
-            'material_type' => $validated['survey_data']['material'] ?? 'pvc',
-            'location_context' => $validated['survey_data']['sub_context'] ?? $validated['survey_data']['location'] ?? 'general',
-            'audio_label' => $validated['audio_label'] ?? 'Standard Flow',
-            'audio_confidence' => $aScore,
-            'survey_data' => $validated['survey_data'],
-            'recommended_tools' => $validated['recommended_tools'] ?? 'Rooter Machine',
-            'city_location' => $validated['city_location'] ?? 'Auto Detect',
-            'latitude' => $lat,
-            'longitude' => $lng,
-            'metadata' => $validated['metadata'] ?? [],
-            'status' => 'pending'
-        ]);
+        try {
+            $lead = AiDiagnose::create([
+                'diagnose_id' => $diagnoseId,
+                'result_label' => $validated['result_label'],
+                'confidence_score' => $vScore,
+                'final_deep_score' => $severity,
+                'material_type' => $validated['survey_data']['material'] ?? 'pvc',
+                'location_context' => $validated['survey_data']['sub_context'] ?? $validated['survey_data']['location'] ?? 'general',
+                'audio_label' => $validated['audio_label'] ?? 'Standard Flow',
+                'audio_confidence' => $aScore,
+                'survey_data' => $validated['survey_data'],
+                'recommended_tools' => $validated['recommended_tools'] ?? 'Rooter Machine',
+                'city_location' => $validated['city_location'] ?? 'Auto Detect',
+                'latitude' => $lat,
+                'longitude' => $lng,
+                'metadata' => $validated['metadata'] ?? [],
+                'status' => 'pending'
+            ]);
 
-        return response()->json([
-            'success' => true,
-            'diagnose_id' => $lead->diagnose_id,
-            'deep_ranking' => $severity,
-            'data' => $lead
-        ]);
+            // Optional cache eviction
+            try {
+                \Illuminate\Support\Facades\Cache::forget('ai_intelligence_heatmap');
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::warning("Cache eviction failed: " . $e->getMessage());
+            }
+
+            return response()->json([
+                'success' => true,
+                'diagnose_id' => $lead->diagnose_id,
+                'deep_ranking' => $severity,
+                'data' => $lead
+            ]);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Diagnostic Storage Failed: " . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Internal Server Error'
+            ], 500);
+        }
     }
 }

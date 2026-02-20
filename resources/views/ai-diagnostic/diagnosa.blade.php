@@ -211,64 +211,81 @@
                             </button>
                         </div>
 
-                        <!-- Step 3 Actions -->
+                        <!-- Step 3 (Generate) Action - positioned outside scroll area -->
                         <div x-show="currentStep === 2" class="flex gap-4">
-                            <button @click="finishDeepDiagnostic()" :disabled="finishing" class="flex-1 py-5 bg-secondary text-white rounded-3xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-secondary/20 hover:scale-105 active:scale-95 transition-all">
-                                <span x-text="finishing ? 'Calculating Rooterin Deep Score...' : 'Generate Deep Diagnostic'"></span>
+                            <button @click="finishDeepDiagnostic()"
+                                :disabled="finishing"
+                                class="flex-1 py-5 bg-secondary text-white rounded-3xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-secondary/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-60 disabled:cursor-wait disabled:scale-100">
+                                <span x-text="finishing ? 'Menghitung Skor...' : 'Generate Deep Diagnostic'"></span>
                             </button>
-                        </div>
                         </div>
                     </div>
 
-                    <!-- Result Modal (Inside Scope) -->
-                    <div x-show="showResultModal" 
-                         x-transition:enter="transition ease-out duration-300"
-                         x-transition:enter-start="opacity-0 scale-95"
-                         x-transition:enter-end="opacity-100 scale-100"
-                         x-transition:leave="transition ease-in duration-200"
-                         x-transition:leave-start="opacity-100 scale-100"
-                         x-transition:leave-end="opacity-0 scale-95"
-                         x-cloak 
-                         class="fixed inset-0 z-[100] flex items-center justify-center p-6">
-                        <div class="absolute inset-0 bg-slate-950/90 backdrop-blur-xl" @click="showResultModal = false"></div>
-                        <div class="relative w-full max-w-lg bg-slate-900 border border-white/10 rounded-[3rem] p-10 shadow-3xl overflow-hidden">
-                            <!-- Deep Rank Badge -->
-                            <div class="flex justify-center mb-6">
-                                <div class="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-accent p-1">
-                                    <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center">
-                                        <span class="text-4xl font-heading font-black text-white italic" x-text="deepRanking"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-center mb-8">
-                                <h2 class="text-2xl font-heading font-black text-white mb-2 underline decoration-primary" x-text="resultTitle"></h2>
-                                <span class="text-[8px] font-black text-slate-500 uppercase tracking-widest">Tracking ID: <span x-text="diagnoseId"></span></span>
-                            </div>
-
-                            <div class="bg-white/5 rounded-3xl p-6 border border-white/5 mb-8">
-                                <div class="space-y-4">
-                                    <div class="p-4 bg-primary/10 rounded-2xl border border-primary/20">
-                                        <span class="text-[8px] font-black text-primary uppercase block mb-1 underline">REKOMENDASI SPESIALIS</span>
-                                        <p class="text-white text-[11px] font-bold leading-relaxed" x-text="recommendation"></p>
-                                    </div>
-                                    <div class="p-4 bg-slate-950/50 rounded-2xl border border-white/5 flex items-start gap-4">
-                                        <div class="w-10 h-10 bg-secondary/20 rounded-xl flex items-center justify-center shrink-0">
-                                            <i class="ri-tools-line text-secondary text-xl"></i>
-                                        </div>
-                                        <div>
-                                            <span class="text-[8px] font-black text-slate-500 uppercase block mb-1">ALAT YANG DIBUTUHKAN</span>
-                                            <p class="text-slate-300 text-[10px] font-medium" x-text="toolsNeeded"></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button @click="openWhatsAppDeep()" class="w-full py-5 bg-secondary text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.2em] shadow-xl shadow-secondary/20 flex items-center justify-center gap-3">
-                                <i class="ri-whatsapp-line text-xl"></i>
-                                Kirim Laporan Deep Diagnostic
-                            </button>
-                            <button @click="showResultModal = false" class="mt-4 w-full py-2 text-[8px] font-black text-slate-500 uppercase tracking-widest hover:text-white transition-all">Tutup Analisis</button>
+                    <!-- Processing Overlay -->
+                    <div x-show="finishing" class="absolute inset-0 z-[60] bg-slate-950/80 backdrop-blur-md flex flex-col items-center justify-center rounded-[3.5rem] p-12 text-center pointer-events-none">
+                        <div class="relative w-24 h-24 mb-6">
+                            <div class="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                            <div class="absolute inset-4 border-4 border-secondary border-b-transparent rounded-full" style="animation: spinReverse 1s linear infinite;"></div>
                         </div>
+                        <h4 class="text-white font-heading font-black text-xl italic mb-2">Neural Fusion...</h4>
+                        <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em]">Menghitung Probabilitas &amp; Solusi Teknis</p>
+                    </div>
+                </div>
+
+                <!-- Result Modal (Moved Outside scope for layout safety) -->
+                <div x-show="showResultModal" 
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 scale-95"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-95"
+                     x-cloak 
+                     class="fixed inset-0 z-[999] flex items-center justify-center p-6">
+                    <div class="absolute inset-0 bg-slate-950/95 backdrop-blur-2xl" @click="showResultModal = false"></div>
+                    <div class="relative w-full max-w-lg bg-slate-900 border border-white/10 rounded-[4rem] p-12 shadow-[0_0_100px_rgba(34,197,94,0.15)] overflow-hidden">
+                        <!-- Deep Rank Badge -->
+                        <div class="flex justify-center mb-8">
+                            <div class="w-32 h-32 rounded-full bg-gradient-to-br from-primary via-orange-500 to-secondary p-1 animate-pulse">
+                                <div class="w-full h-full bg-slate-950 rounded-full flex flex-col items-center justify-center">
+                                    <span class="text-5xl font-heading font-black text-white italic" x-text="deepRanking"></span>
+                                    <span class="text-[8px] font-black text-slate-500 uppercase">AI Score</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mb-10">
+                            <h2 class="text-3xl font-heading font-black text-white mb-3 underline decoration-primary underline-offset-8" x-text="resultTitle"></h2>
+                            <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-white/10">
+                                <span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+                                <span class="text-[8px] font-black text-slate-500 uppercase tracking-widest">ID: <span x-text="diagnoseId"></span></span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 mb-10">
+                            <div class="p-6 bg-primary/5 rounded-[2.5rem] border border-primary/20 relative overflow-hidden group">
+                                <i class="ri-lightbulb-line absolute -right-4 -top-4 text-8xl text-primary/5 group-hover:rotate-12 transition-transform"></i>
+                                <span class="text-[10px] font-black text-primary uppercase block mb-2 tracking-[0.2em]">Strategi Penanganan</span>
+                                <p class="text-white text-sm font-bold leading-relaxed relative z-10" x-text="recommendation"></p>
+                            </div>
+                            
+                            <div class="p-6 bg-slate-950/80 rounded-[2.5rem] border border-white/5 flex items-center gap-6">
+                                <div class="w-14 h-14 bg-secondary/10 rounded-2xl flex items-center justify-center shrink-0 shadow-inner">
+                                    <i class="ri-tools-line text-secondary text-2xl"></i>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] font-black text-slate-500 uppercase block mb-1 tracking-widest">Alat Spesifik</span>
+                                    <p class="text-slate-200 text-xs font-bold" x-text="toolsNeeded"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button @click="openWhatsAppDeep()" class="group w-full py-6 bg-secondary text-white rounded-[2.5rem] font-black uppercase text-xs tracking-[0.3em] shadow-2xl shadow-secondary/50 flex items-center justify-center gap-4 hover:scale-[1.02] hover:bg-secondary/90 transition-all border-t border-white/20">
+                            <i class="ri-whatsapp-line text-2xl group-hover:rotate-12 transition-transform"></i>
+                            Panggil Bantuan Ahli
+                        </button>
+                        
+                        <button @click="showResultModal = false" class="mt-6 w-full py-2 text-[10px] font-black text-slate-600 uppercase tracking-[0.4em] hover:text-white transition-all">Selesai / Tutup</button>
                     </div>
                 </div>
             </div>
@@ -584,84 +601,72 @@
                 },
 
                 async finishDeepDiagnostic() {
-                    if (this.finishing) {
-                        console.warn("Deep Diagnostic: Already in progress, ignoring duplicate call.");
-                        return;
-                    }
+                    if (this.finishing) return;
 
-                    // --- COMPREHENSIVE VALIDATION ---
-                    console.log("Deep Diagnostic: Validating context...", this.survey);
+                    // Auto-fill defaults if nothing selected
                     if (!this.survey.location && !this.survey.sub_context) {
-                        this.showToast("Pilih lokasi atau detail pipa terlebih dahulu!", "error");
-                        console.error("Deep Diagnostic: Validation failed - No location selected.");
-                        return;
+                        this.survey.sub_context = 'general';
                     }
 
                     this.finishing = true;
-                    this.showToast("Step 1: Mengkalkulasi Skor AI...", "info");
+                    this.showToast("Mengkalkulasi Probabilitas AI...", "info");
                     
-                    // Safety Defaults for incomplete data
-                    if (!this.visionLabel || this.visionConfidence < 10) {
-                        console.warn("Deep Diagnostic: Vision data missing or low, using heuristic fallback.");
-                        this.visionLabel = 'Standard Pipe Blockage';
-                        this.visionConfidence = 70;
-                    }
-
                     try {
-                        console.log("Deep Diagnostic: Running Inference Engine...");
+                        console.log("Deep Diagnostic: Fusion Pipeline Initiated");
                         this.runInferenceEngine(); 
 
-                        this.showToast("Step 2: Menghubungkan ke Cloud RooterIN...", "info");
-                        
+                        const controller = new AbortController();
+                        const id = setTimeout(() => controller.abort(), 12000); // 12s timeout
+
                         const response = await fetch('{{ route('ai.diagnostic.store') }}', {
                             method: 'POST',
+                            signal: controller.signal,
                             headers: { 
                                 'Content-Type': 'application/json', 
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                                 'Accept': 'application/json'
                             },
                             body: JSON.stringify({
-                                result_label: this.visionLabel,
-                                confidence_score: this.visionConfidence,
-                                audio_label: this.audioLabel,
-                                audio_confidence: this.audioConfidence,
+                                result_label: String(this.visionLabel || 'General Blockage'),
+                                confidence_score: parseInt(this.visionConfidence) || 85,
+                                audio_label: String(this.audioLabel || 'Standard Flow'),
+                                audio_confidence: parseInt(this.audioConfidence) || 0,
                                 survey_data: this.survey,
-                                recommended_tools: this.toolsNeeded,
+                                recommended_tools: String(this.toolsNeeded || 'Rooter Machine'),
                                 city_location: 'Auto Detect'
                             })
                         });
                         
-                        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+                        clearTimeout(id);
+                        
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
                         
                         const data = await response.json();
-                        console.log("Deep Diagnostic: Server success!", data);
+                        console.log("Deep Diagnostic: Server returned:", data);
 
                         if (data.success) {
                             this.diagnoseId = data.diagnose_id;
                             this.deepRanking = data.deep_ranking;
-                            this.showToast("Analisis Selesai! Menampilkan Hasil...", "info");
+                            this.showToast("Penghitungan Selesai!", "info");
                             
-                            // Force immediate modal show
                             setTimeout(() => {
                                 this.showResultModal = true;
-                                console.log("Deep Diagnostic: Result Modal Triggered.");
-                            }, 500);
+                                this.finishing = false;
+                            }, 400);
                         } else {
-                            throw new Error("Logic failure in server response");
+                            throw new Error("API process failure");
                         }
 
                     } catch (e) {
-                        console.error("Deep Diagnostic: Submission Error", e);
-                        this.showToast("Gagal Terhubung ke Server - Menggunakan Analisis Lokal", "error");
+                        console.error("Deep Diagnostic: Pipeline Failed", e);
+                        const isTimeout = e.name === 'AbortError';
+                        this.showToast(isTimeout ? "Server Sibuk - Mengaktifkan AI Lokal" : "Gagal Terhubung - Mengaktifkan AI Lokal", "error");
                         
-                        // Critical Fallback UI
+                        // Failover Logic
                         this.diagnoseId = 'RT-LOCAL-' + Math.floor(Math.random()*9000 + 1000);
-                        this.deepRanking = 'B'; 
+                        this.deepRanking = (parseInt(this.visionConfidence) > 80) ? 'A' : 'B'; 
                         this.showResultModal = true;
-                        this.saveForSyncLater();
-                    } finally {
                         this.finishing = false;
-                        console.log("Deep Diagnostic: Pipeline lifecycle ended.");
                     }
                 },
 
@@ -709,5 +714,6 @@
         [x-cloak] { display: none !important; }
         .animate-scan-line { animation: scanMove 3s infinite linear; }
         @keyframes scanMove { 0% { top: 0; opacity: 0; } 5% { opacity: 1; } 95% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+        @keyframes spinReverse { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
     </style>
 </x-app-layout>
