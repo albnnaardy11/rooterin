@@ -3,18 +3,34 @@
  * Handles Offline-First capabilities and asset caching for AI Diagnostic
  */
 
-const CACHE_NAME = 'rooterin-ai-v1';
+const CACHE_NAME = 'rooterin-ai-v2'; // Updated version
 const ASSETS_TO_CACHE = [
-    '/ai-diagnostic',
     '/assets/ai/workers/ai-processor.js',
     'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0',
     'https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css'
 ];
 
 self.addEventListener('install', (event) => {
+    self.skipWaiting(); // Force active immediately
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
             return cache.addAll(ASSETS_TO_CACHE);
+        })
+    );
+});
+
+self.addEventListener('activate', (event) => {
+    event.waitUntil(clients.claim()); // Take control of all open tabs
+    // Clean up old caches
+    event.waitUntil(
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cacheName) => {
+                    if (cacheName !== CACHE_NAME) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
         })
     );
 });

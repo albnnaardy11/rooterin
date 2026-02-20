@@ -13,7 +13,9 @@ class AiDiagnosticController extends Controller
         SEOTools::setTitle('AI Visual Pipe Diagnostics - Deteksi Mampet Otomatis');
         SEOTools::setDescription('Gunakan teknologi AI (Computer Vision) Rooterin untuk mendeteksi masalah pipa Anda hanya dengan foto. Cepat, akurat, dan canggih.');
         
-        return view('ai-diagnostic.diagnosa');
+        return response()
+            ->view('ai-diagnostic.diagnosa')
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
     }
 
     public function store(Request $request)

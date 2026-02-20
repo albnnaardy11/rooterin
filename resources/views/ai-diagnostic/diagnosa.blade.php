@@ -28,18 +28,25 @@ function _el(id){ return document.getElementById(id); }
 function _toast(msg, isErr) {
     var t = _el('rt-toast');
     t.textContent = msg;
+    t.style.display = 'block';
+    t.style.opacity = '1';
     t.style.cssText = [
-        'position:fixed;top:5.5rem;left:50%;transform:translateX(-50%) translateY(0);',
-        'z-index:9999;padding:.75rem 1.25rem;border-radius:1rem;',
-        'font-size:.65rem;font-weight:900;text-transform:uppercase;letter-spacing:.12em;',
-        'box-shadow:0 20px 40px rgba(0,0,0,.4);',
-        'transition:opacity .25s,transform .25s;max-width:22rem;width:90%;text-align:center;',
+        'position:fixed;bottom:2.5rem;left:50%;transform:translateX(-50%) translateY(0);',
+        'z-index:9999;padding:.6rem 1.25rem;border-radius:2rem;',
+        'font-size:.6rem;font-weight:900;text-transform:uppercase;letter-spacing:.15em;',
+        'box-shadow:0 10px 30px rgba(0,0,0,0.5); backdrop-filter:blur(10px);',
+        'transition:all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-width:20rem; width:fit-content; text-align:center;',
         isErr
-            ? 'background:rgba(220,38,38,.95);color:#fff;border:1px solid #ef4444;'
-            : 'background:rgba(34,197,94,.95);color:#0f172a;border:1px solid #4ade80;'
+            ? 'background:rgba(220,38,38,0.9); color:#fff; border:1px solid rgba(239,68,68,0.3);'
+            : 'background:rgba(34,197,94,0.9); color:#0f172a; border:1px solid rgba(74,222,128,0.3);'
     ].join('');
+    
     clearTimeout(_diag._tt);
-    _diag._tt = setTimeout(function(){ t.style.opacity='0'; }, 3200);
+    _diag._tt = setTimeout(function(){ 
+        t.style.opacity = '0';
+        t.style.transform = 'translateX(-50%) translateY(20px)';
+        setTimeout(function(){ t.style.display = 'none'; }, 400);
+    }, 2800);
 }
 
 function _goStep(n) {
@@ -247,9 +254,24 @@ function rtShowResult(){
     setTimeout(function(){ _el('rt-modal').style.display='flex'; }, 350);
 }
 
-function rtCloseModal(){ _el('rt-modal').style.display='none'; }
+function rtCloseModal(){ 
+    // Redirect to services to see detailed solutions and pricing
+    window.location.href = '{{ route('services') }}';
+}
 
 function rtWA(){
+    const url = '/admin/api/track-whatsapp';
+    const data = new URLSearchParams();
+    data.append('url', window.location.href);
+    data.append('source', 'ai_diagnostic_result');
+
+    // Attempt tracking with multiple layers of reliability
+    if (navigator.sendBeacon) {
+        navigator.sendBeacon(url, data);
+    } else {
+        fetch(url, { method: 'POST', body: data, keepalive: true });
+    }
+
     var text = '🚨 *ROOTERIN DEEP DIAGNOSTIC*\n\n'+
         'ID: *'+_diag.result.id+'*\nRanking: *'+_diag.result.rank+'*\n\n'+
         '🔍 Diagnosa: *'+_diag.result.title+'*\n'+
@@ -257,7 +279,11 @@ function rtWA(){
         '📋 Material: '+(_diag.survey.material||'-').toUpperCase()+'\n'+
         'Lokasi: '+(_diag.survey.sub_context||_diag.survey.location||'umum').toUpperCase()+'\n\n'+
         '_Mohon segera dijadwalkan inspeksi._';
-    window.open('https://wa.me/6281234567890?text='+encodeURIComponent(text),'_blank');
+    
+    // Tiny delay to allow tracking to initiate
+    setTimeout(function(){
+        window.open('https://wa.me/6281234567890?text=' + encodeURIComponent(text), '_blank');
+    }, 100);
 }
 
 // Close loc dropdown on outside click
@@ -348,11 +374,7 @@ document.addEventListener('click', function(e){
 
         {{-- Header --}}
         <div style="text-align:center;margin-bottom:2.5rem">
-            <div style="display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);border-radius:5rem;margin-bottom:1.25rem">
-                <span style="width:.45rem;height:.45rem;background:#22c55e;border-radius:50%;display:inline-block;animation:rtspin 2s linear infinite"></span>
-                <span style="font-size:.6rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.25em">Deep Diagnostic Pipeline v2.0 — YOLOv8</span>
-            </div>
-            <h1 style="font-size:clamp(2.8rem,8vw,5.5rem);font-weight:900;color:#fff;line-height:.9;letter-spacing:-.04em;font-style:italic;margin:0 0 1rem">
+            <h1 style="font-size:clamp(2.8rem,8vw,5.5rem);font-weight:900;color:#fff;line-height:.9;letter-spacing:-.04em;font-style:italic;margin:3.5rem 0 1rem 0">
                 Magic <br><span style="background:linear-gradient(135deg,#4ade80,#fb923c,#ea580c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Deep Vision.</span>
             </h1>
             <p style="color:#64748b;font-size:.85rem;max-width:28rem;margin:0 auto">Analisis AI multi-sensor untuk mendeteksi jenis sumbatan pipa secara presisi.</p>
