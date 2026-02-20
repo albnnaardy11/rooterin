@@ -22,9 +22,13 @@ class AiIntelligenceController extends Controller
         $contextStats = $this->repo->getContextualStats();
         $conversion = $this->repo->getConversionStats();
         $trends = $this->repo->getSeasonalTrends();
+        $timeline = $this->repo->getAnomaliesTimeline();
+        $regions = $this->repo->getRegionalLeaderboard();
+        $recent = $this->repo->getRecentActivities();
 
         return view('admin.ai-intelligence.index', compact(
-            'heatmapData', 'materials', 'contextStats', 'conversion', 'trends'
+            'heatmapData', 'materials', 'contextStats', 'conversion', 'trends',
+            'timeline', 'regions', 'recent'
         ));
     }
 

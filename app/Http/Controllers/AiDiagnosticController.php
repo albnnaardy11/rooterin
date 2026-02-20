@@ -58,6 +58,16 @@ class AiDiagnosticController extends Controller
         $lat = isset($validated['latitude'])  ? (float) $validated['latitude']  : -6.200000;
         $lng = isset($validated['longitude']) ? (float) $validated['longitude'] : 106.816666;
 
+        // --- SERVICE INTEGRATION MAPPING ---
+        $serviceMap = [
+            'A' => ['slug' => 'saluran-pembuangan-mampet', 'name' => 'Saluran Pembuangan Mampet'],
+            'B' => ['slug' => 'saluran-pembuangan-mampet', 'name' => 'Saluran Pembuangan Mampet'],
+            'C' => ['slug' => 'air-bersih-cuci-toren',      'name' => 'Air Bersih & Cuci Toren'],
+            'D' => ['slug' => 'instalasi-sanitary-pipa',   'name' => 'Instalasi Sanitary & Pipa'],
+            'E' => ['slug' => 'instalasi-sanitary-pipa',   'name' => 'Instalasi Sanitary & Pipa']
+        ];
+        $targetService = $serviceMap[$severity] ?? $serviceMap['B'];
+
         try {
             $lead = AiDiagnose::create([
                 'diagnose_id' => $diagnoseId,
@@ -73,7 +83,10 @@ class AiDiagnosticController extends Controller
                 'city_location' => $validated['city_location'] ?? 'Auto Detect',
                 'latitude' => $lat,
                 'longitude' => $lng,
-                'metadata' => $validated['metadata'] ?? [],
+                'metadata' => array_merge($validated['metadata'] ?? [], [
+                    'recommended_service_slug' => $targetService['slug'],
+                    'recommended_service_name' => $targetService['name']
+                ]),
                 'status' => 'pending'
             ]);
 

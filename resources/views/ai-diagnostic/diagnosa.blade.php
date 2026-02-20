@@ -74,7 +74,7 @@ function _btnState(id, disabled, html) {
 function rtVision() {
     if (_diag.busy) return;
     _diag.busy = true;
-    _btnState('btn-v', true, '⏳ Menganalisa...');
+    _btnState('btn-v', true, 'Menganalisa...');
     _toast('Memindai visual dengan AI...');
     if (_diag.camOn) {
         _el('scan-ln').style.display = 'block';
@@ -94,7 +94,7 @@ function rtVision() {
 function rtAudio() {
     if (_diag.busy) return;
     _diag.busy = true;
-    _btnState('btn-a', true, '🎙 Mendengarkan... (2.5s)');
+    _btnState('btn-a', true, 'Mendengarkan... (2.5s)');
     _el('mic-i').style.color = '#22c55e';
     _toast('Merekam frekuensi audio...');
 
@@ -195,6 +195,7 @@ function rtInfer(){
     _diag.result.title = lbl;
     _diag.result.rec   = lbl;
     _diag.result.tools = tools;
+    _diag.result.rank  = _diag.vScore > 85 ? 'A' : 'B';
 }
 
 // ── GENERATE ────────────────────────────────────────────────
@@ -208,17 +209,23 @@ function rtGenerate(){
     _diag.busy = true;
     rtInfer();
     _el('proc-ov').style.display = 'flex';
-    _btnState('btn-g', true, '⏳ Menghitung...');
+    _btnState('btn-g', true, 'Menghitung...');
     _toast('Menjalankan Neural Fusion...');
 
     var payload = {
-        result_label:      _diag.vLabel || 'General Blockage',
+        result_label:      _diag.result.title || _diag.vLabel,
+        city_location:     _diag.city || 'Auto Detect',
+        material_type:     _diag.survey.material || 'unknown',
+        location_context:  _diag.survey.location || 'umum',
         confidence_score:  parseInt(_diag.vScore) || 85,
         audio_label:       _diag.aLabel || 'Standard Flow',
         audio_confidence:  parseInt(_diag.aScore) || 0,
         survey_data:       _diag.survey,
         recommended_tools: _diag.result.tools || 'Rooter Machine',
-        city_location:     'Auto Detect'
+        metadata: {
+            symptoms: _diag.survey.symptoms || [],
+            sub_context: _diag.survey.sub_context || ''
+        }
     };
     if (_diag.lat !== null) { payload.latitude = _diag.lat; payload.longitude = _diag.lng; }
 
@@ -229,34 +236,55 @@ function rtGenerate(){
     })
     .then(function(r){ return r.ok ? r.json() : Promise.reject('HTTP '+r.status); })
     .then(function(d){
-        if (d.success){ _diag.result.id = d.diagnose_id; _diag.result.rank = d.deep_ranking; }
-        else { _diag.result.id = 'RT-LOCAL-'+Math.floor(Math.random()*9000+1000); _diag.result.rank = _diag.vScore>80?'A':'B'; }
-        rtShowResult();
+        rtShowResult(d.success ? d.data : null);
     })
     .catch(function(e){
-        console.error('API:', e);
-        _diag.result.id = 'RT-LOCAL-'+Math.floor(Math.random()*9000+1000);
-        _diag.result.rank = _diag.vScore>80?'A':'B';
-        rtShowResult();
+        console.error('API Error:', e);
+        rtShowResult(null);
     });
 }
 
-function rtShowResult(){
+function rtShowResult(res){
     _el('proc-ov').style.display = 'none';
-    _btnState('btn-g', false, '🔄 Generate Ulang');
+    _btnState('btn-g', false, 'Generate Ulang');
     _diag.busy = false;
-    _el('m-rank').textContent  = _diag.result.rank;
-    _el('m-title').textContent = _diag.result.title;
-    _el('m-id').textContent    = _diag.result.id;
-    _el('m-rec').textContent   = _diag.result.rec;
-    _el('m-tools').textContent = _diag.result.tools;
+
+    // Use server result if available, otherwise fallback to local diag
+    const finalData = res || {
+        diagnose_id: 'RT-LOCAL-'+Math.floor(Math.random()*9000+1000),
+        final_deep_score: _diag.result.rank || 'B',
+        result_label: _diag.result.title,
+        recommended_tools: _diag.result.tools,
+        metadata: { recommended_service_slug: 'saluran-pembuangan-mampet' }
+    };
+
+    _el('m-id').textContent    = finalData.diagnose_id;
+    _el('m-rank').textContent  = finalData.final_deep_score;
+    _el('m-title').textContent = finalData.result_label;
+    _el('m-rec').textContent   = finalData.result_label;
+    _el('m-tools').textContent = finalData.recommended_tools;
+    
+    // Integrated Service Link
+    const serviceSlug = finalData.metadata?.recommended_service_slug || 'saluran-pembuangan-mampet';
+    const serviceName = finalData.metadata?.recommended_service_name || 'Saluran Pembuangan Mampet';
+    _diag.targetServiceUrl = '/layanan/' + serviceSlug;
+    
+    // Update Service Display in Modal
+    if (_el('m-service')) _el('m-service').textContent = serviceName;
+
+    // Visual Updates
+    const colors = { 'A':'#ef4444', 'B':'#f97316', 'C':'#eab308', 'D':'#22c55e', 'E':'#3b82f6' };
+    const color = colors[finalData.final_deep_score] || '#64748b';
+    _el('m-rank').style.color = color;
+    
     _toast('Diagnosis selesai!');
     setTimeout(function(){ _el('rt-modal').style.display='flex'; }, 350);
 }
 
+
 function rtCloseModal(){ 
-    // Redirect to services to see detailed solutions and pricing
-    window.location.href = '{{ route('services') }}';
+    // Proactive Conversion: Redirect to the specific recommended service
+    window.location.href = _diag.targetServiceUrl || '/services';
 }
 
 function rtWA(){
@@ -272,11 +300,11 @@ function rtWA(){
         fetch(url, { method: 'POST', body: data, keepalive: true });
     }
 
-    var text = '🚨 *ROOTERIN DEEP DIAGNOSTIC*\n\n'+
+    var text = '*ROOTERIN DEEP DIAGNOSTIC*\n\n'+
         'ID: *'+_diag.result.id+'*\nRanking: *'+_diag.result.rank+'*\n\n'+
-        '🔍 Diagnosa: *'+_diag.result.title+'*\n'+
-        '🔧 Alat: '+_diag.result.tools+'\n\n'+
-        '📋 Material: '+(_diag.survey.material||'-').toUpperCase()+'\n'+
+        'Diagnosa: *'+_diag.result.title+'*\n'+
+        'Alat: '+_diag.result.tools+'\n\n'+
+        'Material: '+(_diag.survey.material||'-').toUpperCase()+'\n'+
         'Lokasi: '+(_diag.survey.sub_context||_diag.survey.location||'umum').toUpperCase()+'\n\n'+
         '_Mohon segera dijadwalkan inspeksi._';
     
@@ -344,6 +372,12 @@ document.addEventListener('click', function(e){
             <div style="font-size:.6rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.5rem">Diagnosa & Solusi</div>
             <p id="m-rec" style="color:#fff;font-size:.85rem;font-weight:600;line-height:1.5;margin:0">—</p>
         </div>
+        {{-- Service Link --}}
+        <div style="background:rgba(59,130,246,.04);border:1px solid rgba(59,130,246,.15);border-radius:1rem;padding:1.1rem;margin-bottom:.75rem">
+            <div style="font-size:.6rem;font-weight:900;color:#3b82f6;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.5rem">Layanan RooterIN</div>
+            <p id="m-service" style="color:#fff;font-size:1rem;font-weight:900;line-height:1.3;margin:0">Saluran Pembuangan Mampet</p>
+        </div>
+
         <div style="background:rgba(2,6,23,.8);border:1px solid rgba(255,255,255,.05);border-radius:1rem;padding:1.1rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:.85rem">
             <div style="width:2.75rem;height:2.75rem;background:rgba(249,115,22,.1);border-radius:.65rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" style="width:1.2rem;height:1.2rem"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
@@ -355,11 +389,13 @@ document.addEventListener('click', function(e){
         </div>
 
         {{-- CTA --}}
-        <button onclick="rtWA()" style="width:100%;padding:1rem;background:#22c55e;color:#0f172a;border:none;border-radius:1rem;font-weight:900;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:.6rem">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:1.1rem;height:1.1rem"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-            Panggil Bantuan Ahli
+        <button onclick="rtCloseModal()" style="width:100%;padding:1.1rem;background:#fff;color:#0f172a;border:none;border-radius:1.2rem;font-weight:900;font-size:.7rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:.6rem;box-shadow:0 10px 30px rgba(255,255,255,0.1)">
+            PESAN LAYANAN SEKARANG
         </button>
-        <button onclick="rtCloseModal()" style="width:100%;padding:.65rem;background:transparent;color:#475569;border:none;font-size:.6rem;font-weight:900;text-transform:uppercase;letter-spacing:.15em;cursor:pointer">Tutup / Selesai</button>
+        <button onclick="rtWA()" style="width:100%;padding:.9rem;background:#22c55e;color:#0f172a;border:none;border-radius:1.1rem;font-weight:900;font-size:.6rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:.6rem">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:1.1rem;height:1.1rem"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            Konsultasi WhatsApp
+        </button>
     </div>
 </div>
 
