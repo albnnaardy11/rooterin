@@ -131,20 +131,24 @@ class SecurityAutomationService
         return false;
     }
 
-    /**
-     * ZERO-TRUST: Audit Logging
-     */
     public function auditLog($action, $data = [])
     {
         $ip = request()->ip();
         
+        // UNICORP-GRADE: Comprehensive Metadata Capture
+        $metadata = array_merge($data, [
+            'os' => PHP_OS,
+            'php_version' => PHP_VERSION,
+            'memory_peak' => $this->formatSize(memory_get_peak_usage(true))
+        ]);
+
         DB::table('activity_logs')->insert([
-            'user_id' => auth()->id(), // Use null if not authenticated
+            'user_id' => auth()->id(), 
             'event' => $action,
-            'auditable_type' => 'SecurityAutomation',
+            'auditable_type' => 'InfrastructureOmniscience',
             'auditable_id' => 0,
             'old_values' => null,
-            'new_values' => json_encode($data),
+            'new_values' => json_encode($metadata),
             'url' => request()->fullUrl(),
             'ip_address' => $ip,
             'user_agent' => request()->userAgent(),
@@ -153,7 +157,26 @@ class SecurityAutomationService
         ]);
         
         $user = auth()->user() ? auth()->user()->email : 'Anonymous/System';
-        Log::info("[AUDIT] $user performed $action from $ip");
+        Log::info("[AUDIT] $user performed $action from $ip | Metadata: " . json_encode($metadata));
+    }
+
+    /**
+     * OMNISCIENCE: Immutable Phantom Token Logging
+     */
+    public function auditPhantomExchange($opaque, $success)
+    {
+        $this->auditLog('Phantom Token Exchange', [
+            'opaque_sample' => substr($opaque, 0, 8) . '...',
+            'success' => $success,
+            'status' => $success ? 'VERIFIED' : 'REJECTED'
+        ]);
+    }
+
+    private function formatSize($bytes)
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        for ($i = 0; $bytes > 1024; $i++) $bytes /= 1024;
+        return round($bytes, 2) . ' ' . $units[$i];
     }
 
     /**
@@ -197,17 +220,25 @@ class SecurityAutomationService
 
         // 1. Exchange Opaque for PASETO
         $paseto = $this->paseto->getBackendToken($opaque);
-        if (!$paseto) return false;
-
-        // 2. Decrypt & Verify PASETO Claims
-        $claims = $this->paseto->decrypt($paseto);
-        if (!$claims) return false;
-
-        // Verify Identity Claim
-        if (($claims['identity'] ?? '') !== 'rooterin-neural-client') {
+        if (!$paseto) {
+            $this->auditPhantomExchange($opaque, false);
             return false;
         }
 
+        // 2. Decrypt & Verify PASETO Claims
+        $claims = $this->paseto->decrypt($paseto);
+        if (!$claims) {
+            $this->auditPhantomExchange($opaque, false);
+            return false;
+        }
+
+        // Verify Identity Claim
+        if (($claims['identity'] ?? '') !== 'rooterin-neural-client') {
+            $this->auditPhantomExchange($opaque, false);
+            return false;
+        }
+
+        $this->auditPhantomExchange($opaque, true);
         return true;
     }
 

@@ -30,10 +30,9 @@
     <div class="p-8 space-y-8">
         <!-- Status Overview Row -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            @php
                 $sections = [
                     ['title' => 'AI Core', 'data' => $healthData['ai_integrity'], 'icon' => 'ri-cpu-line'],
-                    ['title' => 'Resources', 'data' => $healthData['infrastructure']['database'], 'icon' => 'ri-database-2-line'],
+                    ['title' => 'Resources', 'data' => $healthData['infrastructure']['database'], 'icon' => 'ri-database-2-line', 'field' => 'pulse'],
                     ['title' => 'SEO API', 'data' => $healthData['seo_api_audit']['google_indexing'], 'icon' => 'ri-rocket-line'],
                     ['title' => 'Security', 'data' => $healthData['security']['environment'], 'icon' => 'ri-shield-check-line'],
                 ];
@@ -46,7 +45,7 @@
                 <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">{{ $sec['title'] }}</p>
                 <div class="flex items-end gap-3">
                     <span class="text-3xl font-black text-white italic tracking-tighter uppercase">
-                        {{ $sec['data']['status'] ?? 'N/A' }}
+                        {{ $sec['field'] ? $sec['data'][$sec['field']] : ($sec['data']['status'] ?? 'N/A') }}
                     </span>
                     <div class="w-3 h-3 rounded-full mb-2 
                         {{ ($sec['data']['status'] ?? '') === 'Operational' ? 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)]' : 
@@ -121,9 +120,9 @@
                                 <div class="flex justify-between items-end mb-3">
                                     <div>
                                         <p class="text-[10px] font-black text-white uppercase mb-1 tracking-tight">System Memory Usage</p>
-                                        <p class="text-xs font-mono text-slate-500">{{ $healthData['infrastructure']['memory']['usage'] }} / {{ $healthData['infrastructure']['memory']['limit'] }}</p>
+                                        <p class="text-xs font-mono text-slate-500">{{ $healthData['infrastructure']['compute']['usage'] }} (Peak: {{ $healthData['infrastructure']['compute']['peak'] }})</p>
                                     </div>
-                                    <span class="text-xs font-black text-primary italic">NORMAL</span>
+                                    <span class="text-xs font-black text-primary italic">{{ $healthData['infrastructure']['compute']['status'] }}</span>
                                 </div>
                                 <div class="h-2 bg-white/5 rounded-full overflow-hidden">
                                     <div class="h-full bg-primary w-[32%] rounded-full shadow-[0_0_10px_rgba(255,255,255,0.3)]"></div>
@@ -136,7 +135,7 @@
                                         <p class="text-[10px] font-black text-white uppercase mb-1 tracking-tight">Physical Storage Audit</p>
                                         <p class="text-xs font-mono text-slate-500">{{ $healthData['infrastructure']['storage']['free_space'] }} Available</p>
                                     </div>
-                                    <span class="text-xs font-black text-white italic">{{ $healthData['infrastructure']['storage']['usage_percent'] }}</span>
+                                    <span class="text-[10px] font-black text-white italic p-1 px-2 bg-white/10 rounded uppercase">{{ $healthData['infrastructure']['storage']['log_status'] }}</span>
                                 </div>
                                 <div class="h-2 bg-white/5 rounded-full overflow-hidden">
                                     <div class="h-full bg-white rounded-full transition-all duration-1000" style="width: {{ $healthData['infrastructure']['storage']['usage_percent'] }}"></div>
@@ -207,13 +206,13 @@
                         <div>
                             <p class="text-[8px] font-black text-slate-500 uppercase mb-2 tracking-widest">Query Latency</p>
                             <div class="flex items-baseline gap-2">
-                                <p class="text-3xl font-black text-white italic tracking-tighter">{{ $healthData['infrastructure']['database']['latency'] }}</p>
+                                <p class="text-3xl font-black text-white italic tracking-tighter">{{ $healthData['infrastructure']['database']['pulse'] }}</p>
                                 <span class="text-[8px] font-bold text-green-500 uppercase">Excellent</span>
                             </div>
                         </div>
                         <div>
                             <p class="text-[8px] font-black text-slate-500 uppercase mb-2 tracking-widest">Total Diagnostic Objects</p>
-                            <p class="text-3xl font-black text-white italic tracking-tighter">{{ number_format($healthData['infrastructure']['database']['count']) }}</p>
+                            <p class="text-3xl font-black text-white italic tracking-tighter">{{ number_format($healthData['infrastructure']['database']['diagnose_entities']) }}</p>
                         </div>
                         <div>
                             <p class="text-[8px] font-black text-slate-500 uppercase mb-2 tracking-widest">Storage Logs Size</p>

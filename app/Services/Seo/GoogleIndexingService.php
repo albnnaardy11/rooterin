@@ -11,11 +11,18 @@ class GoogleIndexingService
 {
     protected $client;
     protected $isConfigured = false;
+    protected $failoverActive = false;
 
     public function __construct()
     {
         $this->client = new Client();
         $this->isConfigured = $this->setupClient();
+        $this->failoverActive = \Illuminate\Support\Facades\Cache::has('google_indexing_failover_mode');
+    }
+
+    public function isFailoverActive(): bool
+    {
+        return $this->failoverActive;
     }
 
     protected function setupClient()

@@ -82,6 +82,15 @@ class SentinelService
             $this->repairSecurity();
         }
 
+        // UNICORP-GRADE: Log Rotation Policy Enforcement
+        $laravelLog = storage_path('logs/laravel.log');
+        if (File::exists($laravelLog) && File::size($laravelLog) > (1.43 * 1024 * 1024)) {
+            Log::info("[SENTINEL] Infrastructure Omniscience: Log Rotation Required. Archiving current log...");
+            $archivePath = storage_path('logs/laravel-' . date('Y-m-d-His') . '.log');
+            File::move($laravelLog, $archivePath);
+            File::put($laravelLog, "[SENTINEL] New Log Cycle Started. Rotation Policy Enforced.\n");
+        }
+
         Log::info("[SENTINEL] System repair completed. Status updated to Top Condition.");
     }
 
@@ -234,11 +243,12 @@ class SentinelService
      */
     protected function checkInfrastructure()
     {
-        // 2a. CPU & RAM
+        // 2a. CPU & RAM (Omniscience Monitoring)
         $memoryUsage = memory_get_usage(true);
+        $peakMemory = memory_get_peak_usage(true);
         $memoryLimit = ini_get('memory_limit');
         
-        // 2b. Database Pulse
+        // 2b. Database Pulse (Latency Guard)
         $start = microtime(true);
         try {
             DB::connection()->getPdo();
@@ -251,29 +261,32 @@ class SentinelService
             $diagnoseCount = 0;
         }
 
-        // 2c. Storage Health
+        // 2c. Storage & Log Audit (Rotation Policy)
         $diskFree = disk_free_space(base_path());
         $diskTotal = disk_total_space(base_path());
         $diskUsagePercent = round((($diskTotal - $diskFree) / $diskTotal) * 100, 2);
 
-        $aiLogsPath = storage_path('logs/laravel.log');
-        $logSize = File::exists($aiLogsPath) ? File::size($aiLogsPath) : 0;
+        $laravelLog = storage_path('logs/laravel.log');
+        $logSize = File::exists($laravelLog) ? File::size($laravelLog) : 0;
+        $maxLogSize = 1.43 * 1024 * 1024; // 1.43 MB threshold
 
         return [
-            'memory' => [
+            'compute' => [
                 'usage' => $this->formatSize($memoryUsage),
+                'peak' => $this->formatSize($peakMemory),
                 'limit' => $memoryLimit,
-                'status' => 'Operational'
+                'status' => $memoryUsage < (40 * 1024 * 1024) ? 'Optimal' : 'Operational' // Target 40MB
             ],
             'database' => [
-                'latency' => round($dbLatency, 2) . 'ms',
-                'count' => $diagnoseCount,
+                'pulse' => round($dbLatency, 2) . 'ms',
+                'diagnose_entities' => $diagnoseCount,
                 'status' => $dbStatus
             ],
             'storage' => [
                 'free_space' => $this->formatSize($diskFree),
                 'usage_percent' => $diskUsagePercent . '%',
                 'log_size' => $this->formatSize($logSize),
+                'log_status' => $logSize < $maxLogSize ? 'Operational' : 'Rotation Required',
                 'status' => $diskUsagePercent < 90 ? 'Operational' : 'Degraded'
             ]
         ];
@@ -302,9 +315,12 @@ class SentinelService
                 $googleStatus = 'Degraded';
                 $googleMessage = 'Invalid JSON Key Structure';
             }
-        } elseif (\Illuminate\Support\Facades\Cache::has('google_indexing_failover_mode')) {
-            $googleStatus = 'Operational'; // Failover mode is operational
-            $googleMessage = 'Failover Caching Active (Key Missing)';
+        } else {
+            $indexingService = app(\App\Services\Seo\GoogleIndexingService::class);
+            if ($indexingService->isFailoverActive()) {
+                $googleStatus = 'Operational';
+                $googleMessage = 'Failover Caching Active (Gateway Resilient)';
+            }
         }
 
         // 3b. Sitemap Validator
