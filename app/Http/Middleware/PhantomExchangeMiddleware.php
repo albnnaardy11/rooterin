@@ -23,6 +23,13 @@ class PhantomExchangeMiddleware
     {
         $exchange = $this->phantom->exchange($request);
 
+        if (is_array($exchange) && isset($exchange['breach'])) {
+            return response()->json([
+                'status' => 'SECURITY_BREACH',
+                'message' => $exchange['message']
+            ], 403);
+        }
+
         if (!$exchange) {
             return response()->json([
                 'error' => 'Phantom Sync Failure',

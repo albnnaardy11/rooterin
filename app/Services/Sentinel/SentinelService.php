@@ -416,6 +416,7 @@ class SentinelService
                 'zero_trust_logs' => DB::table('activity_logs')->count(),
                 'blocked_ips' => count(\Illuminate\Support\Facades\Cache::get('blocked_ips', [])),
                 'threat_neutralized' => $phantomHealth['edge_rejects'] ?? 0,
+                'impossible_travels' => $phantomHealth['impossible_travels'] ?? 0,
                 'phantom_compression' => $phantomHealth['compression'],
                 'intro_pulse' => round($introLatency, 2) . 'ms',
                 'last_archival' => \Illuminate\Support\Facades\Cache::get('sentinel_last_archival', 'N/A')

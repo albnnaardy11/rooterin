@@ -43,6 +43,13 @@ class PhantomIntrospectionController extends Controller
         $exchange = $phantom->exchange($request);
         $latency = (microtime(true) - $start) * 1000;
 
+        if (is_array($exchange) && isset($exchange['breach'])) {
+            return response()->json([
+                'status' => 'SECURITY_BREACH',
+                'message' => $exchange['message']
+            ], 403);
+        }
+
         if (!$exchange) {
             return response()->json([
                 'active' => false,

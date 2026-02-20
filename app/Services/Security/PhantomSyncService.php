@@ -90,29 +90,73 @@ class PhantomSyncService
         }
 
         if ($identity) {
-            // Geolocation Anomaly Detector (Impossible Travel)
+            // Geolocation Anomaly Detector (Impossible Travel) V2.0 (Haversine Velocity)
             $currentIp = $request->ip();
-            $currentCountry = \Illuminate\Support\Facades\Cache::remember('geo_'.$currentIp, 3600, function() use ($currentIp) {
-                // In production, use MaxMind GeoIP2. Here we simulate geolocation resolution.
-                // Assuming standard local mapping or API call.
-                return 'ID'; // Placeholder for Indonesia, in real scenario: GeoIP::getCountry($currentIp);
+            $geoData = \Illuminate\Support\Facades\Cache::remember('geo_itd_'.$currentIp, 3600, function() use ($currentIp) {
+                // In production, use MaxMind GeoIP2. We call ip-api.com as fallback simulator.
+                if ($currentIp === '127.0.0.1' || $currentIp === '::1') {
+                    return ['lat' => -6.2088, 'lon' => 106.8456, 'loc' => 'Jakarta, ID'];
+                }
+                try {
+                    $response = \Illuminate\Support\Facades\Http::timeout(2)->get("http://ip-api.com/json/{$currentIp}");
+                    if ($response->successful() && $response->json('status') === 'success') {
+                        return [
+                            'lat' => $response->json('lat'),
+                            'lon' => $response->json('lon'),
+                            'loc' => $response->json('city') . ', ' . $response->json('countryCode')
+                        ];
+                    }
+                } catch (\Exception $e) {}
+                
+                return ['lat' => -6.2088, 'lon' => 106.8456, 'loc' => 'Unknown, ID'];
             });
 
-            if (isset($identity['__last_country']) && $identity['__last_country'] !== $currentCountry) {
-                // Impossible Travel: Token used across distinct geographic country borders
-                $this->revokeToken($token);
-                $this->logThreat($request, "Impossible Travel Anomaly. Opaque Token moved from {$identity['__last_country']} to {$currentCountry}. Emergency Lockdown Triggered.");
+            // Spatial-Temporal Metadata Logging
+            $lastGeoKey = 'phantom_geo:' . md5($token);
+            $lastGeo = \Illuminate\Support\Facades\Cache::get($lastGeoKey);
+
+            if ($lastGeo && ($lastGeo['lat'] !== $geoData['lat'] || $lastGeo['lon'] !== $geoData['lon'])) {
+                $distance = $this->calculateVelocityDistance($lastGeo['lat'], $lastGeo['lon'], $geoData['lat'], $geoData['lon']);
+                $timeDiffHours = max((time() - $lastGeo['timestamp']) / 3600, 0.001); // Avoid div by zero
+                $speed = $distance / $timeDiffHours;
                 
-                // Alert Sentinel immediately
-                $sentinel = app(\App\Services\Sentinel\SentinelService::class);
-                $sentinel->sendWhatsAppAlert("[SENTINEL: CRITICAL] Impossible Travel Detected! Token revoked instantly to prevent hijacking.");
-                
-                return null;
+                // Speed Threshold: 800 km/h (Commercial Jet Speed)
+                if ($speed > 800) {
+                    $minutes = round($timeDiffHours * 60);
+                    $locA = $lastGeo['loc'];
+                    $locB = $geoData['loc'];
+                    
+                    // Autonomous Defensive Action: Auto-Revocation
+                    $this->revokeToken($token);
+                    \Illuminate\Support\Facades\Cache::increment('phantom_impossible_travels');
+                    
+                    // Hard Block into Sentinel Blacklist for 24 hours
+                    $blockedIps = \Illuminate\Support\Facades\Cache::get('blocked_ips', []);
+                    $blockedIps[] = $currentIp;
+                    \Illuminate\Support\Facades\Cache::put('blocked_ips', array_unique($blockedIps), now()->addHours(24));
+                    
+                    $userId = $identity['user_id'] ?? 'Unknown';
+                    $msg = "[UNICORN ALERT] Account {$userId} Hijack Attempt! Detected travel from {$locA} to {$locB} in {$minutes} min. Action: ACCOUNT_LOCKED.";
+                    
+                    $sentinel = app(\App\Services\Sentinel\SentinelService::class);
+                    $sentinel->sendWhatsAppAlert($msg);
+                    
+                    $this->logThreat($request, "Impossible Travel Anomaly. Speed: " . round($speed) . " km/h. Location: {$locA} -> {$locB}");
+                    
+                    return ['breach' => true, 'message' => 'Geographical anomaly detected. Account locked for safety.'];
+                }
             }
             
+            // Dense Storage: Phantom Geo Map Cache Sync
+            \Illuminate\Support\Facades\Cache::put($lastGeoKey, [
+                'lat' => $geoData['lat'],
+                'lon' => $geoData['lon'],
+                'timestamp' => time(),
+                'loc' => $geoData['loc']
+            ], now()->addHours(3));
+
             // Re-sync identity with new IP state (Write-around)
             $identity['__last_ip'] = $currentIp;
-            $identity['__last_country'] = $currentCountry;
             self::$l1Cache[$token] = $identity;
         }
 
@@ -156,6 +200,16 @@ class PhantomSyncService
         if (empty($filter)) return true;
         
         return in_array($fingerprint, $filter);
+    }
+
+    protected function calculateVelocityDistance($lat1, $lon1, $lat2, $lon2)
+    {
+        $earth_radius = 6371; // km
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+        $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon/2) * sin($dLon/2);
+        $c = 2 * asin(sqrt($a));
+        return $earth_radius * $c;
     }
 
     protected function addFingerprintToFilter($token)
@@ -205,6 +259,7 @@ class PhantomSyncService
             'pulse' => 'VERIFIED',
             'l1_ratio' => $l1Ratio,
             'edge_rejects' => Cache::get('phantom_edge_rejects', 0),
+            'impossible_travels' => Cache::get('phantom_impossible_travels', 0),
             'compression' => $compRatio . '% Saved'
         ];
     }

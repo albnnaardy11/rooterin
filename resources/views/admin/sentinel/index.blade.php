@@ -111,6 +111,10 @@
                             <p class="text-[8px] font-black text-slate-500 uppercase mb-2">Gateway Pulse</p>
                             <p class="text-xl font-black text-white italic tracking-tighter">{{ $healthData['security']['audit']['intro_pulse'] ?? 'N/A' }}</p>
                         </div>
+                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5 col-span-2">
+                            <p class="text-[8px] font-black text-slate-500 uppercase mb-2">Impossible Travel Attempts</p>
+                            <p class="text-xl font-black {{ ($healthData['security']['audit']['impossible_travels'] ?? 0) > 0 ? 'text-red-500' : 'text-green-500' }} italic tracking-tighter">{{ $healthData['security']['audit']['impossible_travels'] ?? 0 }} <span class="text-[10px] font-bold text-slate-500 not-italic">HIJACK BLOCKED</span></p>
+                        </div>
                     </div>
                 </div>
             </div>
