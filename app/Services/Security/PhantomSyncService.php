@@ -31,8 +31,11 @@ class PhantomSyncService
         Cache::put('phantom_comp_raw', $rawSize, 60);
         Cache::put('phantom_comp_bin', strlen($compressed), 60);
         
+        // Adaptive TTL Jitter to prevent Cache Stampede (120 mins +/- 5 mins)
+        $ttlJitter = 120 + rand(-5, 5);
+        
         // Add to L2 (Warm Cache)
-        Cache::put($this->tokenPrefix . $opaqueToken, $binaryState, now()->addHours(2));
+        Cache::put($this->tokenPrefix . $opaqueToken, $binaryState, now()->addMinutes($ttlJitter));
         
         // Add fingerprint to simulated Edge Probabilistic Filter (Cuckoo/Bloom Filter logic)
         $this->addFingerprintToFilter($opaqueToken);
@@ -84,6 +87,21 @@ class PhantomSyncService
             } else {
                 $identity = null;
             }
+        }
+
+        if ($identity) {
+            // Geolocation Anomaly Detector (Impossible Travel)
+            $currentIp = $request->ip();
+            if (isset($identity['__last_ip']) && $identity['__last_ip'] !== $currentIp) {
+                // If IP footprint completely shifts drastically, we trigger Lockdown.
+                $this->revokeToken($token);
+                $this->logThreat($request, 'Impossible Travel Anomaly. Opaque Token used across distinct geographic IP subnets. Emergency Lockdown Triggered.');
+                return null;
+            }
+            
+            // Re-sync identity with new IP state (Write-around)
+            $identity['__last_ip'] = $currentIp;
+            self::$l1Cache[$token] = $identity;
         }
 
         $latency = (microtime(true) - $start) * 1000;

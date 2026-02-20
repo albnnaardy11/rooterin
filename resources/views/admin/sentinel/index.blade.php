@@ -159,8 +159,14 @@
                                     </div>
                                     <span class="text-[10px] font-black text-white italic p-1 px-2 bg-white/10 rounded uppercase">{{ $healthData['infrastructure']['storage']['log_status'] }}</span>
                                 </div>
-                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden mb-4">
                                     <div class="h-full bg-white rounded-full transition-all duration-1000" style="width: {{ $healthData['infrastructure']['storage']['usage_percent'] }}"></div>
+                                </div>
+                                <div class="flex justify-between items-end">
+                                    <div>
+                                        <p class="text-[9px] font-bold text-slate-500 uppercase tracking-tight">Memory Fragmentation Level</p>
+                                    </div>
+                                    <span class="text-[10px] font-black {{ intval($healthData['infrastructure']['storage']['fragmentation'] ?? 0) < 10 ? 'text-green-500' : 'text-orange-500' }} italic">{{ $healthData['infrastructure']['storage']['fragmentation'] ?? '0%' }} (L2 ORPHAN)</span>
                                 </div>
                             </div>
                         </div>
@@ -223,6 +229,19 @@
                                 </div>
                                 <div class="text-right">
                                     <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase bg-green-500/10 text-green-500">SYNCED</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 mt-6">
+                                <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                                    <i class="ri-archive-line text-blue-500 text-xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-[10px] font-black text-white uppercase tracking-tight">Cold Storage Migration</p>
+                                    <p class="text-[9px] text-slate-500 font-bold uppercase mt-0.5">Last Archive: {{ $healthData['security']['audit']['last_archival'] ?? 'Unknown' }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase {{ ($healthData['security']['audit']['last_archival'] ?? 'N/A') !== 'N/A' ? 'bg-green-500/10 text-green-500' : 'bg-slate-500/10 text-slate-500' }}">OPTIMAL</span>
                                 </div>
                             </div>
                         </div>

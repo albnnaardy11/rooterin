@@ -37,6 +37,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('sentinel:scan')->everyFiveMinutes();
         $schedule->command('sentinel:report')->mondays()->at('08:00');
         
+        // Phantom L2 Purge & Cold Storage Archiving
+        $schedule->command('system:housekeeping')
+                 ->dailyAt('03:00')
+                 ->timezone('Asia/Jakarta')
+                 ->withoutOverlapping();
+                 
         // Automated Backup ke Google Drive (01:00 WIB setiap hari)
         $schedule->command('backup:run --only-db')
                  ->dailyAt('01:00')
