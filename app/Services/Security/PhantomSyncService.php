@@ -23,8 +23,13 @@ class PhantomSyncService
     {
         $opaqueToken = Str::random(48); // Reduce entropy slightly to save memory but still secure
         
-        // Tiered Storage: Binary Compression for Memory Saving (~60% smaller than raw array/JSON)
-        $binaryState = base64_encode(gzcompress(json_encode($userData), 9));
+        $rawJson = json_encode($userData);
+        $rawSize = strlen($rawJson);
+        $compressed = gzcompress($rawJson, 9);
+        $binaryState = base64_encode($compressed);
+        
+        Cache::put('phantom_comp_raw', $rawSize, 60);
+        Cache::put('phantom_comp_bin', strlen($compressed), 60);
         
         // Add to L2 (Warm Cache)
         Cache::put($this->tokenPrefix . $opaqueToken, $binaryState, now()->addHours(2));
@@ -54,17 +59,20 @@ class PhantomSyncService
         // 1. Edge Mitigation (Probabilistic Filter Check)
         // Rejects random/revoked tokens instantly without heavy storage I/O
         if (!$this->isLikelyValid($token)) {
+            Cache::increment('phantom_edge_rejects');
             $this->logThreat($request, 'Edge Rejected: Token fingerprint mismatch');
             return null;
         }
 
         // 2. L1 Local Memory Cache (Hot Tier)
         if (isset(self::$l1Cache[$token])) {
+            Cache::increment('phantom_l1_hits');
             $identity = self::$l1Cache[$token];
         } else {
             // 3. L2 Distributed Storage (Warm Tier)
             $binaryState = Cache::get($this->tokenPrefix . $token);
             if ($binaryState) {
+                Cache::increment('phantom_l2_hits');
                 // Deserialize & Decompress Native Binary State
                 $identity = json_decode(gzuncompress(base64_decode($binaryState)), true);
                 
@@ -151,10 +159,23 @@ class PhantomSyncService
     public function getHealthSync()
     {
         $latency = Cache::get('phantom_sync_latency', 0);
+        
+        $l1Hits = Cache::get('phantom_l1_hits', 0);
+        $l2Hits = Cache::get('phantom_l2_hits', 0);
+        $totalHits = $l1Hits + $l2Hits;
+        $l1Ratio = $totalHits > 0 ? round(($l1Hits / $totalHits) * 100, 2) : 100;
+
+        $rawSize = Cache::get('phantom_comp_raw', 0) ?: 1;
+        $binSize = Cache::get('phantom_comp_bin', 0) ?: 1;
+        $compRatio = round((1 - ($binSize / $rawSize)) * 100, 2);
+
         return [
             'latency' => round($latency, 2) . ' ms',
             'status' => ($latency > $this->latencyThreshold) ? 'DEGRADED' : 'OPERATIONAL',
-            'pulse' => 'VERIFIED'
+            'pulse' => 'VERIFIED',
+            'l1_ratio' => $l1Ratio,
+            'edge_rejects' => Cache::get('phantom_edge_rejects', 0),
+            'compression' => $compRatio . '% Saved'
         ];
     }
 }

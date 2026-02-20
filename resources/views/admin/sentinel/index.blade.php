@@ -101,7 +101,15 @@
                         </div>
                         <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
                             <p class="text-[8px] font-black text-slate-500 uppercase mb-2">Debug Mode</p>
-                            <p class="text-xl font-black {{ $healthData['security']['environment']['debug_mode'] === 'Disabled' ? 'text-green-500' : 'text-red-500' }} italic tracking-tighter">{{ strtoupper($healthData['security']['environment']['debug_mode']) }}</p>
+                            <p class="text-xl font-black {{ ($healthData['security']['environment']['debug_mode'] ?? '') === 'Safe (Zero-Exposure)' ? 'text-green-500' : 'text-red-500' }} italic tracking-tighter">{{ strtoupper($healthData['security']['environment']['debug_mode'] ?? 'UNKNOWN') }}</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
+                            <p class="text-[8px] font-black text-slate-500 uppercase mb-2">Threat Neutralized</p>
+                            <p class="text-xl font-black text-green-500 italic tracking-tighter">{{ $healthData['security']['audit']['threat_neutralized'] ?? 0 }} <span class="text-[10px] font-bold text-slate-500 not-italic">REJECTS</span></p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
+                            <p class="text-[8px] font-black text-slate-500 uppercase mb-2">Gateway Pulse</p>
+                            <p class="text-xl font-black text-white italic tracking-tighter">{{ $healthData['security']['audit']['intro_pulse'] ?? 'N/A' }}</p>
                         </div>
                     </div>
                 </div>
@@ -123,10 +131,23 @@
                                         <p class="text-[10px] font-black text-white uppercase mb-1 tracking-tight">System Memory Usage</p>
                                         <p class="text-xs font-mono text-slate-500">{{ $healthData['infrastructure']['compute']['usage'] }} (Peak: {{ $healthData['infrastructure']['compute']['peak'] }})</p>
                                     </div>
-                                    <span class="text-xs font-black text-primary italic">{{ $healthData['infrastructure']['compute']['status'] }}</span>
+                                    <span class="text-xs font-black {{ ($healthData['infrastructure']['compute']['status'] ?? '') == 'ULTRA-OPTIMIZED' ? 'text-primary' : 'text-green-500' }} italic">{{ $healthData['infrastructure']['compute']['status'] }}</span>
                                 </div>
                                 <div class="h-2 bg-white/5 rounded-full overflow-hidden">
                                     <div class="h-full bg-primary w-[32%] rounded-full shadow-[0_0_10px_rgba(255,255,255,0.3)]"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between items-end mb-3">
+                                    <div>
+                                        <p class="text-[10px] font-black text-white uppercase mb-1 tracking-tight">Phantom L1 Hit Ratio</p>
+                                        <p class="text-xs font-mono text-slate-500">{{ $healthData['infrastructure']['compute']['l1_hit_ratio'] ?? '0%' }} vs Redis (L2)</p>
+                                    </div>
+                                    <span class="text-[10px] font-black text-slate-400 italic">Storage Bypass</span>
+                                </div>
+                                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
+                                    <div class="h-full {{ ($healthData['infrastructure']['compute']['status'] ?? '') == 'ULTRA-OPTIMIZED' ? 'bg-primary shadow-[0_0_10px_rgba(249,115,22,0.3)]' : 'bg-green-500' }} transition-all duration-1000 rounded-full" style="width: {{ $healthData['infrastructure']['compute']['l1_hit_ratio'] ?? '0%' }}"></div>
                                 </div>
                             </div>
 
