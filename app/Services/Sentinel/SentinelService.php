@@ -380,6 +380,7 @@ class SentinelService
         $debugSecure = $automation->killDebugMode();
         $isProd = config('app.env') === 'production';
         $shieldActive = \Illuminate\Support\Facades\Cache::has('blocked_ips'); 
+        $bruteForceBlocked = \Illuminate\Support\Facades\Cache::get('threat_brute_force_blocked', 0);
         
         $phantomHealth = app(\App\Services\Security\PhantomSyncService::class)->getHealthSync();
 
@@ -425,7 +426,7 @@ class SentinelService
             'audit' => [
                 'zero_trust_logs' => DB::table('activity_logs')->count(),
                 'blocked_ips' => count(\Illuminate\Support\Facades\Cache::get('blocked_ips', [])),
-                'threat_neutralized' => $phantomHealth['edge_rejects'] ?? 0,
+                'threat_neutralized' => ($phantomHealth['edge_rejects'] ?? 0) + $bruteForceBlocked,
                 'impossible_travels' => $phantomHealth['impossible_travels'] ?? 0,
                 'traffic_shaping' => 'Active (Dynamic)',
                 'phantom_compression' => $phantomHealth['compression'],

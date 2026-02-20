@@ -110,6 +110,7 @@ class SecurityAutomationService
         if (!in_array($ip, $blocked)) {
             $blocked[] = $ip;
             Cache::put('blocked_ips', $blocked, 0); // Permanent block
+            Cache::increment('threat_brute_force_blocked');
             Log::alert("[FIREWALL] IP $ip has been PERMANENTLY BLOCKED. Reason: $reason");
         }
     }
@@ -250,6 +251,28 @@ class SecurityAutomationService
             'issued_at' => now()->toIso8601String(),
             'scope' => 'neural-diagnosa'
         ], 300); // 5 min window
+    }
+
+    /**
+     * UNICORN LOCKDOWN: Adaptive System-Wide Killswitch
+     */
+    public function triggerAutoLockdown($ip, $reason)
+    {
+        Log::emergency("[UNICORN LOCKDOWN] CRITICAL BREACH DETECTED. Reason: $reason | Attacker IP: $ip");
+        Cache::put('system_lockdown_active', true, 86400 * 7); 
+        Cache::put('sentinel_shield_status', 'DISABLED', 86400 * 7);
+        
+        // Notify via Sentinel WhatsApp
+        $sentinel = app(\App\Services\Sentinel\SentinelService::class);
+        $sentinel->sendWhatsAppAlert("[UNICORN LOCKDOWN] System-Wide API Killswitch Engaged! Reason: $reason from IP: $ip. Manual reset via Security Vault required.");
+        
+        $this->blockIp($ip, "Lockdown Trigger: $reason");
+        $this->auditLog('AutoLockdown Engaged', ['reason' => $reason, 'ip' => $ip]);
+    }
+
+    public function isLockedDown()
+    {
+        return Cache::get('system_lockdown_active', false);
     }
 
     /**
