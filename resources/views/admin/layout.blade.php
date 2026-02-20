@@ -85,8 +85,12 @@
                     <span class="text-sm font-bold">Admin Users</span>
                 </a>
                 <a href="{{ route('admin.activity-logs.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.activity-logs.*') ? 'bg-primary/10 text-primary border border-primary/20' : 'hover:bg-white/5' }}">
-                    <i class="ri-radar-line text-xl"></i>
+                    <i class="ri-history-line text-xl"></i>
                     <span class="text-sm font-bold">System Logs</span>
+                </a>
+                <a href="{{ route('admin.sentinel.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('admin.sentinel.*') ? 'bg-primary/10 text-primary border border-primary/20' : 'hover:bg-white/5' }}">
+                    <i class="ri-shield-flash-line text-xl"></i>
+                    <span class="text-sm font-bold">System Sentinel</span>
                 </a>
             </nav>
 

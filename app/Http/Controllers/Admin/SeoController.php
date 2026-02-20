@@ -12,13 +12,15 @@ use App\Models\SeoKeyword;
 use App\Models\SeoCity;
 use App\Models\LocalizedReview;
 use App\Services\Seo\GoogleIndexingService;
+use App\Services\Sentinel\SentinelService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 class SeoController extends Controller
 {
-    public function index()
+    public function index(SentinelService $sentinel)
     {
+        $healthData = $sentinel->monitorAll();
         $settings = SeoSetting::pluck('value', 'key');
         $redirects = SeoRedirect::latest()->get();
         
@@ -54,7 +56,7 @@ class SeoController extends Controller
         $cities = SeoCity::orderBy('name')->get();
         $reviews = LocalizedReview::with('city')->latest()->get();
 
-        return view('admin.seo.index', compact('settings', 'redirects', 'robotsContent', 'topPages', 'deviceStats', 'keywords', 'cities', 'reviews'));
+        return view('admin.seo.index', compact('settings', 'redirects', 'robotsContent', 'topPages', 'deviceStats', 'keywords', 'cities', 'reviews', 'healthData'));
     }
 
     public function updateSettings(Request $request)

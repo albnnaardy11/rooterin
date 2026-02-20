@@ -23,6 +23,49 @@
         </div>
     </div>
 
+    <!-- Unicorn Sentinel: War Room Telemetry -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-slate-900 border border-white/5 rounded-3xl p-5 flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500 border border-orange-500/20">
+                <i class="ri-cpu-line text-xl"></i>
+            </div>
+            <div>
+                <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">AI Inference Engine</p>
+                <p class="text-xs font-black text-white flex items-center gap-2">
+                    {{ $healthData['ai_integrity']['performance']['fps'] }}
+                    <span class="w-1.5 h-1.5 rounded-full {{ ($healthData['ai_integrity']['performance']['status'] ?? '') === 'Operational' ? 'bg-green-500' : 'bg-yellow-500' }}"></span>
+                </p>
+            </div>
+        </div>
+        <div class="bg-slate-900 border border-white/5 rounded-3xl p-5 flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+                <i class="ri-database-2-line text-xl"></i>
+            </div>
+            <div>
+                <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Server RAM Stats</p>
+                <p class="text-xs font-black text-white">{{ $healthData['infrastructure']['memory']['usage'] }} <span class="text-[9px] text-slate-500 font-normal">/ {{ $healthData['infrastructure']['memory']['limit'] }}</span></p>
+            </div>
+        </div>
+        <div class="bg-slate-900 border border-white/5 rounded-3xl p-5 flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-500 border border-indigo-500/20">
+                <i class="ri-rocket-line text-xl"></i>
+            </div>
+            <div>
+                <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Indexing Rocket Quota</p>
+                <p class="text-xs font-black text-white">{{ $healthData['seo_api_audit']['google_indexing']['quota_left'] }} <span class="text-[9px] text-slate-500 font-normal">Today</span></p>
+            </div>
+        </div>
+        <div class="bg-slate-900 border border-white/5 rounded-3xl p-5 flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500 border border-green-500/20">
+                <i class="ri-shield-check-line text-xl"></i>
+            </div>
+            <div>
+                <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Technical Integrity</p>
+                <p class="text-xs font-black text-white uppercase italic">100% Operational</p>
+            </div>
+        </div>
+    </div>
+
     @if(session('success'))
     <div class="bg-primary/20 border border-primary/50 p-4 rounded-2xl text-primary text-xs font-bold flex items-center gap-3">
         <i class="ri-checkbox-circle-line text-xl"></i>

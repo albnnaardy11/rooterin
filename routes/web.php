@@ -114,4 +114,9 @@ Route::prefix('admin')->name('admin.')->group(function() {
 
     // Audit & Activity
     Route::get('/activity-logs', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('activity-logs.index');
+
+    // System Sentinel & Health Check
+    Route::get('/sentinel', [\App\Http\Controllers\Admin\SentinelController::class, 'index'])->name('sentinel.index');
+    Route::post('/sentinel/scan', [\App\Http\Controllers\Admin\SentinelController::class, 'scan'])->name('sentinel.scan');
+    Route::post('/sentinel/heartbeat', [\App\Http\Controllers\Admin\SentinelController::class, 'heartbeat'])->name('sentinel.heartbeat');
 });
