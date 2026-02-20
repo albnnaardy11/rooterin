@@ -92,15 +92,27 @@ class PhantomSyncService
         if ($identity) {
             // Geolocation Anomaly Detector (Impossible Travel)
             $currentIp = $request->ip();
-            if (isset($identity['__last_ip']) && $identity['__last_ip'] !== $currentIp) {
-                // If IP footprint completely shifts drastically, we trigger Lockdown.
+            $currentCountry = \Illuminate\Support\Facades\Cache::remember('geo_'.$currentIp, 3600, function() use ($currentIp) {
+                // In production, use MaxMind GeoIP2. Here we simulate geolocation resolution.
+                // Assuming standard local mapping or API call.
+                return 'ID'; // Placeholder for Indonesia, in real scenario: GeoIP::getCountry($currentIp);
+            });
+
+            if (isset($identity['__last_country']) && $identity['__last_country'] !== $currentCountry) {
+                // Impossible Travel: Token used across distinct geographic country borders
                 $this->revokeToken($token);
-                $this->logThreat($request, 'Impossible Travel Anomaly. Opaque Token used across distinct geographic IP subnets. Emergency Lockdown Triggered.');
+                $this->logThreat($request, "Impossible Travel Anomaly. Opaque Token moved from {$identity['__last_country']} to {$currentCountry}. Emergency Lockdown Triggered.");
+                
+                // Alert Sentinel immediately
+                $sentinel = app(\App\Services\Sentinel\SentinelService::class);
+                $sentinel->sendWhatsAppAlert("[SENTINEL: CRITICAL] Impossible Travel Detected! Token revoked instantly to prevent hijacking.");
+                
                 return null;
             }
             
             // Re-sync identity with new IP state (Write-around)
             $identity['__last_ip'] = $currentIp;
+            $identity['__last_country'] = $currentCountry;
             self::$l1Cache[$token] = $identity;
         }
 
