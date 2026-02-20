@@ -17,7 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(\App\Http\Middleware\SeoRedirectMiddleware::class);
         
         $middleware->validateCsrfTokens(except: [
-            'admin/api/track-whatsapp'
+            'admin/api/track-whatsapp',
+            'api/phantom/introspect'
         ]);
         
         $middleware->alias([

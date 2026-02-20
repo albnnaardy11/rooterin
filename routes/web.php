@@ -8,6 +8,7 @@ Route::get('/ai-diagnostic', [\App\Http\Controllers\AiDiagnosticController::clas
 Route::post('/ai-diagnostic/store', [\App\Http\Controllers\AiDiagnosticController::class, 'store'])->middleware('phantom')->name('ai.diagnostic.store');
 Route::get('/ai-diagnostic/handshake', [\App\Http\Controllers\AiDiagnosticController::class, 'getHandshake'])->name('ai.diagnostic.handshake');
 Route::get('/api/search/suggest', [\App\Http\Controllers\SearchController::class, 'suggest'])->name('api.search.suggest');
+Route::post('/api/phantom/introspect', [\App\Http\Controllers\Api\PhantomIntrospectionController::class, 'introspect'])->name('api.phantom.introspect');
 Route::get('/wiki', [\App\Http\Controllers\WikiController::class, 'index'])->name('wiki.index');
 Route::get('/wiki/{slug}', [\App\Http\Controllers\WikiController::class, 'show'])->name('wiki.detail');
 
