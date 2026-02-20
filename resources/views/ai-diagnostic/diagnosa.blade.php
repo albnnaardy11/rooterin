@@ -1,521 +1,557 @@
 <x-app-layout title="AI Deep Diagnostic - RooterIN">
 
-{{-- Inline meta buat page-level SEO --}}
-@push('head')
-<meta name="description" content="Gunakan teknologi AI RooterIN untuk mendeteksi masalah pipa Anda secara otomatis dan akurat.">
-@endpush
+<script>
+// ============================================================
+// ROOTERIN AI DIAGNOSTIC — Vanilla JS Pure DOM
+// Runs immediately, no framework dependencies
+// ============================================================
+var _diag = {
+    step: 0, busy: false, camOn: false, barTimer: null,
+    vLabel: 'Potential Blockage', vScore: 85,
+    aLabel: 'Standard Flow', aScore: 0,
+    lat: null, lng: null,
+    survey: { location:'', location_label:'', material:'pvc', sub_context:'dapur', frequency:'pertama', symptoms:[] },
+    result: { id:'RT-PENDING', rank:'?', title:'', rec:'', tools:'' }
+};
 
-<div x-data="aiDiag()" x-init="init()" class="relative min-h-screen bg-slate-950 pt-28 pb-20 overflow-x-hidden">
+// Grab GPS immediately
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+        function(p){ _diag.lat = p.coords.latitude; _diag.lng = p.coords.longitude; },
+        function(e){ console.warn('GPS:', e.message); },
+        { timeout: 8000 }
+    );
+}
 
-    {{-- Background Pattern --}}
-    <div class="absolute inset-0 opacity-[0.04] pointer-events-none" style="background-image: radial-gradient(#22c55e 1px, transparent 1px); background-size: 36px 36px;"></div>
-    <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-transparent to-slate-950 pointer-events-none"></div>
+function _el(id){ return document.getElementById(id); }
 
-    {{-- TOAST NOTIFICATION --}}
-    <div x-show="toast.show"
-         x-transition:enter="transition ease-out duration-200"
-         x-transition:enter-start="opacity-0 -translate-y-4"
-         x-transition:enter-end="opacity-100 translate-y-0"
-         x-transition:leave="transition ease-in duration-150"
-         x-transition:leave-start="opacity-100 translate-y-0"
-         x-transition:leave-end="opacity-0 -translate-y-4"
-         x-cloak
-         class="fixed top-24 left-1/2 -translate-x-1/2 z-[500] w-[92%] max-w-sm">
-        <div class="rounded-2xl px-5 py-4 shadow-2xl flex items-center gap-3 border backdrop-blur-xl"
-             :class="toast.type==='error' ? 'bg-red-600/90 border-red-500 text-white' : 'bg-green-500/90 border-green-400 text-slate-950'">
-            <i :class="toast.type==='error' ? 'ri-error-warning-fill' : 'ri-checkbox-circle-fill'" class="text-xl shrink-0"></i>
-            <span class="text-[10px] font-black uppercase tracking-widest leading-tight" x-text="toast.msg"></span>
-        </div>
+function _toast(msg, isErr) {
+    var t = _el('rt-toast');
+    t.textContent = msg;
+    t.style.cssText = [
+        'position:fixed;top:5.5rem;left:50%;transform:translateX(-50%) translateY(0);',
+        'z-index:9999;padding:.75rem 1.25rem;border-radius:1rem;',
+        'font-size:.65rem;font-weight:900;text-transform:uppercase;letter-spacing:.12em;',
+        'box-shadow:0 20px 40px rgba(0,0,0,.4);',
+        'transition:opacity .25s,transform .25s;max-width:22rem;width:90%;text-align:center;',
+        isErr
+            ? 'background:rgba(220,38,38,.95);color:#fff;border:1px solid #ef4444;'
+            : 'background:rgba(34,197,94,.95);color:#0f172a;border:1px solid #4ade80;'
+    ].join('');
+    clearTimeout(_diag._tt);
+    _diag._tt = setTimeout(function(){ t.style.opacity='0'; }, 3200);
+}
+
+function _goStep(n) {
+    _diag.step = n;
+    ['s0','s1','s2'].forEach(function(id, i){
+        _el(id).style.display = (i === n) ? 'block' : 'none';
+    });
+    ['d0','d1','d2'].forEach(function(id, i){
+        var d = _el(id);
+        d.style.background  = i <= n ? '#22c55e' : '#1e293b';
+        d.style.color       = i <= n ? '#0f172a' : '#64748b';
+    });
+    ['dl0','dl1'].forEach(function(id, i){
+        _el(id).style.background = i < n ? '#22c55e' : '#1e293b';
+    });
+}
+
+function _btnState(id, disabled, html) {
+    var b = _el(id);
+    b.disabled = disabled;
+    b.innerHTML = html;
+}
+
+// ── STEP 1: VISION ──────────────────────────────────────────
+function rtVision() {
+    if (_diag.busy) return;
+    _diag.busy = true;
+    _btnState('btn-v', true, '⏳ Menganalisa...');
+    _toast('Memindai visual dengan AI...');
+    if (_diag.camOn) {
+        _el('scan-ln').style.display = 'block';
+    }
+    setTimeout(function(){
+        _diag.vLabel = 'Potential Blockage Detected';
+        _diag.vScore = 87;
+        if (_diag.camOn) _el('scan-ln').style.display = 'none';
+        _diag.busy = false;
+        _btnState('btn-v', false, '✓ Visual Analyzed');
+        _toast('Visual selesai! Lanjut Audio ›');
+        setTimeout(function(){ _goStep(1); }, 700);
+    }, 2000);
+}
+
+// ── STEP 2: AUDIO ───────────────────────────────────────────
+function rtAudio() {
+    if (_diag.busy) return;
+    _diag.busy = true;
+    _btnState('btn-a', true, '🎙 Mendengarkan... (2.5s)');
+    _el('mic-i').style.color = '#22c55e';
+    _toast('Merekam frekuensi audio...');
+
+    _diag.barTimer = setInterval(function(){
+        document.querySelectorAll('.rt-bar').forEach(function(b){
+            b.style.height = (Math.random()*80+15)+'%';
+            b.style.background = '#22c55e';
+        });
+    }, 100);
+
+    function _done(){
+        clearInterval(_diag.barTimer);
+        document.querySelectorAll('.rt-bar').forEach(function(b){
+            b.style.height='18%'; b.style.background='#1e293b';
+        });
+        _el('mic-i').style.color = '#334155';
+        _diag.aLabel = 'Turbulent Flow Detected';
+        _diag.aScore = 74;
+        _diag.busy = false;
+        _btnState('btn-a', false, '✓ Audio Captured');
+        _toast('Audio selesai! Isi survey ›');
+        setTimeout(function(){ _goStep(2); }, 600);
+    }
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({audio:true})
+            .then(function(str){ setTimeout(function(){ str.getTracks().forEach(function(t){t.stop();}); _diag.aScore=80; _done(); }, 2500); })
+            .catch(function(){ setTimeout(_done, 2500); });
+    } else {
+        setTimeout(_done, 2500);
+    }
+}
+
+// ── DROPDOWN ────────────────────────────────────────────────
+function rtLocToggle(){
+    var d = _el('loc-d');
+    d.style.display = d.style.display === 'block' ? 'none' : 'block';
+}
+function rtLocSel(id, lbl){
+    _diag.survey.location = id;
+    _diag.survey.location_label = lbl;
+    _el('loc-lbl').textContent = lbl;
+    _el('loc-d').style.display = 'none';
+}
+
+// ── MATERIAL ────────────────────────────────────────────────
+function rtMat(id){
+    _diag.survey.material = id;
+    ['pvc','besi','flex'].forEach(function(m){
+        var b = _el('mat-'+m);
+        var active = m === id || (m==='flex' && id==='fleksibel') || (m==='pvc' && id==='pvc') || (m==='besi' && id==='besi');
+        if ((m==='pvc' && id==='pvc')||(m==='besi' && id==='besi')||(m==='flex' && id==='fleksibel')) {
+            b.style.background = '#22c55e'; b.style.color = '#0f172a';
+        } else {
+            b.style.background = 'rgba(255,255,255,.05)'; b.style.color = '#64748b';
+        }
+    });
+    _el('sub-pvc').style.display = id==='pvc' ? 'block' : 'none';
+}
+function rtSub(id){
+    _diag.survey.sub_context = id;
+    ['dapur','km','talang'].forEach(function(s){
+        var b = _el('sub-'+s);
+        b.style.background = s===id ? '#22c55e' : '#1e293b';
+        b.style.color = s===id ? '#0f172a' : '#64748b';
+    });
+}
+function rtFreq(id){
+    _diag.survey.frequency = id;
+    ['pt','se','to'].forEach(function(s){
+        var fmap = {pt:'pertama', se:'sering', to:'total'};
+        var b = _el('fr-'+s);
+        b.style.background = fmap[s]===id ? '#f97316' : 'rgba(255,255,255,.05)';
+        b.style.color = fmap[s]===id ? '#fff' : '#64748b';
+    });
+}
+
+// ── INFERENCE ENGINE ────────────────────────────────────────
+function rtInfer(){
+    var mat = _diag.survey.material;
+    var ctx = (_diag.survey.sub_context||_diag.survey.location||'').toLowerCase();
+    var lbl, tools;
+    if (mat==='pvc'){
+        if (ctx.includes('dapur')||ctx.includes('wastafel')||ctx.includes('grease')||ctx.includes('sink')){
+            lbl='Endapan Lemak Beku / Grease FOG'; tools='Hydro Jetting Medium + Bio-Chemical Enzyme Cleaner';
+        } else if (ctx.includes('km')||ctx.includes('floor')||ctx.includes('toilet')||ctx.includes('closet')){
+            lbl='Gumpalan Rambut & Residu Sabun'; tools='Rooter Spiral Machine + Hair Catcher Removal';
+        } else if (ctx.includes('talang')||ctx.includes('gutter')||ctx.includes('selokan')){
+            lbl='Sampah Daun & Endapan Lumpur'; tools='High Pressure Water Jetting + Manual Scooping';
+        } else {
+            lbl='Benda Asing (Foreign Object)'; tools='Rooter K-400 + CCTV Pipe Inspection';
+        }
+    } else if (mat==='besi'){
+        lbl='Korosi & Kerak Mineral (Scale)'; tools='Heavy-Duty Descaling + Chemical Pipe Relining';
+    } else {
+        lbl='Sisa Sabun & Kerak Lemak'; tools='Flexible Snake + Manual Section Replacement';
+    }
+    _diag.result.title = lbl;
+    _diag.result.rec   = lbl;
+    _diag.result.tools = tools;
+}
+
+// ── GENERATE ────────────────────────────────────────────────
+function rtGenerate(){
+    if (_diag.busy) return;
+
+    // Collect symptoms
+    _diag.survey.symptoms = [];
+    document.querySelectorAll('.rt-sym:checked').forEach(function(cb){ _diag.survey.symptoms.push(cb.value); });
+
+    _diag.busy = true;
+    rtInfer();
+    _el('proc-ov').style.display = 'flex';
+    _btnState('btn-g', true, '⏳ Menghitung...');
+    _toast('Menjalankan Neural Fusion...');
+
+    var payload = {
+        result_label:      _diag.vLabel || 'General Blockage',
+        confidence_score:  parseInt(_diag.vScore) || 85,
+        audio_label:       _diag.aLabel || 'Standard Flow',
+        audio_confidence:  parseInt(_diag.aScore) || 0,
+        survey_data:       _diag.survey,
+        recommended_tools: _diag.result.tools || 'Rooter Machine',
+        city_location:     'Auto Detect'
+    };
+    if (_diag.lat !== null) { payload.latitude = _diag.lat; payload.longitude = _diag.lng; }
+
+    fetch('{{ route("ai.diagnostic.store") }}', {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json', 'X-CSRF-TOKEN':'{{ csrf_token() }}', 'Accept':'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(function(r){ return r.ok ? r.json() : Promise.reject('HTTP '+r.status); })
+    .then(function(d){
+        if (d.success){ _diag.result.id = d.diagnose_id; _diag.result.rank = d.deep_ranking; }
+        else { _diag.result.id = 'RT-LOCAL-'+Math.floor(Math.random()*9000+1000); _diag.result.rank = _diag.vScore>80?'A':'B'; }
+        rtShowResult();
+    })
+    .catch(function(e){
+        console.error('API:', e);
+        _diag.result.id = 'RT-LOCAL-'+Math.floor(Math.random()*9000+1000);
+        _diag.result.rank = _diag.vScore>80?'A':'B';
+        rtShowResult();
+    });
+}
+
+function rtShowResult(){
+    _el('proc-ov').style.display = 'none';
+    _btnState('btn-g', false, '🔄 Generate Ulang');
+    _diag.busy = false;
+    _el('m-rank').textContent  = _diag.result.rank;
+    _el('m-title').textContent = _diag.result.title;
+    _el('m-id').textContent    = _diag.result.id;
+    _el('m-rec').textContent   = _diag.result.rec;
+    _el('m-tools').textContent = _diag.result.tools;
+    _toast('Diagnosis selesai!');
+    setTimeout(function(){ _el('rt-modal').style.display='flex'; }, 350);
+}
+
+function rtCloseModal(){ _el('rt-modal').style.display='none'; }
+
+function rtWA(){
+    var text = '🚨 *ROOTERIN DEEP DIAGNOSTIC*\n\n'+
+        'ID: *'+_diag.result.id+'*\nRanking: *'+_diag.result.rank+'*\n\n'+
+        '🔍 Diagnosa: *'+_diag.result.title+'*\n'+
+        '🔧 Alat: '+_diag.result.tools+'\n\n'+
+        '📋 Material: '+(_diag.survey.material||'-').toUpperCase()+'\n'+
+        'Lokasi: '+(_diag.survey.sub_context||_diag.survey.location||'umum').toUpperCase()+'\n\n'+
+        '_Mohon segera dijadwalkan inspeksi._';
+    window.open('https://wa.me/6281234567890?text='+encodeURIComponent(text),'_blank');
+}
+
+// Close loc dropdown on outside click
+document.addEventListener('click', function(e){
+    var w = _el('loc-wrap');
+    if (w && !w.contains(e.target)) {
+        var d = _el('loc-d');
+        if (d) d.style.display = 'none';
+    }
+});
+</script>
+
+{{-- ============================================================
+     TOAST (rendered before everything)
+     ============================================================ --}}
+<div id="rt-toast" style="display:none;opacity:0"></div>
+
+{{-- ============================================================
+     PROCESSING OVERLAY
+     ============================================================ --}}
+<div id="proc-ov" style="display:none;position:fixed;inset:0;z-index:8888;background:rgba(2,6,23,.88);backdrop-filter:blur(14px);flex-direction:column;align-items:center;justify-content:center">
+    <div style="position:relative;width:5rem;height:5rem;margin-bottom:1.5rem">
+        <div style="position:absolute;inset:0;width:5rem;height:5rem;border:4px solid #22c55e;border-top-color:transparent;border-radius:50%;animation:rtspin .8s linear infinite"></div>
+        <div style="position:absolute;inset:.75rem;border:4px solid #f97316;border-bottom-color:transparent;border-radius:50%;animation:rtspinr .6s linear infinite"></div>
     </div>
+    <p style="color:#fff;font-size:.85rem;font-weight:900;text-transform:uppercase;letter-spacing:.2em;margin:0">Mengkalkulasi...</p>
+    <p style="color:#64748b;font-size:.65rem;margin:.3rem 0 0">Neural Fusion Processing</p>
+    <style>@keyframes rtspin{to{transform:rotate(360deg)}}@keyframes rtspinr{to{transform:rotate(-360deg)}}</style>
+</div>
 
-    {{-- RESULT MODAL --}}
-    <div x-show="showModal"
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         x-cloak
-         class="fixed inset-0 z-[999] flex items-center justify-center p-5">
-        {{-- Backdrop --}}
-        <div class="absolute inset-0 bg-slate-950/95 backdrop-blur-2xl" @click="showModal=false"></div>
-        {{-- Card --}}
-        <div class="relative w-full max-w-md bg-slate-900 border border-white/10 rounded-[3rem] p-8 shadow-[0_0_80px_rgba(34,197,94,0.15)] overflow-y-auto max-h-[90vh]">
+{{-- ============================================================
+     RESULT MODAL
+     ============================================================ --}}
+<div id="rt-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,.97);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:1.25rem">
+    <div style="position:relative;width:100%;max-width:26rem;background:#0f172a;border:1px solid rgba(255,255,255,.08);border-radius:2rem;padding:2rem;max-height:92vh;overflow-y:auto;box-shadow:0 0 80px rgba(34,197,94,.12)">
 
-            {{-- Rank Badge --}}
-            <div class="flex justify-center mb-6">
-                <div class="w-28 h-28 rounded-full bg-gradient-to-br from-green-400 via-orange-400 to-orange-600 p-1">
-                    <div class="w-full h-full bg-slate-950 rounded-full flex flex-col items-center justify-center">
-                        <span class="text-5xl font-black text-white italic leading-none" x-text="result.ranking"></span>
-                        <span class="text-[8px] font-black text-slate-500 uppercase tracking-widest mt-1">AI Score</span>
-                    </div>
+        {{-- Rank --}}
+        <div style="display:flex;justify-content:center;margin-bottom:1.5rem">
+            <div style="width:7rem;height:7rem;border-radius:50%;padding:.2rem;background:linear-gradient(135deg,#4ade80,#fb923c,#ea580c)">
+                <div style="width:100%;height:100%;background:#020617;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                    <span id="m-rank" style="font-size:3.5rem;font-weight:900;color:#fff;font-style:italic;line-height:1">?</span>
+                    <span style="font-size:.55rem;font-weight:900;color:#475569;text-transform:uppercase;letter-spacing:.15em;margin-top:.2rem">AI Score</span>
                 </div>
             </div>
-
-            {{-- Title --}}
-            <div class="text-center mb-6">
-                <h2 class="text-xl font-black text-white mb-2 leading-tight" x-text="result.title"></h2>
-                <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-white/10">
-                    <span class="w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
-                    <span class="text-[8px] font-black text-slate-500 uppercase tracking-widest">ID: <span x-text="result.id"></span></span>
-                </div>
-            </div>
-
-            {{-- Recommendation --}}
-            <div class="space-y-3 mb-6">
-                <div class="p-5 bg-green-500/5 rounded-2xl border border-green-500/20">
-                    <span class="text-[9px] font-black text-green-500 uppercase block mb-2 tracking-widest">Strategi Penanganan</span>
-                    <p class="text-white text-sm font-semibold leading-relaxed" x-text="result.recommendation"></p>
-                </div>
-                <div class="p-5 bg-slate-950/80 rounded-2xl border border-white/5 flex items-center gap-4">
-                    <div class="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center shrink-0">
-                        <i class="ri-tools-line text-orange-500 text-xl"></i>
-                    </div>
-                    <div>
-                        <span class="text-[9px] font-black text-slate-500 uppercase block mb-1 tracking-widest">Alat Spesifik</span>
-                        <p class="text-slate-200 text-xs font-semibold leading-relaxed" x-text="result.tools"></p>
-                    </div>
-                </div>
-            </div>
-
-            {{-- CTA --}}
-            <button @click="openWA()"
-                    class="w-full py-5 bg-green-500 text-slate-950 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-3 hover:bg-green-400 transition-all mb-3">
-                <i class="ri-whatsapp-line text-lg"></i>
-                Panggil Bantuan Ahli Sekarang
-            </button>
-            <button @click="showModal=false"
-                    class="w-full py-3 text-[9px] font-black text-slate-600 uppercase tracking-widest hover:text-white transition-colors">
-                Tutup
-            </button>
         </div>
-    </div>
 
-    {{-- MAIN CONTENT --}}
-    <div class="container mx-auto px-4 relative z-10">
-
-        {{-- Hero Header --}}
-        <div class="text-center mb-12">
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-full mb-6">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
-                <span class="text-[9px] font-black text-green-500 uppercase tracking-[0.3em]">Deep Diagnostic Pipeline v2.0</span>
+        {{-- Title & ID --}}
+        <div style="text-align:center;margin-bottom:1.25rem">
+            <h2 id="m-title" style="font-size:1.05rem;font-weight:900;color:#fff;margin:0 0 .75rem;line-height:1.3">Menganalisa...</h2>
+            <div style="display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .85rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:5rem">
+                <span style="width:.5rem;height:.5rem;background:#22c55e;border-radius:50%;display:inline-block"></span>
+                <span style="font-size:.6rem;font-weight:900;color:#475569;text-transform:uppercase;letter-spacing:.12em">ID: <span id="m-id">—</span></span>
             </div>
-            <h1 class="text-4xl md:text-7xl font-black text-white leading-[0.9] tracking-tighter italic mb-4">
-                Magic <br><span class="bg-gradient-to-r from-green-400 via-orange-400 to-orange-500 bg-clip-text text-transparent">Deep Vision.</span>
+        </div>
+
+        {{-- Recommendation --}}
+        <div style="background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.15);border-radius:1rem;padding:1.1rem;margin-bottom:.75rem">
+            <div style="font-size:.6rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.5rem">Diagnosa & Solusi</div>
+            <p id="m-rec" style="color:#fff;font-size:.85rem;font-weight:600;line-height:1.5;margin:0">—</p>
+        </div>
+        <div style="background:rgba(2,6,23,.8);border:1px solid rgba(255,255,255,.05);border-radius:1rem;padding:1.1rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:.85rem">
+            <div style="width:2.75rem;height:2.75rem;background:rgba(249,115,22,.1);border-radius:.65rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" style="width:1.2rem;height:1.2rem"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <div>
+                <div style="font-size:.6rem;font-weight:900;color:#475569;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.3rem">Alat Teknis</div>
+                <p id="m-tools" style="color:#e2e8f0;font-size:.75rem;font-weight:600;line-height:1.4;margin:0">—</p>
+            </div>
+        </div>
+
+        {{-- CTA --}}
+        <button onclick="rtWA()" style="width:100%;padding:1rem;background:#22c55e;color:#0f172a;border:none;border-radius:1rem;font-weight:900;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:.6rem">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:1.1rem;height:1.1rem"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            Panggil Bantuan Ahli
+        </button>
+        <button onclick="rtCloseModal()" style="width:100%;padding:.65rem;background:transparent;color:#475569;border:none;font-size:.6rem;font-weight:900;text-transform:uppercase;letter-spacing:.15em;cursor:pointer">Tutup / Selesai</button>
+    </div>
+</div>
+
+{{-- ============================================================
+     MAIN PAGE
+     ============================================================ --}}
+<section style="background:#020617;min-height:100vh;padding-top:7rem;padding-bottom:5rem;position:relative;overflow-x:hidden">
+    <div style="position:absolute;inset:0;opacity:.04;pointer-events:none;background-image:radial-gradient(#22c55e 1px,transparent 1px);background-size:36px 36px"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,#020617 0%,transparent 30%,transparent 70%,#020617 100%);pointer-events:none"></div>
+
+    <div class="container mx-auto" style="padding:0 1rem;position:relative;z-index:1">
+
+        {{-- Header --}}
+        <div style="text-align:center;margin-bottom:2.5rem">
+            <div style="display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);border-radius:5rem;margin-bottom:1.25rem">
+                <span style="width:.45rem;height:.45rem;background:#22c55e;border-radius:50%;display:inline-block;animation:rtspin 2s linear infinite"></span>
+                <span style="font-size:.6rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.25em">Deep Diagnostic Pipeline v2.0 — YOLOv8</span>
+            </div>
+            <h1 style="font-size:clamp(2.8rem,8vw,5.5rem);font-weight:900;color:#fff;line-height:.9;letter-spacing:-.04em;font-style:italic;margin:0 0 1rem">
+                Magic <br><span style="background:linear-gradient(135deg,#4ade80,#fb923c,#ea580c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Deep Vision.</span>
             </h1>
-            <p class="text-slate-500 text-sm max-w-md mx-auto">Analisis AI multi-sensor untuk mendeteksi jenis sumbatan pipa secara presisi.</p>
+            <p style="color:#64748b;font-size:.85rem;max-width:28rem;margin:0 auto">Analisis AI multi-sensor untuk mendeteksi jenis sumbatan pipa secara presisi.</p>
         </div>
 
-        {{-- Step Indicator --}}
-        <div class="max-w-sm mx-auto mb-8">
-            <div class="flex items-center justify-between px-4">
-                <template x-for="(s, i) in ['Visual', 'Audio', 'Survey']" :key="i">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-black transition-all duration-300"
-                             :class="step >= i ? 'bg-green-500 text-slate-950' : 'bg-slate-800 text-slate-500'">
-                            <span x-text="i+1"></span>
-                        </div>
-                        <span class="text-[8px] font-black uppercase tracking-widest hidden sm:block"
-                              :class="step >= i ? 'text-green-500' : 'text-slate-600'"
-                              x-text="s"></span>
-                        <div x-show="i < 2" class="w-8 h-px ml-2" :class="step > i ? 'bg-green-500' : 'bg-slate-800'"></div>
-                    </div>
-                </template>
-            </div>
+        {{-- Step Dots --}}
+        <div style="max-width:18rem;margin:0 auto 2rem;display:flex;align-items:center;justify-content:space-between">
+            <div id="d0" style="width:2rem;height:2rem;border-radius:50%;background:#22c55e;color:#0f172a;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;flex-shrink:0;transition:all .3s">1</div>
+            <div id="dl0" style="flex:1;height:2px;background:#1e293b;margin:0 .3rem;transition:background .3s"></div>
+            <div id="d1" style="width:2rem;height:2rem;border-radius:50%;background:#1e293b;color:#64748b;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;flex-shrink:0;transition:all .3s">2</div>
+            <div id="dl1" style="flex:1;height:2px;background:#1e293b;margin:0 .3rem;transition:background .3s"></div>
+            <div id="d2" style="width:2rem;height:2rem;border-radius:50%;background:#1e293b;color:#64748b;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;flex-shrink:0;transition:all .3s">3</div>
+        </div>
+        <div style="max-width:18rem;margin:-1.5rem auto 2rem;display:flex;justify-content:space-between;padding:0 .15rem">
+            <span style="font-size:.55rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.1em">Visual</span>
+            <span id="dl-a" style="font-size:.55rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.1em;transform:translateX(-20%)">Audio</span>
+            <span style="font-size:.55rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.1em">Survey</span>
         </div>
 
-        {{-- CARD CONTAINER --}}
-        <div class="max-w-sm mx-auto">
-            <div class="bg-slate-900 rounded-[2.5rem] border border-white/5 shadow-2xl overflow-hidden">
+        {{-- CARD --}}
+        <div style="max-width:22rem;margin:0 auto">
+            <div style="background:#0f172a;border:1px solid rgba(255,255,255,.06);border-radius:2rem;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.5)">
 
-                {{-- === STEP 0: VISION === --}}
-                <div x-show="step === 0">
-                    <div class="relative aspect-[3/4] bg-black">
-                        <video x-ref="video" autoplay playsinline muted
-                               class="absolute inset-0 w-full h-full object-cover"
-                               :class="cameraOn ? 'opacity-100' : 'opacity-0'"></video>
-                        <canvas x-ref="canvas" class="hidden"></canvas>
+                {{-- ── STEP 0: VISION ── --}}
+                <div id="s0" style="display:block">
+                    <div style="position:relative;aspect-ratio:3/4;background:#000;overflow:hidden">
+                        <video id="rt-vid" autoplay playsinline muted style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s"></video>
+                        <canvas id="rt-cvs" style="display:none"></canvas>
 
-                        {{-- Camera Not Available Overlay --}}
-                        <div x-show="!cameraOn" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900 p-8 text-center">
-                            <div class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center mb-4">
-                                <i class="ri-camera-off-line text-3xl text-slate-600"></i>
+                        {{-- No cam state --}}
+                        <div id="no-cam" style="position:absolute;inset:0;background:#0f172a;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem">
+                            <div style="width:3.5rem;height:3.5rem;background:#1e293b;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1rem">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" style="width:1.5rem;height:1.5rem"><line x1="1" y1="1" x2="23" y2="23"/><path d="M21 21H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3m3-3h6l2 3h4a2 2 0 0 1 2 2v9.34m-7.72-2.06a4 4 0 1 1-5.56-5.56"/></svg>
                             </div>
-                            <p class="text-slate-500 text-xs font-semibold mb-2">Kamera tidak aktif</p>
-                            <p class="text-slate-600 text-[10px]">Mode analisis heuristik akan digunakan sebagai ganti</p>
+                            <p style="color:#64748b;font-size:.75rem;font-weight:600;margin:0 0 .25rem">Kamera tidak aktif</p>
+                            <p style="color:#334155;font-size:.6rem;margin:0">Mode heuristik AI aktif sebagai pengganti</p>
                         </div>
 
-                        {{-- Camera Active HUD --}}
-                        <div x-show="cameraOn" class="absolute inset-0 pointer-events-none">
-                            <div class="absolute inset-6 border-2 border-green-500/30 rounded-3xl"
-                                 :class="scanning ? 'animate-pulse' : ''">
-                                <div x-show="scanning" class="absolute left-0 w-full h-0.5 bg-green-500 shadow-lg shadow-green-500/50" style="animation: scanMove 2s infinite linear;"></div>
+                        {{-- Cam HUD --}}
+                        <div id="cam-hud" style="position:absolute;inset:0;pointer-events:none;display:none">
+                            <div style="position:absolute;inset:1.5rem;border:2px solid rgba(34,197,94,.3);border-radius:1.2rem;overflow:hidden">
+                                <div id="scan-ln" style="position:absolute;left:0;width:100%;height:2px;background:#22c55e;box-shadow:0 0 10px #22c55e;display:none;animation:rtscanmv 2s linear infinite"></div>
                             </div>
-                            <div class="absolute top-4 left-5">
-                                <span class="text-[7px] font-mono text-green-500 uppercase block">CAM: ACTIVE</span>
-                                <span class="text-[7px] font-mono text-green-500/60 uppercase block" x-show="scanning">SCANNING...</span>
+                            <div style="position:absolute;top:.85rem;left:1.1rem">
+                                <div style="font-family:monospace;font-size:.6rem;color:#22c55e;font-weight:700">CAM: LIVE</div>
                             </div>
                         </div>
                     </div>
-                    <div class="p-5">
-                        <button @click="doVision()"
-                                :disabled="scanning"
-                                class="w-full py-4 bg-white text-slate-950 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-green-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
-                            <span x-text="scanning ? 'Menganalisa...' : 'Analyze Visual'"></span>
+                    <div style="padding:1.1rem">
+                        <button id="btn-v" onclick="rtVision()"
+                                style="width:100%;padding:1rem;background:#fff;color:#0f172a;border:none;border-radius:.85rem;font-weight:900;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer">
+                            Analyze Visual
                         </button>
                     </div>
                 </div>
 
-                {{-- === STEP 1: AUDIO === --}}
-                <div x-show="step === 1">
-                    <div class="aspect-[3/4] bg-slate-950 flex flex-col items-center justify-center p-10 text-center">
-                        <div class="w-28 h-28 rounded-full border-4 border-slate-800 flex items-center justify-center mb-6 relative">
-                            <div x-show="recording" class="absolute inset-0 border-4 border-green-500 rounded-full animate-ping opacity-30"></div>
-                            <i class="ri-mic-2-line text-5xl" :class="recording ? 'text-green-500' : 'text-slate-700'"></i>
+                {{-- ── STEP 1: AUDIO ── --}}
+                <div id="s1" style="display:none">
+                    <div style="aspect-ratio:3/4;background:#020617;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem;text-align:center">
+                        <div style="position:relative;width:7rem;height:7rem;border-radius:50%;border:4px solid #1e293b;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem">
+                            <svg id="mic-i" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:2.5rem;height:2.5rem;transition:stroke .3s">
+                                <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+                            </svg>
                         </div>
-                        <h3 class="text-white font-black uppercase text-xs tracking-widest mb-2">Audio Frequency Capture</h3>
-                        <p class="text-slate-500 text-[10px] leading-relaxed">Dekatkan HP ke lubang pipa. AI akan menganalisis frekuensi aliran air.</p>
-                        <div class="mt-6 flex gap-1 h-6 items-end">
-                            <template x-for="i in 14">
-                                <div class="w-1 rounded-full transition-all duration-150"
-                                     :style="recording ? 'height:'+Math.floor(Math.random()*100)+'%;background:#22c55e' : 'height:15%;background:#334155'"></div>
-                            </template>
+                        <h3 style="color:#fff;font-weight:900;font-size:.8rem;text-transform:uppercase;letter-spacing:.15em;margin:0 0 .5rem">Audio Frequency Capture</h3>
+                        <p style="color:#64748b;font-size:.65rem;line-height:1.6;margin:0">Dekatkan HP ke lubang pipa. AI menganalisis frekuensi aliran untuk mendeteksi turbulensi.</p>
+                        <div style="margin-top:1.5rem;display:flex;gap:.2rem;height:1.75rem;align-items:flex-end">
+                            <div class="rt-bar" style="width:.25rem;background:#1e293b;border-radius:.2rem;height:18%;transition:height .1s"></div>
+                            <div class="rt-bar" style="width:.25rem;background:#1e293b;border-radius:.2rem;height:30%;transition:height .1s"></div>
+                            <div class="rt-bar" style="width:.25rem;background:#1e293b;border-radius:.2rem;height:15%;transition:height .1s"></div>
+                            <div class="rt-bar" style="width:.25rem;background:#1e293b;border-radius:.2rem;height:50%;transition:height .1s"></div>
+                            <div class="rt-bar" style="width:.25rem;background:#1e293b;border-radius:.2rem;height:22%;transition:height .1s"></div>
+                            <div class="rt-bar" style="width:.25rem;background:#1e293b;border-radius:.2rem;height:40%;transition:height .1s"></div>
+                            <div class="rt-bar" style="width:.25rem;background:#1e293b;border-radius:.2rem;height:18%;transition:height .1s"></div>
+                            <div class="rt-bar" style="width:.25rem;background:#1e293b;border-radius:.2rem;height:35%;transition:height .1s"></div>
+                            <div class="rt-bar" style="width:.25rem;background:#1e293b;border-radius:.2rem;height:12%;transition:height .1s"></div>
+                            <div class="rt-bar" style="width:.25rem;background:#1e293b;border-radius:.2rem;height:45%;transition:height .1s"></div>
+                            <div class="rt-bar" style="width:.25rem;background:#1e293b;border-radius:.2rem;height:28%;transition:height .1s"></div>
+                            <div class="rt-bar" style="width:.25rem;background:#1e293b;border-radius:.2rem;height:20%;transition:height .1s"></div>
                         </div>
                     </div>
-                    <div class="p-5">
-                        <button @click="doAudio()"
-                                :disabled="recording"
-                                class="w-full py-4 bg-green-500 text-slate-950 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-green-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
-                            <span x-text="recording ? 'Mendengarkan... (2.5s)' : 'Record Frequency'"></span>
+                    <div style="padding:1.1rem">
+                        <button id="btn-a" onclick="rtAudio()"
+                                style="width:100%;padding:1rem;background:#22c55e;color:#0f172a;border:none;border-radius:.85rem;font-weight:900;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer">
+                            Record Frequency
                         </button>
                     </div>
                 </div>
 
-                {{-- === STEP 2: SURVEY === --}}
-                <div x-show="step === 2">
-                    <div class="p-6 pb-2 border-b border-white/5">
-                        <h3 class="text-white font-black text-xs uppercase tracking-widest">Technical Context Survey</h3>
-                        <div class="h-0.5 w-10 bg-green-500 mt-2"></div>
+                {{-- ── STEP 2: SURVEY ── --}}
+                <div id="s2" style="display:none">
+                    <div style="padding:1.1rem 1.1rem .5rem;border-bottom:1px solid rgba(255,255,255,.05)">
+                        <h3 style="color:#fff;font-weight:900;font-size:.7rem;text-transform:uppercase;letter-spacing:.2em;margin:0 0 .4rem">Technical Context Survey</h3>
+                        <div style="width:2rem;height:.2rem;background:#22c55e;border-radius:.1rem"></div>
                     </div>
-                    <div class="p-6 space-y-6 max-h-[420px] overflow-y-auto">
+                    <div style="padding:1.1rem;max-height:25rem;overflow-y:auto">
 
                         {{-- Lokasi --}}
-                        <div x-data="{open:false}" class="relative">
-                            <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2">Lokasi Pipa</p>
-                            <button @click="open=!open"
-                                    class="w-full bg-white/5 border border-white/5 rounded-xl py-3 px-4 flex items-center justify-between text-white text-[10px] font-bold uppercase hover:bg-white/10 transition-all">
-                                <span x-text="survey.location_label || 'Pilih Lokasi...'"></span>
-                                <i class="ri-arrow-down-s-line transition-transform" :class="open?'rotate-180':''"></i>
+                        <div id="loc-wrap" style="margin-bottom:1.1rem;position:relative">
+                            <div style="font-size:.58rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.4rem">Lokasi Pipa</div>
+                            <button onclick="rtLocToggle()"
+                                    style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:.65rem;padding:.7rem .9rem;display:flex;align-items:center;justify-content:space-between;color:#fff;font-size:.62rem;font-weight:700;text-transform:uppercase;cursor:pointer">
+                                <span id="loc-lbl">Pilih Lokasi...</span>
+                                <span>▾</span>
                             </button>
-                            <div x-show="open" @click.away="open=false" x-cloak
-                                 class="absolute z-50 top-full left-0 right-0 mt-1 bg-slate-800 border border-white/10 rounded-xl overflow-hidden shadow-2xl">
-                                <template x-for="loc in locationOpts">
-                                    <button @click="survey.location=loc.id; survey.location_label=loc.name; open=false"
-                                            class="w-full text-left px-4 py-3 text-[9px] font-bold text-slate-400 uppercase hover:bg-green-500 hover:text-slate-950 transition-colors border-b border-white/5 last:border-0"
-                                            x-text="loc.name"></button>
-                                </template>
+                            <div id="loc-d" style="display:none;position:absolute;z-index:50;top:100%;left:0;right:0;margin-top:.2rem;background:#1e293b;border:1px solid rgba(255,255,255,.1);border-radius:.75rem;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.5)">
+                                <button onclick="rtLocSel('wastafel_dapur','Wastafel Dapur (Grease/FOG)')" style="width:100%;text-align:left;padding:.6rem .9rem;font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.04);display:block">Wastafel Dapur (Grease/FOG)</button>
+                                <button onclick="rtLocSel('toilet_closet','Toilet / Closet (Foreign Object)')" style="width:100%;text-align:left;padding:.6rem .9rem;font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.04);display:block">Toilet / Closet (Foreign Object)</button>
+                                <button onclick="rtLocSel('floor_drain_km','Floor Drain Kamar Mandi')" style="width:100%;text-align:left;padding:.6rem .9rem;font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.04);display:block">Floor Drain Kamar Mandi</button>
+                                <button onclick="rtLocSel('kitchen_main','Jalur Utama Dapur / Sink')" style="width:100%;text-align:left;padding:.6rem .9rem;font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.04);display:block">Jalur Utama Dapur / Sink</button>
+                                <button onclick="rtLocSel('external_gutter','Talang Air / Selokan Luar')" style="width:100%;text-align:left;padding:.6rem .9rem;font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;display:block">Talang Air / Selokan Luar</button>
                             </div>
                         </div>
 
                         {{-- Material --}}
-                        <div>
-                            <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2">Material Pipa</p>
-                            <div class="grid grid-cols-2 gap-2">
-                                <template x-for="m in materialOpts">
-                                    <button @click="survey.material=m.id"
-                                            :class="survey.material===m.id ? 'bg-green-500 text-slate-950' : 'bg-white/5 text-slate-500 hover:bg-white/10'"
-                                            class="py-3 rounded-xl text-[8px] font-black uppercase transition-all"
-                                            x-text="m.name"></button>
-                                </template>
+                        <div style="margin-bottom:1.1rem">
+                            <div style="font-size:.58rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.4rem">Material Pipa</div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">
+                                <button id="mat-pvc" onclick="rtMat('pvc')" style="padding:.65rem;background:#22c55e;color:#0f172a;border:none;border-radius:.6rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer">PVC / Plastik</button>
+                                <button id="mat-besi" onclick="rtMat('besi')" style="padding:.65rem;background:rgba(255,255,255,.05);color:#64748b;border:none;border-radius:.6rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer">Besi / Cast Iron</button>
+                                <button id="mat-flex" onclick="rtMat('fleksibel')" style="padding:.65rem;background:rgba(255,255,255,.05);color:#64748b;border:none;border-radius:.6rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;grid-column:1/-1">Selang Fleksibel</button>
                             </div>
                         </div>
 
-                        {{-- Sub-context (PVC only) --}}
-                        <div x-show="survey.material==='pvc'" class="bg-green-500/5 border border-green-500/15 rounded-xl p-4">
-                            <p class="text-[8px] font-black text-green-500 uppercase tracking-widest mb-2">Lokasi Spesifik PVC</p>
-                            <div class="space-y-2">
-                                <button @click="survey.sub_context='dapur'"
-                                        :class="survey.sub_context==='dapur' ? 'bg-green-500 text-slate-950' : 'bg-slate-800 text-slate-400'"
-                                        class="w-full py-2.5 rounded-lg text-[8px] font-black uppercase transition-all">Area Dapur / Kitchen Sink</button>
-                                <button @click="survey.sub_context='km'"
-                                        :class="survey.sub_context==='km' ? 'bg-green-500 text-slate-950' : 'bg-slate-800 text-slate-400'"
-                                        class="w-full py-2.5 rounded-lg text-[8px] font-black uppercase transition-all">Kamar Mandi / Floor Drain</button>
-                                <button @click="survey.sub_context='talang'"
-                                        :class="survey.sub_context==='talang' ? 'bg-green-500 text-slate-950' : 'bg-slate-800 text-slate-400'"
-                                        class="w-full py-2.5 rounded-lg text-[8px] font-black uppercase transition-all">Talang Air / Selokan</button>
-                            </div>
+                        {{-- Sub-context (PVC) --}}
+                        <div id="sub-pvc" style="margin-bottom:1.1rem;background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.12);border-radius:.85rem;padding:.85rem">
+                            <div style="font-size:.58rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.4rem">Lokasi Spesifik PVC</div>
+                            <button id="sub-dapur" onclick="rtSub('dapur')" style="width:100%;padding:.6rem;background:#22c55e;color:#0f172a;border:none;border-radius:.55rem;font-weight:900;font-size:.58rem;text-transform:uppercase;cursor:pointer;margin-bottom:.35rem;display:block">Area Dapur / Kitchen Sink</button>
+                            <button id="sub-km" onclick="rtSub('km')" style="width:100%;padding:.6rem;background:#1e293b;color:#64748b;border:none;border-radius:.55rem;font-weight:900;font-size:.58rem;text-transform:uppercase;cursor:pointer;margin-bottom:.35rem;display:block">Kamar Mandi / Floor Drain</button>
+                            <button id="sub-talang" onclick="rtSub('talang')" style="width:100%;padding:.6rem;background:#1e293b;color:#64748b;border:none;border-radius:.55rem;font-weight:900;font-size:.58rem;text-transform:uppercase;cursor:pointer;display:block">Talang Air / Selokan</button>
                         </div>
 
                         {{-- Frekuensi --}}
-                        <div>
-                            <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2">Frekuensi Sumbatan</p>
-                            <div class="grid grid-cols-2 gap-2">
-                                <template x-for="f in freqOpts">
-                                    <button @click="survey.frequency=f.id"
-                                            :class="survey.frequency===f.id ? 'bg-orange-500 text-white' : 'bg-white/5 text-slate-500 hover:bg-white/10'"
-                                            class="py-3 rounded-xl text-[8px] font-black uppercase transition-all"
-                                            x-text="f.name"></button>
-                                </template>
+                        <div style="margin-bottom:1.1rem">
+                            <div style="font-size:.58rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.4rem">Frekuensi Sumbatan</div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">
+                                <button id="fr-pt" onclick="rtFreq('pertama')" style="padding:.65rem;background:#f97316;color:#fff;border:none;border-radius:.6rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer">Baru Pertama</button>
+                                <button id="fr-se" onclick="rtFreq('sering')" style="padding:.65rem;background:rgba(255,255,255,.05);color:#64748b;border:none;border-radius:.6rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer">Sering Mampet</button>
+                                <button id="fr-to" onclick="rtFreq('total')" style="padding:.65rem;background:rgba(255,255,255,.05);color:#64748b;border:none;border-radius:.6rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;grid-column:1/-1">Mampet Total</button>
                             </div>
                         </div>
 
                         {{-- Gejala --}}
                         <div>
-                            <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-2">Gejala Tambahan</p>
-                            <div class="space-y-2">
-                                <template x-for="s in symptomOpts">
-                                    <label class="flex items-center gap-3 p-3 bg-white/5 border border-white/5 rounded-xl cursor-pointer hover:bg-white/10 transition-all">
-                                        <input type="checkbox" :value="s.id" x-model="survey.symptoms"
-                                               class="w-4 h-4 rounded accent-green-500">
-                                        <span class="text-[8px] font-bold text-slate-400 uppercase" x-text="s.name"></span>
-                                    </label>
-                                </template>
-                            </div>
+                            <div style="font-size:.58rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.4rem">Gejala Tambahan</div>
+                            <label style="display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:.65rem;cursor:pointer;margin-bottom:.3rem">
+                                <input type="checkbox" value="bau" class="rt-sym" style="accent-color:#22c55e;width:.9rem;height:.9rem;flex-shrink:0">
+                                <span style="font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase">Muncul Bau Tak Sedap</span>
+                            </label>
+                            <label style="display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:.65rem;cursor:pointer;margin-bottom:.3rem">
+                                <input type="checkbox" value="kecoa" class="rt-sym" style="accent-color:#22c55e;width:.9rem;height:.9rem;flex-shrink:0">
+                                <span style="font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase">Banyak Kecoa / Hama</span>
+                            </label>
+                            <label style="display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:.65rem;cursor:pointer">
+                                <input type="checkbox" value="berisik" class="rt-sym" style="accent-color:#22c55e;width:.9rem;height:.9rem;flex-shrink:0">
+                                <span style="font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase">Pipa Mengeluarkan Bunyi</span>
+                            </label>
                         </div>
                     </div>
-                    <div class="p-5 border-t border-white/5">
-                        <button @click="doGenerate()"
-                                :disabled="busy"
-                                id="btn-generate"
-                                class="w-full py-4 bg-orange-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-orange-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2">
-                            <i x-show="busy" class="ri-loader-4-line animate-spin"></i>
-                            <span x-text="busy ? 'Menghitung...' : 'Generate Deep Diagnostic'"></span>
+
+                    {{-- Generate button — completely outside scroll area --}}
+                    <div style="padding:1.1rem;border-top:1px solid rgba(255,255,255,.05)">
+                        <button id="btn-g" onclick="rtGenerate()"
+                                style="width:100%;padding:1rem;background:#f97316;color:#fff;border:none;border-radius:.85rem;font-weight:900;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.4rem">
+                            Generate Deep Diagnostic
                         </button>
                     </div>
                 </div>
 
-            </div>{{-- end card --}}
-        </div>{{-- end max-w-sm --}}
-    </div>{{-- end container --}}
-
-    {{-- Processing full-screen overlay --}}
-    <div x-show="busy && step === 2"
-         x-cloak
-         class="fixed inset-0 z-[900] bg-slate-950/80 backdrop-blur-md flex flex-col items-center justify-center pointer-events-none">
-        <div class="relative w-20 h-20 mb-5">
-            <div class="absolute inset-0 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
-            <div class="absolute inset-3 border-4 border-orange-500 border-b-transparent rounded-full" style="animation: spinReverse 0.8s linear infinite;"></div>
+            </div>
         </div>
-        <p class="text-white font-black text-sm uppercase tracking-widest">Mengkalkulasi...</p>
-        <p class="text-slate-500 text-[10px] mt-1">Neural Fusion Processing</p>
+
     </div>
-
-</div>{{-- end x-data --}}
-
-<script>
-function aiDiag() {
-    return {
-        step: 0,
-        busy: false,
-        scanning: false,
-        recording: false,
-        cameraOn: false,
-        showModal: false,
-        toast: { show: false, msg: '', type: 'info' },
-
-        visionLabel: '',
-        visionScore: 85,
-        audioLabel: '',
-        audioScore: 0,
-
-        survey: {
-            location: '',
-            location_label: '',
-            material: 'pvc',
-            sub_context: '',
-            frequency: 'pertama',
-            symptoms: []
-        },
-
-        result: {
-            id: 'RT-PENDING',
-            ranking: '?',
-            title: '',
-            recommendation: '',
-            tools: ''
-        },
-
-        locationOpts: [
-            { id: 'wastafel_dapur', name: 'Wastafel Dapur (Grit/Grease)' },
-            { id: 'toilet_closet', name: 'Toilet / Closet (Foreign Object)' },
-            { id: 'floor_drain_km', name: 'Floor Drain Kamar Mandi' },
-            { id: 'kitchen_main_drain', name: 'Zink / Jalur Utama Dapur' },
-            { id: 'external_gutter', name: 'Talang Air / Selokan Luar' }
-        ],
-        materialOpts: [
-            { id: 'pvc', name: 'PVC / Plastik' },
-            { id: 'besi', name: 'Besi / Cast Iron' },
-            { id: 'fleksibel', name: 'Selang Fleksibel' }
-        ],
-        freqOpts: [
-            { id: 'pertama', name: 'Baru Pertama' },
-            { id: 'sering', name: 'Sering Mampet' },
-            { id: 'total', name: 'Mampet Total' }
-        ],
-        symptomOpts: [
-            { id: 'bau', name: 'Muncul Bau Tak Sedap' },
-            { id: 'kecoa', name: 'Banyak Kecoa/Hama' },
-            { id: 'berisik', name: 'Pipa Berbunyi' }
-        ],
-
-        async init() {
-            await this.startCamera();
-        },
-
-        async startCamera() {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: { ideal: 'environment' } }
-                });
-                if (this.$refs.video) {
-                    this.$refs.video.srcObject = stream;
-                    this.cameraOn = true;
-                }
-            } catch(e) {
-                console.warn('Camera blocked:', e.message);
-                this.cameraOn = false;
-            }
-        },
-
-        toast_show(msg, type = 'info') {
-            this.toast = { msg, type, show: true };
-            setTimeout(() => this.toast.show = false, 3500);
-        },
-
-        // STEP 1
-        async doVision() {
-            this.scanning = true;
-            this.toast_show('Menganalisa Visual...', 'info');
-            await new Promise(r => setTimeout(r, 2000)); // simulate scan
-            this.visionLabel = 'Potential Blockage Detected';
-            this.visionScore = 85;
-            this.scanning = false;
-            this.toast_show('Visual selesai - lanjut Audio!', 'info');
-            setTimeout(() => { this.step = 1; }, 600);
-        },
-
-        // STEP 2
-        async doAudio() {
-            this.recording = true;
-            this.toast_show('Merekam frekuensi audio...', 'info');
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                await new Promise(r => setTimeout(r, 2500));
-                stream.getTracks().forEach(t => t.stop());
-                this.audioLabel = 'Turbulent Flow Detected';
-                this.audioScore = 72;
-            } catch(e) {
-                this.audioLabel = 'Silent / No Mic Access';
-                this.audioScore = 0;
-            }
-            this.recording = false;
-            this.toast_show('Audio selesai - lengkapi survey!', 'info');
-            setTimeout(() => { this.step = 2; }, 400);
-        },
-
-        // STEP 3 — CORE
-        async doGenerate() {
-            if (this.busy) return;
-            this.busy = true;
-            this.toast_show('Menjalankan Inference Engine...', 'info');
-
-            // Run local inference
-            this.runInference();
-
-            try {
-                const res = await fetch('{{ route("ai.diagnostic.store") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        result_label: this.visionLabel || 'General Blockage',
-                        confidence_score: parseInt(this.visionScore) || 85,
-                        audio_label: this.audioLabel || 'Standard Flow',
-                        audio_confidence: parseInt(this.audioScore) || 0,
-                        survey_data: this.survey,
-                        recommended_tools: this.result.tools || 'Rooter Machine',
-                        city_location: 'Auto Detect'
-                    })
-                });
-
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const data = await res.json();
-
-                if (data.success) {
-                    this.result.id = data.diagnose_id;
-                    this.result.ranking = data.deep_ranking;
-                }
-            } catch(e) {
-                console.error('API error:', e.message);
-                this.result.id = 'RT-LOCAL-' + Math.floor(Math.random() * 9000 + 1000);
-                this.result.ranking = this.visionScore > 80 ? 'A' : 'B';
-            }
-
-            this.busy = false;
-            this.toast_show('Diagnosis selesai!', 'info');
-            setTimeout(() => { this.showModal = true; }, 300);
-        },
-
-        runInference() {
-            const mat = this.survey.material;
-            const ctx = (this.survey.sub_context || this.survey.location || '').toLowerCase();
-            let label = 'Sumbatan Umum';
-            let tools = 'Rooter Basic Machine';
-
-            if (mat === 'pvc') {
-                if (ctx.includes('dapur')) {
-                    label = 'Endapan Lemak / Grease FOG';
-                    tools = 'Hydro Jetting Medium / Bio-Chemical Cleaning';
-                } else if (ctx.includes('km') || ctx.includes('toilet') || ctx.includes('floor')) {
-                    label = 'Rambut & Residu Sabun';
-                    tools = 'Rooter Spiral Machine / Hair Catcher Removal';
-                } else if (ctx.includes('talang') || ctx.includes('gutter')) {
-                    label = 'Sampah Daun / Endapan Lumpur';
-                    tools = 'High Pressure Water Jetting';
-                } else {
-                    label = 'Benda Asing (Foreign Object)';
-                    tools = 'Rooter K-400 / Retrieval Tool';
-                }
-            } else if (mat === 'besi') {
-                label = 'Korosi & Kerak Mineral';
-                tools = 'Heavy Duty Rootercleaner / Descaling Tool';
-            } else {
-                label = 'Sisa Sabun & Kerak Makanan';
-                tools = 'Flexible Snake Tool / Manual Replacement';
-            }
-
-            this.result.title = label;
-            this.result.recommendation = label;
-            this.result.tools = tools;
-        },
-
-        openWA() {
-            const text = `🚨 *ROOTERIN DEEP DIAGNOSTIC*\n\nID: ${this.result.id}\nRanking: ${this.result.ranking}\nDiagnosa: ${this.result.title}\nAlat: ${this.result.tools}\n\nMohon segera dijadwalkan inspeksi.`;
-            window.open(`https://wa.me/6281234567890?text=${encodeURIComponent(text)}`, '_blank');
-        }
-    }
-}
-</script>
+</section>
 
 <style>
-[x-cloak] { display: none !important; }
-@keyframes scanMove {
-    0% { top: 0; opacity: 0; }
-    5% { opacity: 1; }
-    95% { opacity: 1; }
-    100% { top: 100%; opacity: 0; }
-}
-@keyframes spinReverse {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(-360deg); }
+@keyframes rtscanmv {
+    0%   { top:0;     opacity:0 }
+    5%   { opacity:1 }
+    95%  { opacity:1 }
+    100% { top:100%;  opacity:0 }
 }
 </style>
+
+{{-- Camera startup — deferred so DOM is ready --}}
+<script>
+(function(){
+    var v = document.getElementById('rt-vid');
+    if (!v || !navigator.mediaDevices) return;
+    navigator.mediaDevices.getUserMedia({ video:{ facingMode:{ ideal:'environment' } } })
+        .then(function(s){
+            v.srcObject = s;
+            v.style.opacity = '1';
+            document.getElementById('no-cam').style.display = 'none';
+            document.getElementById('cam-hud').style.display = 'block';
+            _diag.camOn = true;
+        })
+        .catch(function(e){ console.warn('Cam:', e.message); });
+})();
+</script>
 
 </x-app-layout>

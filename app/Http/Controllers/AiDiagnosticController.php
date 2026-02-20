@@ -19,14 +19,16 @@ class AiDiagnosticController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'result_label' => 'required|string',
+            'result_label'     => 'required|string',
             'confidence_score' => 'required|integer',
-            'audio_label' => 'nullable|string',
+            'audio_label'      => 'nullable|string',
             'audio_confidence' => 'nullable|integer',
-            'survey_data' => 'required|array',
-            'recommended_tools' => 'nullable|string',
-            'city_location' => 'nullable|string',
-            'metadata' => 'nullable|array',
+            'survey_data'      => 'required|array',
+            'recommended_tools'=> 'nullable|string',
+            'city_location'    => 'nullable|string',
+            'latitude'         => 'nullable|numeric',
+            'longitude'        => 'nullable|numeric',
+            'metadata'         => 'nullable|array',
         ]);
 
         // --- ROOTERIN INFERENCE ENGINE (WEIGHTED MULTI-INPUT) ---
@@ -36,7 +38,7 @@ class AiDiagnosticController extends Controller
 
         // Composite Weighted Score Calculation
         $compositeScore = ($vScore * 0.5) + ($aScore * 0.3) + ($sScore * 0.2);
-        
+
         // Deep Ranking Logic (A-E)
         $severity = 'E';
         if ($compositeScore >= 90) $severity = 'A';
@@ -45,13 +47,14 @@ class AiDiagnosticController extends Controller
         elseif ($compositeScore >= 25) $severity = 'D';
 
         // Generate ID: #RT-YYYY-XXXX
-        $year = date('Y');
+        $year  = date('Y');
         $count = AiDiagnose::whereYear('created_at', $year)->count() + 1;
         $diagnoseId = "#RT-{$year}-" . str_pad($count, 4, '0', STR_PAD_LEFT);
 
-        // Simulation: Random Geo for Heatmap demo if not provided
-        $lat = -6.2 + (mt_rand(-100, 100) / 1000); 
-        $lng = 106.8 + (mt_rand(-100, 100) / 1000);
+        // Use REAL GPS coordinates sent by the browser.
+        // Fall back to Jakarta center ONLY if browser did not provide coords.
+        $lat = isset($validated['latitude'])  ? (float) $validated['latitude']  : -6.200000;
+        $lng = isset($validated['longitude']) ? (float) $validated['longitude'] : 106.816666;
 
         try {
             $lead = AiDiagnose::create([
