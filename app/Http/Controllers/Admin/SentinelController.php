@@ -3,56 +3,88 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Services\Sentinel\SentinelService;
 use Illuminate\Http\Request;
+use App\Models\SentinelRiskProfile;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class SentinelController extends Controller
 {
-    protected $sentinel;
-
-    public function __construct(SentinelService $sentinel)
-    {
-        $this->sentinel = $sentinel;
-    }
-
     /**
-     * Display the System Sentinel Dashboard.
+     * UNICORP-GRADE: System Sentinel Dashboard
      */
     public function index()
     {
-        $healthData = $this->sentinel->monitorAll();
-        
+        $healthData = app(\App\Services\Sentinel\SentinelService::class)->monitorAll();
         return view('admin.sentinel.index', compact('healthData'));
     }
 
     /**
-     * Run a manual deep scan and return the results.
+     * UNICORP-GRADE: On-Demand Deep Scan
      */
     public function scan()
     {
-        $healthData = $this->sentinel->monitorAll();
-        
+        $healthData = app(\App\Services\Sentinel\SentinelService::class)->monitorAll();
+        return response()->json(['success' => true, 'health' => $healthData]);
+    }
+
+    /**
+     * UNICORP-GRADE: Sentinel Heartbeat API
+     */
+    public function heartbeat()
+    {
         return response()->json([
-            'success' => true,
-            'message' => 'System scan completed successfully.',
-            'data' => $healthData
+            'status' => 'Operational',
+            'timestamp' => now()->toIso8601String()
         ]);
     }
 
     /**
-     * Receive heartbeat from client-side AI engine.
+     * UNICORP-GRADE: PoW Challenge Verification
      */
-    public function heartbeat(Request $request)
+    public function verifyChallenge(Request $request)
     {
-        $fps = $request->input('fps', 30);
-        $latency = $request->input('latency', 100);
+        $token = $request->input('pow_token');
+        $ip = $request->ip();
 
-        \Illuminate\Support\Facades\Cache::put('sentinel_neural_fps', [
-            'fps' => $fps,
-            'latency' => $latency,
-            'timestamp' => now()->toIso8601String()
-        ], 60); // Keep for 1 minute
+        if ($token && str_contains($token, ':')) {
+            // Verify partial collision (simulated check)
+            list($hash, $nonce) = explode(':', $token);
+            
+            if (str_starts_with($hash, '0000')) {
+                $profile = SentinelRiskProfile::where('ip_address', $ip)->first();
+                if ($profile) {
+                    // Reputation Recovery: Reward for solving the challenge
+                    $profile->trust_score = min(100, $profile->trust_score + 15);
+                    $profile->violation_count = max(0, $profile->violation_count - 1);
+                    $profile->save();
+                    
+                    Log::info("[SENTINEL-AI] PoW Challenge Solved by $ip. Trust Score elevated to {$profile->trust_score}");
+                    
+                    return redirect()->intended('/')->with('success', 'Human verification successful. Trust restored.');
+                }
+            }
+        }
 
-        return response()->json(['status' => 'Heartbeat received']);
+        return redirect()->back()->with('error', 'Koneksi Neural tidak stabil. Silakan coba lagi.');
+    }
+
+    /**
+     * UNICORP-GRADE: Threat Heatmap Data
+     */
+    public function getHeatmapData()
+    {
+        $logs = \App\Models\SentinelBehaviorLog::select('event_name', 'context')
+            ->latest()
+            ->take(1000)
+            ->get()
+            ->groupBy(function($log) {
+                return $log->context['url'] ?? 'unknown';
+            })
+            ->map(function($group) {
+                return $group->count();
+            });
+
+        return response()->json($logs);
     }
 }

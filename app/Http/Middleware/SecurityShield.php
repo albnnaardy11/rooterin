@@ -31,6 +31,12 @@ class SecurityShield
 
         // 1. Neural Risk Scoring (Phase 1: Proactive Prediction)
         $profile = $this->inference->introspectBehavior();
+        
+        // PHASE 2: Proof-of-Work Challenge (Adaptive Throttling)
+        if ($this->inference->needsPoW($profile) && !$request->is('admin/sentinel/challenge*')) {
+            return redirect()->route('sentinel.challenge');
+        }
+
         if ($profile->trust_score < 10 || $profile->is_bot_probability > 0.95) {
             $this->security->blockIp($request->ip(), "Neural Risk Failure (Score: {$profile->trust_score}, BotProb: {$profile->is_bot_probability})");
             abort(403, 'Akses ditolak: Perilaku navigasi tidak wajar (Neural Sentinel Alert).');

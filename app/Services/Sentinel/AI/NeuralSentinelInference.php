@@ -25,6 +25,9 @@ class NeuralSentinelInference
             return $profile;
         }
 
+        // PHASE 1: Reputation Recovery (Time-Based Risk Decay)
+        $this->applyReputationRecovery($profile);
+
         $this->checkTeleportTrap($profile);
         $this->checkRapidFingerprinting($profile);
         $this->checkMechanicalCadence($profile);
@@ -36,6 +39,28 @@ class NeuralSentinelInference
         $profile->save();
         
         return $profile;
+    }
+
+    protected function applyReputationRecovery($profile)
+    {
+        if (!$profile->last_seen_at) return;
+
+        $hoursPassed = now()->diffInHours($profile->last_seen_at);
+        
+        if ($hoursPassed >= 1) {
+            // Recover 5 trust points per hour of absence/normalcy
+            $recovery = $hoursPassed * 5;
+            $profile->trust_score = min(100, $profile->trust_score + $recovery);
+            
+            Log::info("[SENTINEL-AI] Reputation Recovery for {$profile->ip_address}: +{$recovery} Trust Points.");
+        }
+    }
+
+    public function needsPoW($profile)
+    {
+        // Ambang 70-80 Risk = 20-30 Trust Score
+        $riskScore = 100 - $profile->trust_score;
+        return ($riskScore >= 70 && $riskScore <= 85);
     }
 
     protected function hasAmnesty($ip)

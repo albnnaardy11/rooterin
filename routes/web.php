@@ -153,6 +153,11 @@ Route::prefix('admin')->name('admin.')->middleware(['audit'])->group(function() 
         Route::get('/vault/forensics/{id}', [\App\Http\Controllers\Admin\VaultController::class, 'viewForensics'])->name('vault.forensics');
         Route::post('/vault/genesis', [\App\Http\Controllers\Admin\VaultController::class, 'genesisRestoration'])->name('vault.genesis');
         Route::get('/vault/reports/{id}', [\App\Http\Controllers\Admin\VaultController::class, 'viewPostMortem'])->name('vault.reports');
+        
+        // Sentinel Next-Gen Routes
+        Route::get('/sentinel/challenge', function() { return view('errors.sentinel-challenge'); })->name('sentinel.challenge');
+        Route::post('/sentinel/challenge/verify', [\App\Http\Controllers\Admin\SentinelController::class, 'verifyChallenge'])->name('sentinel.challenge.verify');
+        Route::get('/sentinel/heatmap', [\App\Http\Controllers\Admin\SentinelController::class, 'getHeatmapData'])->name('sentinel.heatmap');
     });
 
     // Honey Pot Trap (Lead Cyber Security Implementation)

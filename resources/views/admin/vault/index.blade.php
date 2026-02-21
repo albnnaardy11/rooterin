@@ -326,6 +326,28 @@
             </div>
             @endif
 
+            <!-- NEURAL ANOMALY HEATMAP -->
+            <div class="mt-8 pt-8 border-t border-white/5">
+                <div class="flex items-center justify-between mb-6">
+                    <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Neural Anomaly Heatmap (Risk Density)</h4>
+                    <span class="flex items-center gap-2 text-[9px] text-primary font-bold uppercase tracking-widest animate-pulse">
+                        <span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                        Live Telemetry
+                    </span>
+                </div>
+                <div id="anomaly-heatmap" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                    <!-- Heatmap cells injected via JS -->
+                    <div class="animate-pulse flex space-x-4">
+                        <div class="flex-1 space-y-4 py-1">
+                            <div class="h-4 bg-white/5 rounded w-3/4"></div>
+                            <div class="space-y-2">
+                                <div class="h-12 bg-white/5 rounded"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             @if(count($reports) > 0)
             <div class="mt-8 pt-8 border-t border-white/5">
                 <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6">Laporan Pertahanan Elite (Archived PMs)</h4>
@@ -391,5 +413,40 @@ function viewForensics(id) {
 function closeForensics() {
     document.getElementById('forensicsModal').classList.add('hidden');
 }
+
+async function fetchHeatmap() {
+    const container = document.getElementById('anomaly-heatmap');
+    try {
+        const response = await fetch('/admin/sentinel/heatmap');
+        const data = await response.json();
+        
+        container.innerHTML = '';
+        const maxVal = Math.max(...Object.values(data), 1);
+
+        Object.entries(data).forEach(([url, count]) => {
+            const intensity = (count / maxVal) * 100;
+            const color = intensity > 80 ? 'bg-red-500/80 border-red-500/50' : 
+                          intensity > 50 ? 'bg-orange-500/50 border-orange-500/30' : 
+                          intensity > 20 ? 'bg-yellow-500/30 border-yellow-500/20' : 
+                          'bg-emerald-500/10 border-emerald-500/10';
+
+            const cell = `<div class="p-3 rounded-xl border ${color} transition-all hover:scale-105 group relative cursor-help">
+                <p class="text-[9px] font-bold text-white uppercase truncate">${url}</p>
+                <p class="text-[10px] text-white/50 font-mono">${count} hits</p>
+                <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 rounded-xl transition-all"></div>
+            </div>`;
+            container.innerHTML += cell;
+        });
+
+        if (Object.keys(data).length === 0) {
+            container.innerHTML = '<p class="text-[10px] text-slate-500 italic py-4">Sistem dalam keadaan steril. Belum ada anomali terdeteksi.</p>';
+        }
+    } catch (err) {
+        container.innerHTML = '<p class="text-red-500 text-[10px]">Gagal mengambil data telemetri.</p>';
+    }
+}
+
+fetchHeatmap();
+setInterval(fetchHeatmap, 30000);
 </script>
 @endsection
