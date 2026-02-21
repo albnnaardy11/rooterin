@@ -24,13 +24,13 @@
 <link rel="alternate" hreflang="x-default" href="index.html" />
     
     
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"RooterIn","url":"","potentialAction":{"@type":"SearchAction","target":"/search?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"RooterIn","url":"","potentialAction":{"@type":"SearchAction","target":"search?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","name":"RooterIn","url":"","telephone":"0812-4666-8749","priceRange":"$$","image":"images/logo.png","address":{"@type":"PostalAddress","streetAddress":"Jakarta, Indonesia","addressLocality":"Jakarta","addressCountry":"ID"}}</script>
 
 
     <script>
         function trackWhatsAppClick(source = 'general') {
-            fetch('/api/track-whatsapp', {
+            fetch('api/track-whatsapp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,14 +60,15 @@
       }, {
         "source": "document",
         "where": { "and": [
-          { "href_matches": "/area/*" },
-          { "not": { "href_matches": "/admin/*" }}
+          { "href_matches": "area/*" },
+          { "not": { "href_matches": "admin/*" }}
         ]},
         "eagerness": "moderate"
       }]
     }
     </script>
-</head>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    </head>
 <body class="font-sans antialiased bg-stone-50 text-slate-800">
     <div id="site-content" class="min-h-screen flex flex-col transition-all duration-300">
         <!-- Modern Floating Navbar -->
@@ -450,7 +451,7 @@ async function rtVision() {
     _btnState('btn-v', true, 'Handshake...');
     
     try {
-        const hResp = await fetch('/ai-diagnostic/handshake');
+        const hResp = await fetch('ai-diagnostic/handshake');
         const hData = await hResp.json();
         _diag.handshake = hData.token;
         _toast('Neural Handshake Active: Verified');
@@ -644,11 +645,11 @@ function rtGenerate(){
     };
     if (_diag.lat !== null) { payload.latitude = _diag.lat; payload.longitude = _diag.lng; }
 
-    fetch('/ai-diagnostic/store', {
+    fetch('ai-diagnostic/store', {
         method: 'POST',
         headers: { 
             'Content-Type':'application/json', 
-            'X-CSRF-TOKEN':'E9kmhDWO6eoFjbBeWueDuMj7WYGBFJIdEVK2zRau', 
+            'X-CSRF-TOKEN':'sxvMqxyEMaN4fgsWQfmgBQfBrlNSdeLNMNSQSV9G', 
             'Accept':'application/json',
             'X-Phantom-Token': _diag.handshake || ''
         },
@@ -792,7 +793,7 @@ function rtShowResult(res, materialWarning){
         const meta = modelData.metadata || {};
         const serviceSlug = meta.recommended_service_slug || 'saluran-pembuangan-mampet';
         const serviceName = meta.recommended_service_name || 'Saluran Pembuangan Mampet';
-        _diag.targetServiceUrl = '/layanan/' + serviceSlug;
+        _diag.targetServiceUrl = "layanan.html" + serviceSlug;
         
         if (_el('m-service')) _el('m-service').textContent = serviceName;
 
@@ -846,11 +847,11 @@ function rtCloseModal(e){
 }
 
 function rtPesanLayanan(){
-    window.location.href = _diag.targetServiceUrl || '/services';
+    window.location.href = _diag.targetServiceUrl || 'services';
 }
 
 function rtWA(){
-    const url = '/admin/api/track-whatsapp';
+    const url = 'admin/api/track-whatsapp';
     const data = new URLSearchParams();
     data.append('url', window.location.href);
     data.append('source', 'ai_diagnostic_result');
@@ -1393,7 +1394,7 @@ document.addEventListener('keydown', function(e){
         <div class="flex-1 overflow-y-auto p-8 custom-scrollbar space-y-12">
             
             <!-- Panduan Pengguna Link -->
-            <a href="/panduan-aksesibilitas" class="relative overflow-hidden flex items-center justify-between p-5 bg-gradient-to-br from-secondary via-secondary to-[#1a2533] rounded-2xl shadow-lg group hover:scale-[1.02] transition-all duration-300 border border-white/10">
+            <a href="panduan-aksesibilitas" class="relative overflow-hidden flex items-center justify-between p-5 bg-gradient-to-br from-secondary via-secondary to-[#1a2533] rounded-2xl shadow-lg group hover:scale-[1.02] transition-all duration-300 border border-white/10">
                 <!-- Decorative BG -->
                 <div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
                 
