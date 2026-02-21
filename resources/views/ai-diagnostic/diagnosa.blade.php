@@ -348,20 +348,26 @@ function rtShowRejection(iconClass, title, reason, hint, color) {
     var m = _el('rt-modal');
     if (!m) return;
 
-    // Temporarily use modal for rejection display
     m.innerHTML = `
-    <div onclick="event.stopPropagation()" style="position:relative;width:100%;max-width:34rem;background:#0f172a;border:2px solid ${color};border-radius:2rem;padding:2.5rem;text-align:center;box-shadow:0 0 60px ${color}33">
-        <div style="font-size:3.5rem;margin-bottom:1rem;color:${color}"><i class="${iconClass}"></i></div>
-        <h2 style="color:#fff;font-size:1.1rem;font-weight:900;margin:0 0 1rem;line-height:1.3">${title}</h2>
-        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:1rem;padding:1.1rem;margin-bottom:.85rem">
-            <p style="color:#e2e8f0;font-size:.85rem;line-height:1.6;margin:0">${reason}</p>
+    <div onclick="event.stopPropagation()" style="position:relative;width:100%;max-width:32rem;background:#0f172a;border:1px solid ${color}44;border-radius:2.5rem;padding:3rem;text-align:center;box-shadow:0 30px 60px rgba(0,0,0,.8), 0 0 100px ${color}11">
+        <div style="width:5rem;height:5rem;background:${color}11;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;border:1px solid ${color}22">
+            <i class="${iconClass}" style="font-size:3rem;color:${color}"></i>
         </div>
-        <div style="background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.2);border-radius:1rem;padding:.9rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:center;gap:.5rem">
-            <i class="ri-lightbulb-line" style="color:#4ade80"></i>
-            <p style="color:#4ade80;font-size:.75rem;font-weight:700;margin:0">${hint}</p>
+        <h2 style="color:#fff;font-size:1.4rem;font-weight:900;margin:0 0 .75rem;line-height:1.2;letter-spacing:-0.02em">${title}</h2>
+        
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:1.5rem;padding:1.5rem;margin-bottom:1.25rem">
+            <p style="color:#94a3b8;font-size:.85rem;line-height:1.7;margin:0">${reason}</p>
         </div>
-        <button onclick="rtCloseModal(event); rtResetToStep0();" style="width:100%;padding:1rem;background:${color};color:#fff;border:none;border-radius:1rem;font-weight:900;font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem">
-            <i class="ri-camera-fill"></i> Ambil Foto Ulang
+
+        <div style="background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.1);border-radius:1.2rem;padding:1.2rem;margin-bottom:2rem;display:flex;gap:1rem;text-align:left;align-items:flex-start">
+            <div style="width:1.8rem;height:1.8rem;background:rgba(34,197,94,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem">
+                <i class="ri-lightbulb-flash-line" style="color:#4ade80;font-size:1rem"></i>
+            </div>
+            <p style="color:#4ade80;font-size:.78rem;font-weight:700;line-height:1.6;margin:0">${hint}</p>
+        </div>
+
+        <button onclick="rtCloseModal(event); rtResetToStep0();" style="width:100%;padding:1.2rem;background:${color};color:#fff;border:none;border-radius:1.2rem;font-weight:900;font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.75rem;box-shadow:0 10px 30px ${color}44;transition:all .3s">
+            <i class="ri-camera-lens-fill" style="font-size:1.2rem"></i> Ambil Foto Ulang
         </button>
     </div>`;
 
@@ -658,14 +664,16 @@ document.addEventListener('keydown', function(e){
         </div>
 
         {{-- Step Dots --}}
-        <div style="max-width:18rem;margin:0 auto 2rem;display:flex;align-items:center;justify-content:space-between">
-            <div id="d0" style="width:2.5rem;height:2.5rem;border-radius:50%;background:#22c55e;color:#0f172a;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;flex-shrink:0;transition:all .3s">1</div>
-            <div id="dl0" style="flex:1;height:2px;background:#1e293b;margin:0 1rem;transition:background .3s"></div>
-            <div id="d2" style="width:2.5rem;height:2.5rem;border-radius:50%;background:#1e293b;color:#64748b;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;flex-shrink:0;transition:all .3s">2</div>
-        </div>
-        <div style="max-width:18rem;margin:-1.5rem auto 2rem;display:flex;justify-content:space-between;padding:0 1rem">
-            <span style="font-size:.65rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.1em;transform:translateX(-25%)">Pemindai Visual</span>
-            <span style="font-size:.65rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.1em;transform:translateX(15%)">Data Kondisi</span>
+        <div style="max-width:20rem;margin:0 auto 3rem;display:flex;align-items:center;justify-content:center;gap:1.5rem">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:.75rem">
+                <div id="d0" style="width:3rem;height:3rem;border-radius:1rem;background:#22c55e;color:#0f172a;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900;box-shadow:0 0 30px rgba(34,197,94,.3);transition:all .3s"><i class="ri-camera-lens-line"></i></div>
+                <span style="font-size:.6rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.15em">Visual</span>
+            </div>
+            <div id="dl0" style="width:4rem;height:2px;background:#1e293b;border-radius:1px;margin-bottom:1.5rem;transition:all .3s"></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:.75rem">
+                <div id="d2" style="width:3rem;height:3rem;border-radius:1rem;background:#1e293b;color:#475569;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900;transition:all .3s"><i class="ri-survey-line"></i></div>
+                <span style="font-size:.6rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em">Kondisi</span>
+            </div>
         </div>
 
         {{-- CARD --}}
