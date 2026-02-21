@@ -258,5 +258,106 @@
             </div>
         </div>
     </div>
+    <!-- ARR Incident Reports (Black-Box Forensics) -->
+    <div class="bg-slate-900 border border-white/5 rounded-[32px] overflow-hidden">
+        <div class="p-8 border-b border-white/5 flex items-center justify-between bg-red-500/5">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 border border-red-500/10">
+                    <i class="ri-history-line text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-white font-heading font-black uppercase tracking-widest text-sm">ARR Incident Reports</h3>
+                    <p class="text-[10px] text-slate-500 uppercase tracking-widest">Post-Panic Forensics & Anti-Flapping History</p>
+                </div>
+            </div>
+            @if($incidents->count() > 0)
+            <span class="px-3 py-1 bg-red-500/20 text-red-500 text-[10px] font-black uppercase tracking-[0.2em] rounded-full border border-red-500/20 animate-pulse">Critical Spikes Detected</span>
+            @else
+            <span class="px-3 py-1 bg-emerald-500/20 text-emerald-500 text-[10px] font-black uppercase tracking-[0.2em] rounded-full border border-emerald-500/20">All Clear</span>
+            @endif
+        </div>
+        
+        <div class="p-8">
+            @if($incidents->count() > 0)
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-white/5">
+                            <th class="pb-4">Timestamp</th>
+                            <th class="pb-4">Memory @ Panic</th>
+                            <th class="pb-4">Attempt</th>
+                            <th class="pb-4">Description</th>
+                            <th class="pb-4 text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        @foreach($incidents as $incident)
+                        <tr class="group hover:bg-white/5 transition-all">
+                            <td class="py-4 text-xs text-slate-400">{{ $incident->created_at->format('H:i:s') }}</td>
+                            <td class="py-4 text-xs font-bold text-red-500">{{ $incident->metrics['usage'] ?? 'N/A' }}</td>
+                            <td class="py-4 text-xs text-white">#{{ $incident->metrics['reboot_attempt'] ?? '1' }}</td>
+                            <td class="py-4 text-[10px] text-slate-500 italic">{{ Str::limit($incident->description, 50) }}</td>
+                            <td class="py-4 text-right">
+                                <button onclick="viewForensics('{{ $incident->metrics['forensics_id'] }}')" class="px-4 py-2 bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-primary hover:text-white transition-all">
+                                    View Black-Box
+                                </button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            @else
+            <div class="flex flex-col items-center justify-center py-12 text-center">
+                <i class="ri-shield-check-line text-6xl text-emerald-500/20 mb-4"></i>
+                <p class="text-sm text-slate-500 italic">No ARR incidents recorded in recent telemetry.</p>
+            </div>
+            @endif
+        </div>
+    </div>
 </div>
+
+<!-- Forensics Modal -->
+<div id="forensicsModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl">
+    <div class="bg-slate-900 border border-white/10 rounded-[32px] w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl">
+        <div class="p-8 border-b border-white/5 flex items-center justify-between">
+            <h3 class="text-white font-heading font-black uppercase tracking-widest text-sm flex items-center gap-3">
+                <i class="ri-search-eye-line text-primary"></i>
+                Black-Box Forensics Explorer
+            </h3>
+            <button onclick="closeForensics()" class="text-slate-500 hover:text-white transition-all">
+                <i class="ri-close-circle-line text-2xl"></i>
+            </button>
+        </div>
+        <div id="forensicContent" class="p-8 overflow-y-auto max-h-[70vh] custom-scrollbar text-xs font-mono text-emerald-500 bg-black/50 leading-relaxed">
+            <!-- Content Injected via JS -->
+        </div>
+    </div>
+</div>
+
+<script>
+function viewForensics(id) {
+    const modal = document.getElementById('forensicsModal');
+    const content = document.getElementById('forensicContent');
+    modal.classList.remove('hidden');
+    content.innerHTML = 'Decrypting forensic trace...';
+
+    fetch(`/admin/vault/forensics/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                content.innerHTML = `<span class="text-red-500">${data.error}</span>`;
+            } else {
+                content.innerHTML = '<pre>' + JSON.stringify(data, null, 4) + '</pre>';
+            }
+        })
+        .catch(err => {
+            content.innerHTML = '<span class="text-red-500">Decryption Failed: Connection Break in Neural Bridge.</span>';
+        });
+}
+
+function closeForensics() {
+    document.getElementById('forensicsModal').classList.add('hidden');
+}
+</script>
 @endsection

@@ -31,8 +31,35 @@ class VaultController extends Controller
         ];
 
         $latestAudit = SentinelAudit::latest()->first();
+        
+        // Fetch Forensics/ARR Incidents
+        $incidents = SentinelAudit::where('event_type', 'MEMORY_PANIC_REBOOT')
+            ->latest()
+            ->take(5)
+            ->get();
 
-        return view('admin.vault.index', compact('stats', 'latestAudit'));
+        return view('admin.vault.index', compact('stats', 'latestAudit', 'incidents'));
+    }
+
+    /**
+     * UNICORP-GRADE: Forensics Viewer (Black-Box Explorer)
+     */
+    public function viewForensics($id)
+    {
+        $path = storage_path('vault/forensics/' . $id . '.json');
+        
+        if (!file_exists($path)) {
+            return response()->json(['error' => 'Forensic trace not found or already purged by EntropyGuard.'], 404);
+        }
+
+        $content = file_get_contents($path);
+        
+        try {
+            $data = unserialize(base64_decode($content));
+            return response()->json($data);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Forensic data corruption detected.'], 500);
+        }
     }
 
     public function toggleLockdown()
