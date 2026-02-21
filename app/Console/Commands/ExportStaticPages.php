@@ -70,10 +70,44 @@ class ExportStaticPages extends Command
             }
         }
 
-        // Copy assets
         $this->info("Copying assets...");
         $this->copyDirectory(public_path('build'), base_path('docs/build'));
         
+        // Post-process build assets (JS and CSS)
+        $this->info("Post-processing build assets...");
+        $buildFiles = array_merge(
+            glob(base_path('docs/build/assets/*.css')),
+            glob(base_path('docs/build/assets/*.js'))
+        );
+        
+        foreach ($buildFiles as $file) {
+            $content = file_get_contents($file);
+            
+            // Fix absolute paths in build assets
+            // This replaces paths starting with /build/ and /assets/
+            $replacements = [
+                '/build/assets/' => '',
+                '/assets/' => '../../assets/', // Relative from build/assets/ to public/assets/
+            ];
+            
+            foreach ($replacements as $search => $replace) {
+                // Handle various quoting styles in JS/CSS
+                $content = str_replace(
+                    ['url("'.$search, "url('".$search, 'url('.$search, '"'.$search, "'".$search],
+                    ['url("'.$replace, "url('".$replace, 'url('.$replace, '"'.$replace, "'".$replace],
+                    $content
+                );
+            }
+            
+            // Specialized fixes for remixicon and other fonts in CSS
+            if (pathinfo($file, PATHINFO_EXTENSION) === 'css') {
+                // Ensure plain url(/build/assets/...) becomes url(...)
+                $content = preg_replace('/url\(\s*[\'"]?\/build\/assets\//', 'url(', $content);
+            }
+            
+            file_put_contents($file, $content);
+        }
+
         if (is_dir(public_path('images'))) {
             $this->copyDirectory(public_path('images'), base_path('docs/images'));
         }
