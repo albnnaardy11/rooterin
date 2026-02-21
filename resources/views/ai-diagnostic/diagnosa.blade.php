@@ -53,17 +53,29 @@ function _goStep(n) {
     if(s2) s2.style.display = (n === 2) ? 'block' : 'none';
 
     var d0 = document.getElementById('d0');
-    if(d0) { d0.style.background = '#22c55e'; d0.style.color = '#0f172a'; }
-
     var d2 = document.getElementById('d2');
     var dl0 = document.getElementById('dl0');
 
+    if(d0) {
+        d0.style.background = '#22c55e';
+        d0.style.color = '#0f172a';
+        d0.style.boxShadow = '0 0 30px rgba(34,197,94,.3)';
+    }
+
     if (n >= 2) {
-        if(d2) { d2.style.background = '#22c55e'; d2.style.color = '#0f172a'; }
-        if(dl0) { dl0.style.background = '#22c55e'; }
+        if(d2) {
+            d2.style.background = '#22c55e';
+            d2.style.color = '#0f172a';
+            d2.style.boxShadow = '0 0 30px rgba(34,197,94,.3)';
+        }
+        if(dl0) { dl0.style.background = '#22c55e'; dl0.style.boxShadow = '0 0 15px rgba(34,197,94,.2)'; }
     } else {
-        if(d2) { d2.style.background = '#1e293b'; d2.style.color = '#64748b'; }
-        if(dl0) { dl0.style.background = '#1e293b'; }
+        if(d2) { 
+            d2.style.background = '#1e293b'; 
+            d2.style.color = '#475569';
+            d2.style.boxShadow = 'none';
+        }
+        if(dl0) { dl0.style.background = '#1e293b'; dl0.style.boxShadow = 'none'; }
     }
 }
 
@@ -677,23 +689,23 @@ document.addEventListener('keydown', function(e){
         </div>
 
         {{-- CARD --}}
-        <div style="max-width:22rem;margin:0 auto">
-            <div style="background:#0f172a;border:1px solid rgba(255,255,255,.06);border-radius:2rem;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.5)">
+        <div style="max-width:26rem;margin:0 auto">
+            <div style="background:rgba(15,23,42,.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);border-radius:3rem;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.6)">
 
                 {{-- ── STEP 0: VISION ── --}}
                 <div id="s0" style="display:block">
-                    <div style="position:relative;aspect-ratio:3/4;background:#000;overflow:hidden">
+                    <div style="position:relative;aspect-ratio:1/1;background:#000;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05)">
                         <video id="rt-vid" autoplay playsinline muted style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s"></video>
                         <canvas id="rt-cvs" style="display:none"></canvas>
 
                         {{-- No cam state / Upload Frame --}}
                         <div id="no-cam" style="position:absolute;inset:0;background:#0f172a;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;z-index:2">
-                            <div style="width:3.5rem;height:3.5rem;background:#1e293b;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1rem">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" style="width:1.5rem;height:1.5rem"><line x1="1" y1="1" x2="23" y2="23"/><path d="M21 21H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3m3-3h6l2 3h4a2 2 0 0 1 2 2v9.34m-7.72-2.06a4 4 0 1 1-5.56-5.56"/></svg>
+                            <div style="width:4.5rem;height:4.5rem;background:rgba(30,41,59,.5);border:1px dashed rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem">
+                                <i class="ri-camera-off-line" style="font-size:1.5rem;color:#475569"></i>
                             </div>
-                            <p style="color:#64748b;font-size:.75rem;font-weight:600;margin:0 0 .25rem">Kamera tidak aktif</p>
-                            <label style="cursor:pointer;color:#22c55e;font-size:.6rem;font-weight:900;text-transform:uppercase;margin:0;padding:.3rem .8rem;background:rgba(34,197,94,.1);border-radius:.3rem;margin-top:.4rem;display:inline-block">
-                                ATAU UPLOAD FOTO PIPA LOKAL
+                            <p style="color:#64748b;font-size:.8rem;font-weight:600;margin:0 0 .5rem">Sistem Kamera Offline</p>
+                            <label style="cursor:pointer;color:#22c55e;font-size:.65rem;font-weight:900;text-transform:uppercase;margin:0;padding:.6rem 1.2rem;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:2rem;margin-top:.5rem;display:inline-block;transition:all .3s">
+                                <i class="ri-upload-cloud-2-line"></i> Upload Foto Lokal
                                 <input type="file" accept="image/*" style="display:none" onchange="rtUploadFile(this)">
                             </label>
                         </div>
@@ -721,81 +733,95 @@ document.addEventListener('keydown', function(e){
                 </div>
 
                 {{-- ── STEP 2: SURVEY ── --}}
-                <div id="s2" style="display:none">
-                    <div style="padding:1.1rem 1.1rem .5rem;border-bottom:1px solid rgba(255,255,255,.05)">
-                        <h3 style="color:#fff;font-weight:900;font-size:.7rem;text-transform:uppercase;letter-spacing:.2em;margin:0 0 .4rem">Technical Context Survey</h3>
-                        <div style="width:2rem;height:.2rem;background:#22c55e;border-radius:.1rem"></div>
                     </div>
-                    <div style="padding:1.1rem;max-height:25rem;overflow-y:auto">
+                    <div style="padding:1.5rem;display:flex;flex-direction:column;gap:.75rem">
+                        <button id="btn-v" onclick="rtVision()"
+                                style="width:100%;padding:1.1rem;background:#fff;color:#0f172a;border:none;border-radius:1.2rem;font-weight:900;font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer;box-shadow:0 10px 30px rgba(255,255,255,.1)">
+                            Mulai Analisis Visual
+                        </button>
+                        <label style="cursor:pointer;color:#94a3b8;font-size:.65rem;font-weight:900;text-transform:uppercase;margin:0;padding:.9rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:1.2rem;text-align:center;display:block;transition:all .3s">
+                            <i class="ri-folder-upload-line"></i> Pilih File Gambar
+                            <input type="file" accept="image/*" style="display:none" onchange="rtUploadFile(this)">
+                        </label>
+                    </div>
+                </div>
+
+                {{-- ── STEP 2: SURVEY ── --}}
+                <div id="s2" style="display:none">
+                    <div style="padding:1.5rem 1.5rem .75rem;border-bottom:1px solid rgba(255,255,255,.05)">
+                        <h3 style="color:#fff;font-weight:900;font-size:.75rem;text-transform:uppercase;letter-spacing:.2em;margin:0 0 .5rem">Technical Survey</h3>
+                        <div style="width:2.5rem;height:.25rem;background:linear-gradient(to right,#22c55e,#4ade80);border-radius:.1rem"></div>
+                    </div>
+                    <div style="padding:1.5rem;max-height:28rem;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent">
 
                         {{-- Lokasi --}}
-                        <div id="loc-wrap" style="margin-bottom:1.1rem;position:relative">
-                            <div style="font-size:.58rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.4rem">Lokasi Pipa</div>
+                        <div id="loc-wrap" style="margin-bottom:1.5rem;position:relative">
+                            <div style="font-size:.6rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.6rem">Lokasi Perpipaan</div>
                             <button onclick="rtLocToggle()"
-                                    style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:.65rem;padding:.7rem .9rem;display:flex;align-items:center;justify-content:space-between;color:#fff;font-size:.62rem;font-weight:700;text-transform:uppercase;cursor:pointer">
-                                <span id="loc-lbl">Pilih Lokasi...</span>
-                                <i class="ri-arrow-down-s-line"></i>
+                                    style="width:100%;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:1rem;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;color:#fff;font-size:.7rem;font-weight:700;text-transform:uppercase;cursor:pointer;transition:all .3s">
+                                <span id="loc-lbl">Konfigurasi Jalur...</span>
+                                <i class="ri-arrow-down-s-line" style="font-size:1rem;color:#22c55e"></i>
                             </button>
-                            <div id="loc-d" style="display:none;position:absolute;z-index:50;top:100%;left:0;right:0;margin-top:.2rem;background:#1e293b;border:1px solid rgba(255,255,255,.1);border-radius:.75rem;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.5)">
-                                <button onclick="rtLocSel('wastafel_dapur','Wastafel Dapur (Grease/FOG)')" style="width:100%;text-align:left;padding:.6rem .9rem;font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.04);display:block">Wastafel Dapur (Grease/FOG)</button>
-                                <button onclick="rtLocSel('toilet_closet','Toilet / Closet (Foreign Object)')" style="width:100%;text-align:left;padding:.6rem .9rem;font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.04);display:block">Toilet / Closet (Foreign Object)</button>
-                                <button onclick="rtLocSel('floor_drain_km','Floor Drain Kamar Mandi')" style="width:100%;text-align:left;padding:.6rem .9rem;font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.04);display:block">Floor Drain Kamar Mandi</button>
-                                <button onclick="rtLocSel('kitchen_main','Jalur Utama Dapur / Sink')" style="width:100%;text-align:left;padding:.6rem .9rem;font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.04);display:block">Jalur Utama Dapur / Sink</button>
-                                <button onclick="rtLocSel('external_gutter','Talang Air / Selokan Luar')" style="width:100%;text-align:left;padding:.6rem .9rem;font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;display:block">Talang Air / Selokan Luar</button>
+                            <div id="loc-d" style="display:none;position:absolute;z-index:50;top:100%;left:0;right:0;margin-top:.5rem;background:#0f172a;border:1px solid rgba(255,255,255,.1);border-radius:1.2rem;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.8);backdrop-filter:blur(30px)">
+                                <button onclick="rtLocSel('wastafel_dapur','Wastafel Dapur')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Wastafel Dapur (Grease)</button>
+                                <button onclick="rtLocSel('toilet_closet','Toilet / Closet')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Toilet / Closet</button>
+                                <button onclick="rtLocSel('floor_drain_km','Floor Drain KM')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Floor Drain KM</button>
+                                <button onclick="rtLocSel('kitchen_main','Jalur Utama Sink')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Jalur Utama Sink</button>
+                                <button onclick="rtLocSel('external_gutter','Talang / Selokan')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent">Talang / Selokan</button>
                             </div>
                         </div>
 
                         {{-- Material --}}
-                        <div style="margin-bottom:1.1rem">
-                            <div style="font-size:.58rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.4rem">Material Pipa</div>
-                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">
-                                <button id="mat-pvc" onclick="rtMat('pvc')" style="padding:.65rem;background:#22c55e;color:#0f172a;border:none;border-radius:.6rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer">PVC / Plastik</button>
-                                <button id="mat-besi" onclick="rtMat('besi')" style="padding:.65rem;background:rgba(255,255,255,.05);color:#64748b;border:none;border-radius:.6rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer">Besi / Cast Iron</button>
-                                <button id="mat-flex" onclick="rtMat('fleksibel')" style="padding:.65rem;background:rgba(255,255,255,.05);color:#64748b;border:none;border-radius:.6rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;grid-column:1/-1">Selang Fleksibel</button>
+                        <div style="margin-bottom:1.5rem">
+                            <div style="font-size:.6rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.6rem">Material Instalasi</div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">
+                                <button id="mat-pvc" onclick="rtMat('pvc')" style="padding:.9rem;background:#22c55e;color:#0f172a;border:none;border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;transition:all .3s">PVC / Plastik</button>
+                                <button id="mat-besi" onclick="rtMat('besi')" style="padding:.9rem;background:rgba(255,255,255,.04);color:#64748b;border:1px solid rgba(255,255,255,.06);border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;transition:all .3s">Cast Iron / Besi</button>
+                                <button id="mat-flex" onclick="rtMat('fleksibel')" style="padding:.9rem;background:rgba(255,255,255,.04);color:#64748b;border:1px solid rgba(255,255,255,.06);border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;grid-column:1/-1;transition:all .3s">Selang Fleksibel</button>
                             </div>
                         </div>
 
                         {{-- Sub-context (PVC) --}}
-                        <div id="sub-pvc" style="margin-bottom:1.1rem;background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.12);border-radius:.85rem;padding:.85rem">
-                            <div style="font-size:.58rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.4rem">Lokasi Spesifik PVC</div>
-                            <button id="sub-dapur" onclick="rtSub('dapur')" style="width:100%;padding:.6rem;background:#22c55e;color:#0f172a;border:none;border-radius:.55rem;font-weight:900;font-size:.58rem;text-transform:uppercase;cursor:pointer;margin-bottom:.35rem;display:block">Area Dapur / Kitchen Sink</button>
-                            <button id="sub-km" onclick="rtSub('km')" style="width:100%;padding:.6rem;background:#1e293b;color:#64748b;border:none;border-radius:.55rem;font-weight:900;font-size:.58rem;text-transform:uppercase;cursor:pointer;margin-bottom:.35rem;display:block">Kamar Mandi / Floor Drain</button>
-                            <button id="sub-talang" onclick="rtSub('talang')" style="width:100%;padding:.6rem;background:#1e293b;color:#64748b;border:none;border-radius:.55rem;font-weight:900;font-size:.58rem;text-transform:uppercase;cursor:pointer;display:block">Talang Air / Selokan</button>
+                        <div id="sub-pvc" style="margin-bottom:1.5rem;background:rgba(34,197,94,.03);border:1px solid rgba(34,197,94,.1);border-radius:1.2rem;padding:1.2rem">
+                            <div style="font-size:.6rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.5rem">Konfigurasi PVC</div>
+                            <button id="sub-dapur" onclick="rtSub('dapur')" style="width:100%;padding:.75rem;background:#22c55e;color:#0f172a;border:none;border-radius:.75rem;font-weight:900;font-size:.63rem;text-transform:uppercase;cursor:pointer;margin-bottom:.5rem;display:block">Kitchen Sink Area</button>
+                            <button id="sub-km" onclick="rtSub('km')" style="width:100%;padding:.75rem;background:#1e293b;color:#475569;border:none;border-radius:.75rem;font-weight:900;font-size:.63rem;text-transform:uppercase;cursor:pointer;margin-bottom:.5rem;display:block">Kamar Mandi / Drain</button>
+                            <button id="sub-talang" onclick="rtSub('talang')" style="width:100%;padding:.75rem;background:#1e293b;color:#475569;border:none;border-radius:.75rem;font-weight:900;font-size:.63rem;text-transform:uppercase;cursor:pointer;display:block">Talang Air Utama</button>
                         </div>
 
                         {{-- Frekuensi --}}
-                        <div style="margin-bottom:1.1rem">
-                            <div style="font-size:.58rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.4rem">Frekuensi Sumbatan</div>
-                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">
-                                <button id="fr-pt" onclick="rtFreq('pertama')" style="padding:.65rem;background:#f97316;color:#fff;border:none;border-radius:.6rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer">Baru Pertama</button>
-                                <button id="fr-se" onclick="rtFreq('sering')" style="padding:.65rem;background:rgba(255,255,255,.05);color:#64748b;border:none;border-radius:.6rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer">Sering Mampet</button>
-                                <button id="fr-to" onclick="rtFreq('total')" style="padding:.65rem;background:rgba(255,255,255,.05);color:#64748b;border:none;border-radius:.6rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;grid-column:1/-1">Mampet Total</button>
+                        <div style="margin-bottom:1.5rem">
+                            <div style="font-size:.6rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.6rem">Deep Analysis History</div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">
+                                <button id="fr-pt" onclick="rtFreq('pertama')" style="padding:.9rem;background:#f97316;color:#fff;border:none;border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;transition:all .3s">Baru Pertama</button>
+                                <button id="fr-se" onclick="rtFreq('sering')" style="padding:.9rem;background:rgba(255,255,255,.04);color:#64748b;border:1px solid rgba(255,255,255,.06);border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;transition:all .3s">Sering Mampet</button>
+                                <button id="fr-to" onclick="rtFreq('total')" style="padding:.9rem;background:rgba(255,255,255,.04);color:#64748b;border:1px solid rgba(255,255,255,.06);border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;grid-column:1/-1;transition:all .3s">Mampet Total</button>
                             </div>
                         </div>
 
                         {{-- Gejala --}}
                         <div>
-                            <div style="font-size:.58rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.4rem">Gejala Tambahan</div>
-                            <label style="display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:.65rem;cursor:pointer;margin-bottom:.3rem">
-                                <input type="checkbox" value="bau" class="rt-sym" style="accent-color:#22c55e;width:.9rem;height:.9rem;flex-shrink:0">
-                                <span style="font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase">Muncul Bau Tak Sedap</span>
+                            <div style="font-size:.6rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.6rem">Observasi Lapangan</div>
+                            <label style="display:flex;align-items:center;gap:.75rem;padding:1rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:1rem;cursor:pointer;margin-bottom:.5rem;transition:all .3s">
+                                <input type="checkbox" value="bau" class="rt-sym" style="accent-color:#22c55e;width:1.1rem;height:1.1rem;flex-shrink:0">
+                                <span style="font-size:.63rem;font-weight:700;color:#64748b;text-transform:uppercase">Aroma Tidak Sedap Kuat</span>
                             </label>
-                            <label style="display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:.65rem;cursor:pointer;margin-bottom:.3rem">
-                                <input type="checkbox" value="kecoa" class="rt-sym" style="accent-color:#22c55e;width:.9rem;height:.9rem;flex-shrink:0">
-                                <span style="font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase">Banyak Kecoa / Hama</span>
+                            <label style="display:flex;align-items:center;gap:.75rem;padding:1rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:1rem;cursor:pointer;margin-bottom:.5rem;transition:all .3s">
+                                <input type="checkbox" value="kecoa" class="rt-sym" style="accent-color:#22c55e;width:1.1rem;height:1.1rem;flex-shrink:0">
+                                <span style="font-size:.63rem;font-weight:700;color:#64748b;text-transform:uppercase">Aktivitas Hama / Kecoa</span>
                             </label>
-                            <label style="display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:.65rem;cursor:pointer">
-                                <input type="checkbox" value="berisik" class="rt-sym" style="accent-color:#22c55e;width:.9rem;height:.9rem;flex-shrink:0">
-                                <span style="font-size:.58rem;font-weight:700;color:#94a3b8;text-transform:uppercase">Pipa Mengeluarkan Bunyi</span>
+                            <label style="display:flex;align-items:center;gap:.75rem;padding:1rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:1rem;cursor:pointer;transition:all .3s">
+                                <input type="checkbox" value="berisik" class="rt-sym" style="accent-color:#22c55e;width:1.1rem;height:1.1rem;flex-shrink:0">
+                                <span style="font-size:.63rem;font-weight:700;color:#64748b;text-transform:uppercase">Pipa Berbunyi (Gurgling)</span>
                             </label>
                         </div>
                     </div>
 
                     {{-- Generate button — completely outside scroll area --}}
-                    <div style="padding:1.1rem;border-top:1px solid rgba(255,255,255,.05)">
+                    <div style="padding:1.5rem;border-top:1px solid rgba(255,255,255,.05);background:rgba(15,23,42,.4)">
                         <button id="btn-g" onclick="rtGenerate()"
-                                style="width:100%;padding:1rem;background:#f97316;color:#fff;border:none;border-radius:.85rem;font-weight:900;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.4rem">
-                            Generate Deep Diagnostic
+                                style="width:100%;padding:1.15rem;background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:1.2rem;font-weight:900;font-size:.75rem;text-transform:uppercase;letter-spacing:.2em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.6rem;box-shadow:0 10px 30px rgba(249,115,22,.2)">
+                            Generate Forensic AI
                         </button>
                     </div>
                 </div>
