@@ -109,7 +109,7 @@ class SecurityAutomationService
         $blocked = Cache::get('blocked_ips', []);
         if (!in_array($ip, $blocked)) {
             $blocked[] = $ip;
-            Cache::put('blocked_ips', $blocked, 0); // Permanent block
+            Cache::forever('blocked_ips', $blocked); // UNICORP-GRADE: Permanent block
             Cache::increment('threat_brute_force_blocked');
             Log::alert("[FIREWALL] IP $ip has been PERMANENTLY BLOCKED. Reason: $reason");
         }

@@ -51,11 +51,16 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('ai_diagnoses', function (Blueprint $table) {
-            $table->dropColumn([
+            $columns = [
                 'latitude', 'longitude', 'final_deep_score', 'material_type', 
                 'location_context', 'audio_label', 'audio_confidence', 
                 'survey_data', 'recommended_tools', 'analysis_version'
-            ]);
+            ];
+            foreach ($columns as $column) {
+                if (Schema::hasColumn('ai_diagnoses', $column)) {
+                    $table->dropColumn($column);
+                }
+            }
         });
     }
 };
