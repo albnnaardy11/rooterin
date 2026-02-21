@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tentang Kami - RooterIn Indonesia</title>
+
+    <!-- SEO -->
+    <meta name="description"
+        content="Pelajari lebih lanjut tentang RooterIn, visi kami, dan bagaimana kami merevolusi industri plumbing di Indonesia.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Remix Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#22c55e',
+                            rgb: '34, 197, 94'
+                        },
+                        secondary: {
+                            DEFAULT: '#0f172a',
+                            rgb: '15, 23, 42'
+                        },
+                        accent: '#f97316',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    animation: {
+                        'bounce-soft': 'bounceSoft 3s ease-in-out infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'spin-slow': 'spin 8s linear infinite',
+                    },
+                    keyframes: {
+                        bounceSoft: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        :root {
+            --color-primary: #22c55e;
+            --color-primary-rgb: 34, 197, 94;
+            --color-secondary: #0f172a;
+            --color-secondary-rgb: 15, 23, 42;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased bg-stone-50 text-slate-800">
+    <div id="site-content" class="min-h-screen flex flex-col transition-all duration-300">
+
+        <!-- Navbar (Same as index) -->
+        <nav x-data="{ open: false, scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 50)"
+            class="fixed top-0 left-0 right-0 z-50 pt-4 sm:pt-10 px-3 sm:px-4 transition-all duration-500 ease-in-out">
+            <div :class="scrolled ? 'max-w-7xl py-3' : 'max-w-[85rem] py-4.5 sm:py-5.5'"
+                class="mx-auto bg-secondary/95 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-[1.75rem] shadow-[0_25px_50px_rgba(0,0,0,0.35)] transition-all duration-500 px-6 lg:px-9 flex items-center justify-between relative">
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-4 group cursor-pointer relative">
+                    <div
+                        class="relative w-10 h-10 sm:w-12 sm:h-12 bg-primary flex items-center justify-center rounded-2xl shadow-lg shadow-primary/20 transition-all duration-500 group-hover:scale-105">
+                        <i class="ri-flashlight-fill text-white text-2xl sm:text-2xl"></i>
+                    </div>
+                    <div class="relative flex flex-col">
+                        <span
+                            class="font-heading font-black text-xl sm:text-2xl text-white tracking-widest leading-none">ROOTER<span
+                                class="text-primary">IN</span></span>
+                        <span
+                            class="hidden sm:block text-[9px] text-gray-500 font-black tracking-[0.4em] uppercase mt-1.5 text-left">Organic
+                            Plumbing Hub</span>
+                    </div>
+                </a>
+                <div class="hidden xl:flex items-center space-x-2">
+                    <a href="index.html"
+                        class="relative px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 text-gray-400 hover:text-white">Home</a>
+                    <a href="about.html"
+                        class="relative px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 text-primary">About</a>
+                    <a href="layanan.html"
+                        class="relative px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 text-gray-400 hover:text-white">Layanan</a>
+                    <a href="galeri.html"
+                        class="relative px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 text-gray-400 hover:text-white">Gallery</a>
+                    <a href="tips.html"
+                        class="relative px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 text-gray-400 hover:text-white">Tips</a>
+                    <a href="ai-diagnostic.html"
+                        class="relative px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 text-gray-400 hover:text-white">AI
+                        Diagnostic</a>
+                    <a href="wiki.html"
+                        class="relative px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 text-gray-400 hover:text-white">WikiPipa</a>
+                    <a href="kontak.html"
+                        class="relative px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 text-gray-400 hover:text-white">Kontak</a>
+                </div>
+                <div class="flex items-center gap-3 sm:gap-5">
+                    <a href="https://wa.me/6281246668749"
+                        class="hidden md:flex items-center gap-3 bg-white/5 border border-white/10 px-4 xl:px-6 py-2.5 xl:py-3 rounded-2xl text-white uppercase font-black text-[11px] tracking-widest transition-all">WhatsApp
+                        SOS</a>
+                    <button @click="open = ! open"
+                        class="xl:hidden w-11 h-11 bg-white/10 rounded-2xl flex items-center justify-center text-white"><i
+                            class="ri-menu-line text-xl"></i></button>
+                </div>
+            </div>
+            <div x-show="open" x-cloak
+                class="xl:hidden absolute top-[90px] left-4 right-4 bg-secondary/98 backdrop-blur-3xl border border-white/10 rounded-[2rem] p-5 shadow-2xl">
+                <div class="flex flex-col gap-1">
+                    <a href="index.html"
+                        class="text-white py-3 border-b border-white/5 font-bold uppercase text-xs tracking-widest">Home</a>
+                    <a href="about.html"
+                        class="text-primary py-3 border-b border-white/5 font-bold uppercase text-xs tracking-widest">About</a>
+                    <a href="layanan.html"
+                        class="text-white py-3 border-b border-white/5 font-bold uppercase text-xs tracking-widest">Layanan</a>
+                    <a href="galeri.html"
+                        class="text-white py-3 border-b border-white/5 font-bold uppercase text-xs tracking-widest">Gallery</a>
+                    <a href="ai-diagnostic.html"
+                        class="text-white py-3 border-b border-white/5 font-bold uppercase text-xs tracking-widest">AI
+                        Diagnostic</a>
+                    <a href="wiki.html"
+                        class="text-white py-3 border-b border-white/5 font-bold uppercase text-xs tracking-widest">WikiPipa</a>
+                    <a href="kontak.html" class="text-white py-3 font-bold uppercase text-xs tracking-widest">Kontak</a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-grow pt-32">
+            <!-- ABOUT HERO -->
+            <section class="py-24 relative overflow-hidden">
+                <div class="max-w-7xl mx-auto px-6">
+                    <div class="flex flex-col lg:flex-row items-center gap-16">
+                        <div class="lg:w-1/2">
+                            <span class="text-primary font-black text-[10px] uppercase tracking-[0.4em] mb-6 block">Our
+                                Legacy & Vision</span>
+                            <h1
+                                class="text-5xl md:text-7xl font-heading font-black text-secondary leading-tight tracking-tighter mb-8">
+                                Mengubah Wajah <br> <span class="text-primary italic">Plumbing Indonesia.</span>
+                            </h1>
+                            <p class="text-gray-500 text-lg font-medium leading-relaxed max-w-xl">
+                                RooterIn lahir dari kebutuhan akan layanan sanitasi yang efisien, transparan, dan tidak
+                                merusak keindahan arsitektur bangunan Anda.
+                            </p>
+                        </div>
+                        <div class="lg:w-1/2 relative">
+                            <div
+                                class="aspect-square bg-gray-200 rounded-[4rem] overflow-hidden rotate-3 shadow-2xl transition-transform hover:rotate-0 duration-700">
+                                <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1000"
+                                    class="w-full h-full object-cover">
+                            </div>
+                            <div
+                                class="absolute -bottom-10 -left-10 bg-white p-8 rounded-3xl shadow-xl border border-stone-100 flex items-center gap-6 animate-bounce-soft">
+                                <div
+                                    class="w-14 h-14 bg-primary/20 rounded-2xl flex items-center justify-center text-primary text-2xl">
+                                    <i class="ri-medal-fill"></i>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] text-gray-400 font-black uppercase tracking-widest">Experience
+                                    </p>
+                                    <p class="text-secondary font-black text-xl leading-none">10+ Years</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PROFILE SECTION -->
+            <section class="py-32 bg-white">
+                <div class="max-w-7xl mx-auto px-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-24">
+                        <div class="space-y-10">
+                            <h2 class="text-4xl font-heading font-black text-secondary tracking-tight">Visi Layanan
+                                <span class="text-primary italic">Masa Depan.</span>
+                            </h2>
+                            <p class="text-gray-500 leading-relaxed text-lg">Kami percaya bahwa setiap masalah pipa
+                                memiliki solusi cerdas tanpa harus menghancurkan apa yang telah Anda bangun dengan susah
+                                payah.</p>
+                            <div
+                                class="p-8 bg-stone-50 rounded-3xl border border-stone-100 italic font-medium text-secondary">
+                                "Inovasi bukan hanya tentang alat baru, tapi tentang cara baru dalam menghargai properti
+                                milik pelanggan."
+                                <span class="block mt-4 text-[10px] font-black uppercase tracking-widest text-primary">—
+                                    Ardy Albanna, Founder</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 gap-8">
+                            <div
+                                class="p-10 bg-secondary text-white rounded-[3rem] shadow-xl relative overflow-hidden group">
+                                <div
+                                    class="absolute top-0 right-0 w-32 h-32 bg-primary opacity-10 rounded-full -translate-y-1/2 translate-x-1/2">
+                                </div>
+                                <h4 class="text-primary font-black text-[10px] uppercase tracking-widest mb-4">Visi Kami
+                                </h4>
+                                <p class="text-lg font-bold leading-relaxed">Menjadi standar emas layanan perpipaan di
+                                    Asia Tenggara melalui integrasi teknologi forensic dan eksekusi presisi.</p>
+                            </div>
+                            <div class="p-10 bg-stone-50 rounded-[3rem] border border-stone-100 group">
+                                <h4 class="text-accent font-black text-[10px] uppercase tracking-widest mb-4">Misi Utama
+                                </h4>
+                                <ul class="space-y-4">
+                                    <li class="flex gap-4">
+                                        <i class="ri-checkbox-circle-fill text-primary mt-1"></i>
+                                        <span class="text-gray-600 font-medium">Memberikan solusi tanpa bongkar untuk
+                                            efisiensi biaya dan waktu.</span>
+                                    </li>
+                                    <li class="flex gap-4">
+                                        <i class="ri-checkbox-circle-fill text-primary mt-1"></i>
+                                        <span class="text-gray-600 font-medium">Terus mengupdate teknologi deteksi
+                                            visual dan audit sensorik.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- METHODOLOGY -->
+            <section class="py-32 bg-stone-50">
+                <div class="max-w-7xl mx-auto px-6">
+                    <div class="text-center mb-24">
+                        <span class="text-primary font-black text-[10px] uppercase tracking-[0.4em] mb-4 block">Our
+                            Approach</span>
+                        <h2
+                            class="text-4xl md:text-6xl font-heading font-black text-secondary leading-tight tracking-tighter">
+                            Teknik Kerja <br> <span class="text-primary italic">RooterIn Method.</span>
+                        </h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                        <div class="space-y-4">
+                            <div
+                                class="p-8 bg-white rounded-3xl shadow-sm border border-gray-100 hover:border-primary/20 transition-all group">
+                                <h4 class="text-secondary font-black text-xl mb-3 flex justify-between items-center">
+                                    Forensic Audit
+                                    <i class="ri-zoom-in-line text-primary"></i>
+                                </h4>
+                                <p class="text-gray-400 text-sm font-medium leading-relaxed">Analisis mendalam
+                                    menggunakan endoscope thermal untuk memetakan jalur dan titik sumbatan secara
+                                    visual.</p>
+                            </div>
+                            <div
+                                class="p-8 bg-white rounded-3xl shadow-sm border border-gray-100 hover:border-primary/20 transition-all group">
+                                <h4 class="text-secondary font-black text-xl mb-3 flex justify-between items-center">
+                                    Cabled Rooting
+                                    <i class="ri-loop-right-line text-primary"></i>
+                                </h4>
+                                <p class="text-gray-400 text-sm font-medium leading-relaxed">Pembersihan mekanis
+                                    fleksibel yang mampu menjangkau lekukan pipa tanpa melukai dinding pipa itu sendiri.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="aspect-video bg-secondary rounded-[3.5rem] overflow-hidden shadow-3xl">
+                            <img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=1000"
+                                class="w-full h-full object-cover opacity-60">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer (Same as index) -->
+        <footer class="bg-secondary text-white pt-24 pb-12 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6 relative z-10 text-center md:text-left">
+                <div class="flex flex-col lg:flex-row justify-between gap-20 mb-20">
+                    <div class="lg:w-1/3">
+                        <div class="flex items-center gap-4 mb-8 justify-center md:justify-start">
+                            <div class="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-lg"><i
+                                    class="ri-flashlight-fill text-white text-2xl"></i></div>
+                            <span class="font-heading font-black text-3xl tracking-tighter uppercase">ROOTER<span
+                                    class="text-primary italic">IN</span></span>
+                        </div>
+                        <p class="text-gray-400 font-medium mb-10 max-w-sm ml-auto mr-auto md:ml-0 md:mr-0">Layanan
+                            plumbing premium pertama di Indonesia.</p>
+                    </div>
+                </div>
+                <div
+                    class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between gap-8 text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em]">
+                    <p>© 2026 RooterIn Indonesia</p>
+                    <p>Developed by Ardy Albanna</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

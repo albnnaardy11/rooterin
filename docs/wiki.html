@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WikiPipa - Database Infrastruktur Saluran & Pipa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#22c55e',
+                        secondary: '#0f172a',
+                        accent: '#f97316',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased bg-stone-50 text-slate-800">
+    <div id="site-content" class="min-h-screen flex flex-col" x-data="{
+        activeCategory: 'Semua',
+        searchQuery: '',
+        allEntities: [
+            { title: 'Pipa HDPE', category: 'Material', description: 'High-Density Polyethylene, pipa fleksibel dengan ketahanan kimia tinggi, cocok untuk jalur air bersih bertekanan.', slug: 'pipa-hdpe' },
+            { title: 'Pipa PVC AW', category: 'Material', description: 'Varian pipa PVC paling tebal untuk penggunaan air bertekanan hingga 10 bar. Standar industri perumahan.', slug: 'pipa-pvc-aw' },
+            { title: 'Mesin Rooter Spiral', category: 'Alat', description: 'Alat mekanis dengan kawat spiral baja yang berputar kencang untuk menghancurkan lemak dan sumbatan keras di dalam pipa.', slug: 'mesin-rooter-spiral' },
+            { title: 'CCTV Inspection', category: 'Teknik', description: 'Metode inspeksi visual menggunakan kamera endoscope khusus untuk melihat kondisi interior pipa secara real-time.', slug: 'cctv-inspection' },
+            { title: 'Trap Dapur (Grease Trap)', category: 'Instalasi', description: 'Sistem penyaringan lemak pada wastafel dapur sebelum air masuk ke saluran utama guna mencegah pembekuan lemak.', slug: 'grease-trap' },
+            { title: 'Pipa Cast Iron', category: 'Material', description: 'Material pipa besi cor yang sangat tahan lama, biasanya ditemukan pada gedung-gedung tua atau jalur pembuangan utama.', slug: 'pipa-cast-iron' }
+        ],
+        get filteredEntities() {
+            return this.allEntities.filter(entity => {
+                const matchesCategory = this.activeCategory === 'Semua' || entity.category === this.activeCategory;
+                const matchesSearch = entity.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
+                                   entity.description.toLowerCase().includes(this.searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+        }
+    }">
+
+        <!-- Navbar -->
+        <nav x-data="{ open: false, scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 50)"
+            class="fixed top-0 left-0 right-0 z-50 pt-4 sm:pt-10 px-3 sm:px-4 transition-all duration-500 ease-in-out">
+            <div :class="scrolled ? 'max-w-7xl py-3' : 'max-w-[85rem] py-4.5 sm:py-5.5'"
+                class="mx-auto bg-secondary/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl transition-all px-6 lg:px-9 flex items-center justify-between">
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-4 group">
+                    <div class="w-10 h-10 bg-primary flex items-center justify-center rounded-2xl"><i
+                            class="ri-flashlight-fill text-white text-xl"></i></div>
+                    <div class="flex flex-col"><span
+                            class="font-heading font-black text-xl text-white tracking-widest leading-none">ROOTER<span
+                                class="text-primary">IN</span></span></div>
+                </a>
+                <div class="hidden xl:flex items-center space-x-2">
+                    <a href="index.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">Home</a>
+                    <a href="about.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">About</a>
+                    <a href="layanan.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">Layanan</a>
+                    <a href="galeri.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">Gallery</a>
+                    <a href="tips.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">Tips</a>
+                    <a href="ai-diagnostic.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">AI
+                        Diagnostic</a>
+                    <a href="wiki.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-primary transition-all">WikiPipa</a>
+                    <a href="kontak.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">Kontak</a>
+                </div>
+                <div
+                    class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white">
+                    <i class="ri-search-line"></i>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-grow pt-32">
+            <!-- WIKI HERO -->
+            <section class="relative bg-secondary min-h-[70vh] flex items-center overflow-hidden">
+                <div class="max-w-7xl mx-auto px-6 relative z-10 w-full text-center lg:text-left pt-20">
+                    <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-24">
+                        <div class="lg:w-3/5">
+                            <h1
+                                class="text-6xl md:text-[8rem] font-heading font-black text-white leading-[0.85] tracking-tighter mb-10">
+                                Wiki<span class="text-primary italic">Pipa</span>.
+                            </h1>
+                            <p class="text-gray-400 text-xl font-medium max-w-xl mb-12">Database teknis terlengkap
+                                tentang infrastruktur air, jenis pipa, dan solusi maintenance profesional.</p>
+                            <div class="max-w-xl relative group">
+                                <input type="text" x-model="searchQuery" placeholder="Cari data teknis..."
+                                    class="w-full bg-white/5 rounded-3xl py-7 px-10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 ring-primary/50 text-lg font-bold">
+                                <div
+                                    class="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-white text-2xl shadow-xl shadow-primary/20">
+                                    <i class="ri-search-line"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lg:w-2/5 hidden lg:block">
+                            <div
+                                class="aspect-square bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[4rem] p-16 flex flex-col justify-center">
+                                <i class="ri-book-read-line text-7xl text-primary mb-8"></i>
+                                <h3
+                                    class="text-4xl font-black text-white leading-tight mb-4 tracking-tight uppercase italic">
+                                    Technical <br> Authority.</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DATABASE GRID -->
+            <section class="py-32 bg-stone-50 min-h-screen">
+                <div class="max-w-7xl mx-auto px-6">
+                    <!-- Filters -->
+                    <div class="flex items-center gap-4 overflow-x-auto no-scrollbar pb-16">
+                        <template x-for="cat in ['Semua', 'Material', 'Alat', 'Teknik', 'Instalasi']" :key="cat">
+                            <button @click="activeCategory = cat"
+                                :class="activeCategory === cat ? 'bg-secondary text-white shadow-xl' : 'bg-white text-gray-400 border border-stone-100'"
+                                class="px-10 py-4 rounded-full font-black text-[10px] uppercase tracking-widest transition-all"
+                                x-text="cat"></button>
+                        </template>
+                    </div>
+
+                    <!-- Counter -->
+                    <div x-show="searchQuery.length > 0" class="mb-10 flex items-center gap-4">
+                        <span class="text-gray-400 text-sm font-bold uppercase tracking-widest">Found: <span
+                                x-text="filteredEntities.length" class="text-primary"></span> results for "<span
+                                x-text="searchQuery"></span>"</span>
+                    </div>
+
+                    <!-- Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                        <template x-for="(entity, index) in filteredEntities" :key="index">
+                            <div
+                                class="group bg-white rounded-[3.5rem] p-12 border border-gray-100 hover:border-primary/20 transition-all duration-700 hover:-translate-y-4 hover:shadow-2xl relative overflow-hidden flex flex-col">
+                                <div class="relative z-10 flex flex-col h-full">
+                                    <span x-text="entity.category"
+                                        class="text-primary font-black text-[10px] uppercase tracking-[0.4em] mb-6 block"></span>
+                                    <h3 x-text="entity.title"
+                                        class="text-3xl font-heading font-black text-secondary mb-6 leading-tight group-hover:text-primary transition-colors">
+                                    </h3>
+                                    <p x-text="entity.description"
+                                        class="text-gray-400 text-base leading-relaxed font-medium mb-12 flex-grow italic">
+                                    </p>
+                                    <div class="mt-auto flex items-center justify-between">
+                                        <div
+                                            class="text-secondary group-hover:text-primary font-black text-[10px] uppercase tracking-widest flex items-center gap-2 transition-all">
+                                            READ DETAIL <i
+                                                class="ri-arrow-right-line group-hover:translate-x-2 transition-transform"></i>
+                                        </div>
+                                        <div
+                                            class="w-12 h-12 rounded-2xl bg-stone-50 flex items-center justify-center text-primary/40 group-hover:text-primary transition-all text-xl">
+                                            <i class="ri-book-open-line"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Empty State -->
+                    <template x-if="filteredEntities.length === 0">
+                        <div class="py-24 text-center bg-white rounded-[4rem] shadow-sm border border-stone-100">
+                            <i class="ri-search-eye-line text-7xl text-gray-200 mb-8 block"></i>
+                            <h3 class="text-3xl font-heading font-black text-secondary mb-3">Data Tidak Ditemukan</h3>
+                            <p class="text-gray-400 text-lg mb-10">Maaf, kami tidak menemukan data teknis yang sesuai.
+                            </p>
+                            <button @click="searchQuery = ''; activeCategory = 'Semua'"
+                                class="bg-primary/10 text-primary px-10 py-5 rounded-full font-black text-[11px] uppercase tracking-widest">Reset
+                                Pencarian</button>
+                        </div>
+                    </template>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-secondary text-white pt-24 pb-12">
+            <div class="max-w-7xl mx-auto px-6 text-center">
+                <h4 class="font-heading font-black text-2xl mb-8 uppercase tracking-widest">Wiki<span
+                        class="text-primary italic">Pipa</span></h4>
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-[0.3em]">© 2026 RooterIn Indonesia •
+                    Technical Library</p>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

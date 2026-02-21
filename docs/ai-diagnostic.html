@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AI Visual Pipe Diagnostics - RooterIn Demo</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Poppins:wght@600;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Remix Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Tailwind (For specific utility classes used in layout) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#22c55e',
+                        secondary: '#0f172a',
+                        accent: '#f97316',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: #020617;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        @keyframes rtscanmv {
+            0% {
+                top: 0;
+                opacity: 0
+            }
+
+            5% {
+                opacity: 1
+            }
+
+            95% {
+                opacity: 1
+            }
+
+            100% {
+                top: 100%;
+                opacity: 0
+            }
+        }
+
+        /* Custom Scrollbar for Rejection Modal */
+        .modal-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .modal-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .modal-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="antialiased font-sans">
+
+    <nav class="fixed top-0 left-0 right-0 z-50 pt-6 px-4">
+        <div
+            class="max-w-6xl mx-auto bg-secondary/90 backdrop-blur-xl border border-white/10 rounded-3xl p-4 flex items-center justify-between shadow-2xl">
+            <a href="index.html" class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+                    <i class="ri-flashlight-fill text-white text-xl"></i>
+                </div>
+                <span class="font-black text-xl tracking-tighter uppercase text-white">ROOTER<span
+                        class="text-primary">IN</span></span>
+            </a>
+            <div
+                class="hidden md:flex gap-8 items-center uppercase text-[10px] font-black tracking-widest text-gray-400">
+                <a href="index.html" class="hover:text-white transition-colors">Home</a>
+                <a href="about.html" class="hover:text-white transition-colors">About</a>
+                <a href="layanan.html" class="hover:text-white transition-colors">Services</a>
+                <a href="galeri.html" class="hover:text-white transition-colors">Gallery</a>
+                <a href="tips.html" class="hover:text-white transition-colors">Tips</a>
+                <a href="ai-diagnostic.html" class="text-primary">AI Diagnostic</a>
+                <a href="https://wa.me/6281246668749"
+                    class="px-5 py-2.5 bg-primary/10 text-primary border border-primary/20 rounded-xl hover:bg-primary hover:text-white transition-all">WhatsApp
+                    SOS</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENT FROM BLADE -->
+    <section
+        style="background:#020617;min-height:100vh;padding-top:8rem;padding-bottom:5rem;position:relative;overflow-x:hidden">
+        <div
+            style="position:absolute;inset:0;opacity:.04;pointer-events:none;background-image:radial-gradient(#22c55e 1px,transparent 1px);background-size:36px 36px">
+        </div>
+        <div
+            style="position:absolute;inset:0;background:linear-gradient(to bottom,#020617 0%,transparent 30%,transparent 70%,#020617 100%);pointer-events:none">
+        </div>
+
+        <div class="container mx-auto" style="padding:0 1rem;position:relative;z-index:1">
+
+            {{-- Header --}}
+            <div style="text-align:center;margin-bottom:3.5rem">
+                <h1
+                    style="font-size:clamp(2.8rem,8vw,5.5rem);font-weight:900;color:#fff;line-height:.9;letter-spacing:-.04em;font-style:italic;margin:0 0 1.5rem 0">
+                    Magic <br><span
+                        style="background:linear-gradient(135deg,#4ade80,#fb923c,#ea580c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Deep
+                        Vision.</span>
+                </h1>
+                <p style="color:#64748b;font-size:.9rem;max-width:32rem;margin:0 auto;font-weight:500;line-height:1.6">
+                    Analisis AI multi-sensor untuk mendeteksi jenis sumbatan pipa secara presisi. (GitHub Pages Static
+                    Version)</p>
+            </div>
+
+            {{-- Step Dots --}}
+            <div
+                style="max-width:20rem;margin:0 auto 3rem;display:flex;align-items:center;justify-content:center;gap:1.5rem">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:.75rem">
+                    <div id="d0"
+                        style="width:3.5rem;height:3.5rem;border-radius:1.2rem;background:#22c55e;color:#0f172a;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:900;box-shadow:0 0 30px rgba(34,197,94,.3);transition:all .3s">
+                        <i class="ri-camera-lens-line"></i>
+                    </div>
+                    <span
+                        style="font-size:.65rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.15em">Visual</span>
+                </div>
+                <div id="dl0"
+                    style="width:4.5rem;height:2px;background:#1e293b;border-radius:1px;margin-bottom:1.5rem;transition:all .3s">
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:.75rem">
+                    <div id="d2"
+                        style="width:3.5rem;height:3.5rem;border-radius:1.2rem;background:#1e293b;color:#475569;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:900;transition:all .3s">
+                        <i class="ri-survey-line"></i>
+                    </div>
+                    <span
+                        style="font-size:.65rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em">Kondisi</span>
+                </div>
+            </div>
+
+            {{-- CARD --}}
+            <div style="max-width:26rem;margin:0 auto">
+                <div
+                    style="background:rgba(15,23,42,.8);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);border-radius:3rem;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.6)">
+
+                    {{-- ── STEP 0: VISION ── --}}
+                    <div id="s0" style="display:block">
+                        <div
+                            style="position:relative;aspect-ratio:1/1;background:#000;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05)">
+                            <video id="rt-vid" autoplay playsinline muted
+                                style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s"></video>
+                            <canvas id="rt-cvs" style="display:none"></canvas>
+
+                            {{-- No cam state / Upload Frame --}}
+                            <div id="no-cam"
+                                style="position:absolute;inset:0;background:#0f172a;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;z-index:2">
+                                <div
+                                    style="width:5rem;height:5rem;background:rgba(30,41,59,.5);border:1px dashed rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem">
+                                    <i class="ri-camera-off-line" style="font-size:2rem;color:#475569"></i>
+                                </div>
+                                <p style="color:#64748b;font-size:.85rem;font-weight:600;margin:0 0 .5rem">Sistem Kamera
+                                    Offline</p>
+                                <label
+                                    style="cursor:pointer;color:#22c55e;font-size:.7rem;font-weight:900;text-transform:uppercase;margin:0;padding:.8rem 1.5rem;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:2rem;margin-top:.5rem;display:inline-block;transition:all .3s">
+                                    <i class="ri-upload-cloud-2-line"></i> Upload Foto Lokal
+                                    <input type="file" accept="image/*" style="display:none"
+                                        onchange="rtUploadFile(this)">
+                                </label>
+                            </div>
+
+                            {{-- Cam HUD --}}
+                            <div id="cam-hud" style="position:absolute;inset:0;pointer-events:none;display:none">
+                                <div
+                                    style="position:absolute;inset:1.5rem;border:2px solid rgba(34,197,94,.3);border-radius:1.5rem;overflow:hidden">
+                                    <div id="scan-ln"
+                                        style="position:absolute;left:0;width:100%;height:2px;background:#22c55e;box-shadow:0 0 10px #22c55e;display:none;animation:rtscanmv 2s linear infinite">
+                                    </div>
+                                </div>
+                                <div style="position:absolute;top:1rem;left:1.5rem">
+                                    <div style="font-family:monospace;font-size:.65rem;color:#22c55e;font-weight:700">
+                                        CAM: LIVE (SECURE)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding:1.5rem;display:flex;flex-direction:column;gap:.75rem">
+                            <button id="btn-v" onclick="rtVision()"
+                                style="width:100%;padding:1.2rem;background:#fff;color:#0f172a;border:none;border-radius:1.5rem;font-weight:900;font-size:.8rem;text-transform:uppercase;letter-spacing:.2em;cursor:pointer;box-shadow:0 10px 30px rgba(255,255,255,.1)">
+                                Mulai Analisis Visual
+                            </button>
+                            <label
+                                style="cursor:pointer;color:#94a3b8;font-size:.7rem;font-weight:900;text-transform:uppercase;margin:0;padding:1rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:1.5rem;text-align:center;display:block;transition:all .3s">
+                                <i class="ri-folder-upload-line"></i> Pilih File Gambar
+                                <input type="file" accept="image/*" style="display:none" onchange="rtUploadFile(this)">
+                            </label>
+                        </div>
+                    </div>
+
+                    {{-- ── STEP 2: SURVEY ── --}}
+                    <div id="s2" style="display:none">
+                        <div style="padding:1.5rem 1.5rem .75rem;border-bottom:1px solid rgba(255,255,255,.05)">
+                            <h3
+                                style="color:#fff;font-weight:900;font-size:.85rem;text-transform:uppercase;letter-spacing:.2em;margin:0 0 .5rem">
+                                Technical Survey</h3>
+                            <div
+                                style="width:3rem;height:.3rem;background:linear-gradient(to right,#22c55e,#4ade80);border-radius:.1rem">
+                            </div>
+                        </div>
+                        <div
+                            style="padding:1.5rem;max-height:28rem;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent">
+                            <!-- Survey Content truncated for mock index, includes all functional buttons from original blade -->
+                            <div id="loc-wrap" style="margin-bottom:1.5rem;position:relative">
+                                <div
+                                    style="font-size:.65rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.6rem">
+                                    Lokasi Perpipaan</div>
+                                <button onclick="rtLocToggle()"
+                                    style="width:100%;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:1.2rem;padding:1.1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;color:#fff;font-size:.75rem;font-weight:700;text-transform:uppercase;cursor:pointer;transition:all .3s">
+                                    <span id="loc-lbl">Konfigurasi Jalur...</span>
+                                    <i class="ri-arrow-down-s-line" style="font-size:1.2rem;color:#22c55e"></i>
+                                </button>
+                                <div id="loc-d"
+                                    style="display:none;position:absolute;z-index:50;top:100%;left:0;right:0;margin-top:.5rem;background:#0f172a;border:1px solid rgba(255,255,255,.1);border-radius:1.5rem;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.8);backdrop-filter:blur(30px)">
+                                    <button onclick="rtLocSel('wastafel_dapur','Wastafel Dapur')"
+                                        style="width:100%;text-align:left;padding:1.1rem 1.5rem;font-size:.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Wastafel
+                                        Dapur (Grease)</button>
+                                    <button onclick="rtLocSel('toilet_closet','Toilet / Closet')"
+                                        style="width:100%;text-align:left;padding:1.1rem 1.5rem;font-size:.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Toilet
+                                        / Closet</button>
+                                    <button onclick="rtLocSel('floor_drain_km','Floor Drain KM')"
+                                        style="width:100%;text-align:left;padding:1.1rem 1.5rem;font-size:.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Floor
+                                        Drain KM</button>
+                                    <button onclick="rtLocSel('kitchen_main','Jalur Utama Sink')"
+                                        style="width:100%;text-align:left;padding:1.1rem 1.5rem;font-size:.7rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent">Jalur
+                                        Utama Sink</button>
+                                </div>
+                            </div>
+                            <div style="margin-bottom:1.5rem">
+                                <div
+                                    style="font-size:.65rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.6rem">
+                                    Material Instalasi</div>
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+                                    <button id="mat-pvc" onclick="rtMat('pvc')"
+                                        style="padding:1rem;background:#22c55e;color:#0f172a;border:none;border-radius:1rem;font-weight:900;font-size:.65rem;text-transform:uppercase;cursor:pointer">PVC
+                                        / Plastik</button>
+                                    <button id="mat-besi" onclick="rtMat('besi')"
+                                        style="padding:1rem;background:rgba(255,255,255,.04);color:#64748b;border:1px solid rgba(255,255,255,.06);border-radius:1rem;font-weight:900;font-size:.65rem;text-transform:uppercase;cursor:pointer">Besi
+                                        / Cast Iron</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Generate button --}}
+                        <div
+                            style="padding:1.5rem;border-top:1px solid rgba(255,255,255,.05);background:rgba(15,23,42,.4)">
+                            <button id="btn-g" onclick="rtGenerate()"
+                                style="width:100%;padding:1.3rem;background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:1.5rem;font-weight:900;font-size:.8rem;text-transform:uppercase;letter-spacing:.25em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.75rem;box-shadow:0 15px 40px rgba(249,115,22,.3)">
+                                <i class="ri-radar-line text-lg animate-pulse"></i> Generate Forensic AI
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER (Static Mockup) -->
+    <footer class="bg-secondary text-white pt-20 pb-10 border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <h4 class="font-black text-2xl mb-4 tracking-tighter uppercase">ROOTER<span
+                    class="text-primary italic">IN</span></h4>
+            <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.4em] mb-8">Organic Plumbing Hub
+                Indonesia</p>
+            <p class="text-gray-400 text-xs mb-10 max-w-lg mx-auto leading-relaxed">Solusi perpipaan modern tanpa
+                bongkar. Menggunakan teknologi Gemini ForensicGuard untuk diagnosis akuransi tinggi.</p>
+            <div class="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-[9px] text-gray-600 font-bold uppercase tracking-widest">© 2026 RooterIn Indonesia • Ardy
+                    Albanna</p>
+                <div class="flex gap-4">
+                    <i class="ri-instagram-line text-lg text-gray-600"></i>
+                    <i class="ri-facebook-circle-fill text-lg text-gray-600"></i>
+                    <i class="ri-whatsapp-fill text-lg text-gray-600"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LOGIC SYSTEM (Embedded & Decoupled) -->
+    <script>
+        // CONFIG
+        var _diag = {
+            step: 0,
+            busy: false,
+            imageBase64: null,
+            uploadedBase64: null,
+            location: null,
+            material: 'pvc',
+            sub: 'dapur',
+            freq: 'pertama',
+            camOn: false,
+            // API CONFIG: Since this is static, 
+            // point to your live backend if CORS is allowed, 
+            // or show demo results.
+            apiEndpoint: 'https://rooterin.com/ai-diagnostic/store'
+        };
+
+        function _el(id) { return document.getElementById(id); }
+        function _toast(msg, isErr) {
+            alert(msg); // Simplified for static version
+        }
+
+        function _goStep(n) {
+            _diag.step = n;
+            _el('s0').style.display = (n === 0) ? 'block' : 'none';
+            _el('s2').style.display = (n === 2) ? 'block' : 'none';
+
+            // UI Dot Transitions
+            var d0 = _el('d0'); var d2 = _el('d2'); var dl0 = _el('dl0');
+            if (n >= 2) {
+                if (d2) { d2.style.background = '#22c55e'; d2.style.color = '#0f172a'; d2.style.boxShadow = '0 0 30px rgba(34,197,94,.3)'; }
+                if (dl0) { dl0.style.background = '#22c55e'; }
+            } else {
+                if (d2) { d2.style.background = '#1e293b'; d2.style.color = '#475569'; d2.style.boxShadow = 'none'; }
+                if (dl0) { dl0.style.background = '#1e293b'; }
+            }
+        }
+
+        function rtLocToggle() {
+            var d = _el('loc-d');
+            d.style.display = (d.style.display === 'none') ? 'block' : 'none';
+        }
+
+        function rtLocSel(val, label) {
+            _diag.location = val;
+            _el('loc-lbl').textContent = label;
+            _el('loc-d').style.display = 'none';
+        }
+
+        function rtMat(val) {
+            _diag.material = val;
+            _el('mat-pvc').style.background = (val === 'pvc') ? '#22c55e' : 'rgba(255,255,255,.04)';
+            _el('mat-besi').style.background = (val === 'besi') ? '#22c55e' : 'rgba(255,255,255,.04)';
+        }
+
+        function rtVision() {
+            if (_diag.busy) return;
+            var v = _el('rt-vid');
+            var c = _el('rt-cvs');
+            c.width = v.videoWidth;
+            c.height = v.videoHeight;
+            c.getContext('2d').drawImage(v, 0, 0);
+            _diag.imageBase64 = c.toDataURL('image/jpeg', 0.85);
+
+            _el('scan-ln').style.display = 'block';
+            setTimeout(() => {
+                _el('scan-ln').style.display = 'none';
+                _goStep(2);
+            }, 1000);
+        }
+
+        function rtUploadFile(input) {
+            var file = input.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                _diag.uploadedBase64 = e.target.result;
+                _goStep(2);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function rtGenerate() {
+            if (!_diag.location) { alert('Pilih lokasi terlebih dahulu!'); return; }
+            alert('DEMO MODE: Analisis AI memerlukan backend aktif. Jika di-upload ke GitHub Pages, pastikan API Endpoint valid dan CORS diizinkan.');
+        }
+
+        // Camera startup
+        (function () {
+            var v = document.getElementById('rt-vid');
+            if (!v || !navigator.mediaDevices) return;
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } } })
+                .then(function (s) {
+                    v.srcObject = s;
+                    v.style.opacity = '1';
+                    document.getElementById('no-cam').style.display = 'none';
+                    document.getElementById('cam-hud').style.display = 'block';
+                })
+                .catch(function (e) { console.warn('Cam:', e.message); });
+        })();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tips & Trik Perawatan Pipa - RooterIN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#22c55e',
+                        secondary: '#0f172a',
+                        accent: '#f97316',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        :root {
+            --color-primary: #22c55e;
+            --color-primary-rgb: 34, 197, 94;
+            --color-secondary: #0f172a;
+            --color-secondary-rgb: 15, 23, 42;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased bg-stone-50 text-slate-800">
+    <div id="site-content" class="min-h-screen flex flex-col pt-32">
+
+        <!-- Navbar -->
+        <nav x-data="{ open: false, scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 50)"
+            class="fixed top-0 left-0 right-0 z-50 pt-4 sm:pt-10 px-3 sm:px-4 transition-all duration-500 ease-in-out">
+            <div :class="scrolled ? 'max-w-7xl py-3' : 'max-w-[85rem] py-4.5 sm:py-5.5'"
+                class="mx-auto bg-secondary/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl transition-all px-6 lg:px-9 flex items-center justify-between">
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-4 group">
+                    <div class="w-10 h-10 bg-primary flex items-center justify-center rounded-2xl"><i
+                            class="ri-flashlight-fill text-white text-xl"></i></div>
+                    <div class="flex flex-col"><span
+                            class="font-heading font-black text-xl text-white tracking-widest leading-none uppercase">ROOTER<span
+                                class="text-primary">IN</span></span></div>
+                </a>
+                <div class="hidden xl:flex items-center space-x-2">
+                    <a href="index.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">Home</a>
+                    <a href="about.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">About</a>
+                    <a href="layanan.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">Layanan</a>
+                    <a href="galeri.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">Gallery</a>
+                    <a href="ai-diagnostic.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">AI
+                        Diagnostic</a>
+                    <a href="wiki.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">WikiPipa</a>
+                    <a href="kontak.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">Kontak</a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-grow">
+            <!-- HERO SECTION -->
+            <section class="relative bg-secondary min-h-[70vh] flex items-center overflow-hidden">
+                <div class="max-w-7xl mx-auto px-6 relative z-10 w-full text-center lg:text-left">
+                    <h1
+                        class="text-6xl md:text-8xl font-heading font-black text-white leading-[0.9] tracking-tighter mb-10">
+                        Tips & Trik <br> <span class="text-primary italic">Solusi Pipa.</span>
+                    </h1>
+                    <p class="text-gray-400 text-lg max-w-xl mb-12">Panduan praktis merawat sistem pembuangan rumah anda
+                        dari para ahli RooterIn.</p>
+                </div>
+            </section>
+
+            <!-- CONTENT -->
+            <section class="py-32 bg-stone-50" x-data="{
+                activeCategory: 'Semua',
+                searchQuery: '',
+                posts: [
+                    { title: 'Cara Alami Atasi Wastafel Mampet', category: 'Dapur', excerpt: 'Ternyata bahan dapur seperti baking soda dan cuka bisa menjadi solusi awal sebelum memanggil teknisi.', img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=800', date: '21 Feb 2026', readTime: '5 min read' },
+                    { title: 'Penyebab Bau Tak Sedap di Kamar Mandi', category: 'Kamar Mandi', excerpt: 'Pelajari bagaimana s-trap yang kering atau floor drain yang kotor bisa menyebabkan bau gas yang mengganggu.', img: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=800', date: '20 Feb 2026', readTime: '4 min read' },
+                    { title: 'Tips Merawat Toren Agar Bebas Lumut', category: 'Tips Hemat', excerpt: 'Penggunaan filter eksternal dan cat pelindung UV secara signifikan bisa mengurangi pertumbuhan lumut.', img: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=800', date: '19 Feb 2026', readTime: '6 min read' }
+                ],
+                get filteredPosts() {
+                    return this.posts.filter(p => (this.activeCategory === 'Semua' || p.category === this.activeCategory) && p.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
+                }
+            }">
+                <div class="max-w-7xl mx-auto px-6">
+                    <div class="flex flex-col lg:flex-row gap-16">
+                        <!-- Articles -->
+                        <div class="lg:w-2/3">
+                            <div class="grid grid-cols-1 gap-12">
+                                <template x-for="(post, index) in filteredPosts" :key="index">
+                                    <div
+                                        class="group bg-white rounded-[3rem] overflow-hidden shadow-xl hover:-translate-y-2 transition-all flex flex-col md:flex-row">
+                                        <div class="md:w-1/3 aspect-square md:aspect-auto overflow-hidden">
+                                            <img :src="post.img"
+                                                class="w-full h-full object-cover group-hover:scale-110 transition-all duration-1000">
+                                        </div>
+                                        <div class="md:w-2/3 p-10 flex flex-col justify-center text-left">
+                                            <span x-text="post.category"
+                                                class="text-primary font-black text-[10px] uppercase tracking-widest mb-4"></span>
+                                            <h3 x-text="post.title"
+                                                class="text-2xl font-heading font-black text-secondary mb-4"></h3>
+                                            <p x-text="post.excerpt" class="text-gray-500 text-sm mb-8 leading-relaxed">
+                                            </p>
+                                            <div
+                                                class="flex items-center gap-6 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                                <span x-text="post.date"></span>
+                                                <span x-text="post.readTime"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                        <!-- Sidebar -->
+                        <div class="lg:w-1/3">
+                            <div class="sticky top-32 space-y-12">
+                                <div class="bg-white p-10 rounded-[2.5rem] shadow-xl text-left">
+                                    <h4 class="font-black text-secondary uppercase text-sm mb-6 tracking-widest">Search
+                                        Articles</h4>
+                                    <input type="text" x-model="searchQuery" placeholder="Cari tips..."
+                                        class="w-full bg-stone-50 rounded-2xl py-4 px-6 focus:outline-none ring-primary/20 focus:ring-2 transition-all">
+                                </div>
+                                <div class="bg-secondary p-10 rounded-[2.5rem] shadow-2xl text-center">
+                                    <h3 class="text-white font-black text-xl mb-4 leading-tight">Pipa Mampet Parah?</h3>
+                                    <p class="text-gray-400 text-xs mb-8">Hubungi teknisi handal kami sekarang juga.</p>
+                                    <a href="https://wa.me/6281246668749"
+                                        class="block w-full bg-primary text-white py-4 rounded-xl font-black uppercase text-[10px] tracking-widest">WhatsApp
+                                        SOS</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="bg-secondary text-white pt-24 pb-12">
+            <div class="max-w-7xl mx-auto px-6 text-center">
+                <h4 class="font-heading font-black text-2xl mb-8 uppercase tracking-widest italic">ROOTER<span
+                        class="text-primary">IN</span></h4>
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-[0.3em]">© 2026 RooterIn Indonesia •
+                    Knowledge Center</p>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

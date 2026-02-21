@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Katalog Layanan - RooterIn Indonesia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#22c55e',
+                        secondary: '#0f172a',
+                        accent: '#f97316',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #eee;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased bg-stone-50 text-slate-800">
+    <div id="site-content" class="min-h-screen flex flex-col transition-all duration-300">
+
+        <!-- Navbar -->
+        <nav x-data="{ open: false, scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 50)"
+            class="fixed top-0 left-0 right-0 z-50 pt-4 sm:pt-10 px-3 sm:px-4 transition-all duration-500 ease-in-out">
+            <div :class="scrolled ? 'max-w-7xl py-3' : 'max-w-[85rem] py-4.5 sm:py-5.5'"
+                class="mx-auto bg-secondary/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl transition-all px-6 lg:px-9 flex items-center justify-between">
+                <a href="index.html" class="flex-shrink-0 flex items-center gap-4 group">
+                    <div
+                        class="w-10 h-10 sm:w-12 sm:h-12 bg-primary flex items-center justify-center rounded-2xl group-hover:scale-105 transition-all">
+                        <i class="ri-flashlight-fill text-white text-xl"></i>
+                    </div>
+                    <div class="flex flex-col"><span
+                            class="font-heading font-black text-xl text-white tracking-widest leading-none">ROOTER<span
+                                class="text-primary">IN</span></span></div>
+                </a>
+                <div class="hidden xl:flex items-center space-x-2">
+                    <a href="index.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">Home</a>
+                    <a href="about.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">About</a>
+                    <a href="layanan.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-primary transition-all">Layanan</a>
+                    <a href="galeri.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">Gallery</a>
+                    <a href="tips.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">Tips</a>
+                    <a href="ai-diagnostic.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">AI
+                        Diagnostic</a>
+                    <a href="wiki.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">WikiPipa</a>
+                    <a href="kontak.html"
+                        class="px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-white transition-all">Kontak</a>
+                </div>
+                <a href="https://wa.me/6281246668749"
+                    class="hidden md:block px-6 py-3 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20">WhatsApp
+                    SOS</a>
+            </div>
+        </nav>
+
+        <main class="flex-grow pt-32">
+            <!-- SERVICES HERO -->
+            <section class="py-24 bg-secondary relative overflow-hidden">
+                <div class="max-w-7xl mx-auto px-6 text-center relative z-10">
+                    <div
+                        class="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/10 mb-8">
+                        <span class="text-primary font-black text-[9px] uppercase tracking-[0.3em]">Technical
+                            catalog</span>
+                    </div>
+                    <h1
+                        class="text-5xl md:text-8xl font-heading font-black text-white leading-[0.9] tracking-tighter mb-12">
+                        Katalog Solusi <br> <span class="text-primary italic">Plumbing Modern.</span>
+                    </h1>
+                </div>
+            </section>
+
+            <!-- CATALOG SECTION -->
+            <section x-data="{ 
+                activeCategory: null,
+                categories: [
+                    {
+                        id: 'A',
+                        title: 'Saluran Pembuangan',
+                        icon: 'ri-water-flash-fill',
+                        color: 'primary',
+                        desc: 'Pembersihan saluran mampet dengan teknologi rooting tanpa bongkar.',
+                        items: ['Wastafel Dapur', 'Floor Drain Kamar Mandi', 'Saluran Air Hujan', 'Pipa Sink Restoran'],
+                        pricing: [{ type: 'Standard', price: 'Rp 450k+', note: 'Harga dasar sesuai tingkat kesulitan.' }]
+                    },
+                    {
+                        id: 'B',
+                        title: 'Air Bersih & Toren',
+                        icon: 'ri-drop-fill',
+                        color: 'accent',
+                        desc: 'Perawatan instalasi air bersih dan pembersihan tangki penampungan.',
+                        items: ['Cuci Toren Dasar', 'Cuci Toren & Pipa', 'Sirkulasi Pipa Kerak', 'Instalasi Radar Toren'],
+                        pricing: [{ type: 'Package', price: 'Rp 350k+', note: 'Sudah termasuk disinfeksi tuntas.' }]
+                    },
+                    {
+                        id: 'C',
+                        title: 'Inspeksi & Alat',
+                        icon: 'ri-tools-fill',
+                        color: 'secondary',
+                        desc: 'Audit teknis perpipaan menggunakan sensor dan kamera khusus.',
+                        items: ['Inspeksi Kamera (CCTV)', 'Deteksi Kebocoran Akustik', 'Mapping Jalur Pipa', 'Deep Cleaning Pipa'],
+                        pricing: [{ type: 'Advanced', price: 'Rp 600k+', note: 'Laporan digital forensic lengkap.' }]
+                    }
+                ]
+            }" class="py-32 bg-white relative overflow-hidden">
+                <div class="max-w-7xl mx-auto px-6 relative z-10">
+                    <div class="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
+                        <div class="max-w-2xl text-left">
+                            <h2
+                                class="text-4xl sm:text-6xl font-heading font-black text-secondary leading-tight tracking-tighter">
+                                Solusi Tuntas <br> <span class="text-primary italic">Masalah Saluran.</span>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <template x-for="cat in categories" :key="cat.id">
+                            <div @click="activeCategory = (activeCategory === cat.id ? null : cat.id)"
+                                class="group relative bg-stone-50 rounded-[3rem] p-10 cursor-pointer overflow-hidden transition-all duration-700 hover:-translate-y-4 border border-transparent shadow-sm"
+                                :class="activeCategory === cat.id ? 'border-primary/20 bg-white shadow-2xl ring-4 ring-primary/5' : ''">
+                                <div class="relative z-10">
+                                    <div class="flex items-center justify-between mb-12">
+                                        <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-xl transition-all duration-500"
+                                            :class="activeCategory === cat.id ? 'bg-primary text-white scale-110' : 'bg-white text-gray-400 group-hover:text-primary'">
+                                            <i :class="cat.icon"></i>
+                                        </div>
+                                        <span
+                                            class="px-5 py-2 rounded-full bg-white text-[9px] font-black uppercase tracking-widest text-gray-400 border border-gray-100 shadow-sm"
+                                            x-text="cat.pricing[0].price"></span>
+                                    </div>
+                                    <h3 class="text-2xl font-heading font-black text-secondary tracking-tight mb-4"
+                                        x-text="cat.title"></h3>
+                                    <p class="text-gray-500 text-sm font-medium leading-relaxed mb-8" x-text="cat.desc">
+                                    </p>
+                                    <button
+                                        class="w-full py-4 rounded-2xl flex items-center justify-center gap-4 text-[10px] font-black uppercase tracking-widest transition-all duration-500 shadow-lg"
+                                        :class="activeCategory === cat.id ? 'bg-secondary text-white' : 'bg-white text-secondary group-hover:bg-primary group-hover:text-white'">
+                                        <span
+                                            x-text="activeCategory === cat.id ? 'Tutup Detail' : 'Lihat Detail Layanan'"></span>
+                                        <i class="ri-arrow-right-line"
+                                            :class="activeCategory === cat.id ? 'rotate-90' : ''"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- DRAWERS -->
+                    <template x-for="cat in categories" :key="'drawer-' + cat.id">
+                        <div x-show="activeCategory === cat.id" x-collapse class="mt-12">
+                            <div
+                                class="bg-secondary rounded-[3.5rem] p-12 sm:p-20 text-white relative overflow-hidden shadow-2xl">
+                                <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20">
+                                    <div>
+                                        <h4 class="text-3xl font-heading font-black mb-12 tracking-tight">Detail Lingkup
+                                            <br> <span class="text-white/60 italic">Pekerjaan Kami.</span>
+                                        </h4>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <template x-for="item in cat.items" :key="item">
+                                                <div
+                                                    class="flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5">
+                                                    <div class="w-2 h-2 rounded-full bg-primary"></div>
+                                                    <span class="text-xs font-bold tracking-wide" x-text="item"></span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col justify-between">
+                                        <div>
+                                            <p
+                                                class="text-[10px] text-primary font-black uppercase tracking-widest mb-4">
+                                                Estimasi Biaya</p>
+                                            <div class="p-8 rounded-3xl bg-white text-secondary">
+                                                <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2"
+                                                    x-text="cat.pricing[0].type"></p>
+                                                <p class="text-4xl font-heading font-black mb-2"
+                                                    x-text="cat.pricing[0].price"></p>
+                                                <p class="text-[11px] font-bold text-gray-500 italic"
+                                                    x-text="cat.pricing[0].note"></p>
+                                            </div>
+                                        </div>
+                                        <a href="https://wa.me/6281246668749"
+                                            class="mt-12 w-full bg-primary py-6 rounded-2xl flex items-center justify-center gap-4 text-white font-black uppercase tracking-widest text-xs shadow-xl shadow-primary/20">
+                                            <i class="ri-whatsapp-line text-xl"></i>
+                                            <span>Pesan Layanan Sekarang</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-secondary text-white pt-24 pb-12 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <div class="flex flex-col lg:flex-row justify-between gap-20 mb-20 text-center md:text-left">
+                    <div class="lg:w-1/3">
+                        <div class="flex items-center gap-4 mb-8 justify-center md:justify-start">
+                            <div
+                                class="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-lg transform rotate-12">
+                                <i class="ri-flashlight-fill text-white text-2xl"></i>
+                            </div>
+                            <span class="font-heading font-black text-3xl tracking-tighter uppercase">ROOTER<span
+                                    class="text-primary italic">IN</span></span>
+                        </div>
+                        <p class="text-gray-400 font-medium mb-10 max-w-sm ml-auto mr-auto md:ml-0 md:mr-0">Solusi
+                            perpipaan modern tanpa bongkar.</p>
+                    </div>
+                </div>
+                <div
+                    class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between gap-8 text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em] text-center md:text-left">
+                    <p>© 2026 RooterIn Indonesia • Developed by Ardy Albanna</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>
