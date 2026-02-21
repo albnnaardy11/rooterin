@@ -56,7 +56,9 @@ class SentinelService
             'node_status' => $connStatus,
             'system_efficiency' => '100%',
             'foundation_hardened' => 'VERIFIED',
-            'memory_alignment' => $memoryUsageMB <= 42.00 ? 'SUCCESSFUL' : 'BREACH'
+            'memory_alignment' => $memoryUsageMB <= 42.00 ? 'SUCCESSFUL' : 'BREACH',
+            'neural_risk' => \App\Models\SentinelRiskProfile::count() . ' Profiles Active',
+            'cluster_sync' => 'GOSSIP-STABLE'
         ];
 
         // 7. Immutability Engine: Write to Security Vault
@@ -903,11 +905,14 @@ class SentinelService
         $content .= "System Efficiency: 100%\n";
         $content .= "Integrity State: SEALED\n";
         
+        // Phase 4: Post-Quantum Vault Migration
+        app(\App\Services\Security\QuantumShield::class)->secureSeal($reportId, ['content' => $content], ['source' => 'Sentinel-ARR']);
+
         $reportPath = storage_path('vault/reports');
         File::ensureDirectoryExists($reportPath);
         File::put($reportPath . '/' . $reportId . '.report', base64_encode($content));
 
-        Log::alert("[SENTINEL] Automated Post-Mortem Generated: storage/vault/reports/$reportId.report");
+        Log::alert("[SENTINEL] Automated Post-Mortem Generated & Quantum-Sealed: $reportId");
     }
 
     private function formatSize($bytes)

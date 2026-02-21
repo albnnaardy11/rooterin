@@ -305,7 +305,7 @@
                     <tbody class="divide-y divide-white/5">
                         @foreach($incidents as $incident)
                         <tr class="group hover:bg-white/5 transition-all">
-                            <td class="py-4 text-xs text-slate-400">{{ $incident->created_at->format('H:i:s') }}</td>
+                            <td class="py-4 text-xs text-slate-400">{{ $incident->created_at->format('d/m H:i:s') }}</td>
                             <td class="py-4 text-xs font-bold text-red-500">{{ $incident->metrics['usage'] ?? 'N/A' }}</td>
                             <td class="py-4 text-xs text-white">#{{ $incident->metrics['reboot_attempt'] ?? '1' }}</td>
                             <td class="py-4 text-[10px] text-slate-500 italic">{{ Str::limit($incident->description, 50) }}</td>

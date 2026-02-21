@@ -11,10 +11,12 @@ use Illuminate\Support\Facades\Log;
 class SecurityShield
 {
     protected $security;
+    protected $inference;
 
-    public function __construct(SecurityAutomationService $security)
+    public function __construct(SecurityAutomationService $security, \App\Services\Sentinel\AI\NeuralSentinelInference $inference)
     {
         $this->security = $security;
+        $this->inference = $inference;
     }
 
     /**
@@ -22,7 +24,19 @@ class SecurityShield
      */
     public function handle(Request $request, Closure $next)
     {
-        // 1. Check IP Blocks
+        // 0. Cluster Gossip Check (Phase 2: Global Sync)
+        if (Cache::has("cluster_blacklist:remote_block:{$request->ip()}")) {
+            abort(403, 'Global Cluster Quarantine: Your IP has been flagged by Sentinel Intercom.');
+        }
+
+        // 1. Neural Risk Scoring (Phase 1: Proactive Prediction)
+        $profile = $this->inference->introspectBehavior();
+        if ($profile->trust_score < 10 || $profile->is_bot_probability > 0.95) {
+            $this->security->blockIp($request->ip(), "Neural Risk Failure (Score: {$profile->trust_score}, BotProb: {$profile->is_bot_probability})");
+            abort(403, 'Akses ditolak: Perilaku navigasi tidak wajar (Neural Sentinel Alert).');
+        }
+
+        // 2. Check IP Blocks
         $blockedIps = Cache::get('blocked_ips', []);
         if (in_array($request->ip(), $blockedIps)) {
             abort(403, 'Your IP has been flagged for security violations.');
