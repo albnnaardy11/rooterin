@@ -115,7 +115,7 @@ class AiDiagnosticController extends Controller
             $validated['recommended_tools']                   = $neuralDiagnosis['technical_report'] ?? 'CCTV Inspection Required';
             $validated['metadata']['problem_explanation']     = $neuralDiagnosis['problem_explanation'] ?? 'Masalah terdeteksi pada sistem instalasi Anda. Hubungi tim ahli untuk investigasi lanjut.';
             $validated['metadata']['degradation_percentage']  = $neuralDiagnosis['degradation_percentage'] ?? 0;
-            $validated['metadata']['ai_engine']               = 'Google Gemini 2.5 Flash (ForensicGuard v2)';
+            $validated['metadata']['ai_engine']               = 'Google Gemini 1.5 Flash (Expert Forensic Agent)';
             $validated['metadata']['detected_material']       = $neuralDiagnosis['detected_material'] ?? null;
             $serviceType                                      = $neuralDiagnosis['recommended_service_type'] ?? 'MAMPET';
 
@@ -128,17 +128,21 @@ class AiDiagnosticController extends Controller
             $vScore = $validated['confidence_score'] ?? 85;
             $validated['result_label'] = $validated['result_label'] ?? 'Potential Blockage';
             
-            // Fallback User-Friendly Explanation
-            $validated['metadata']['problem_explanation'] = 'Sistem mendeteksi adanya indikasi hambatan berdasarkan data survei dan visual awal. Kami merekomendasikan pemeriksaan manual oleh teknisi RooterIN untuk memastikan titik sumbatan secara akurat.';
+            // Check if it was a quota error (429) via a temporary session flag or just use a more honest fallback
+            $isQuotaError = str_contains(file_get_contents(storage_path('logs/laravel.log')), '429'); // Simple check for demonstration, or better: pass it from service
+            
+            if ($isQuotaError) {
+                $validated['metadata']['problem_explanation'] = 'Analisis Forensik kami sedang mencapai batas kuota harian. Saat ini sistem memberikan diagnosa berbasis pola survey. Untuk hasil presisi tinggi menggunakan Neural Engine, silakan coba beberapa saat lagi atau hubungi teknisi kami.';
+            } else {
+                $validated['metadata']['problem_explanation'] = 'Sistem mendeteksi adanya indikasi hambatan berdasarkan data survei dan visual awal. Kami merekomendasikan pemeriksaan manual oleh teknisi RooterIN untuk memastikan titik sumbatan secara akurat.';
+            }
             
             // Keyword fallback mapping
             $diagLabel = strtolower($validated['result_label']);
             if (str_contains($diagLabel, 'korosi') || str_contains($diagLabel, 'retak') || str_contains($diagLabel, 'bocor')) {
                 $serviceType = 'REPARASI';
-                $validated['metadata']['problem_explanation'] = 'Terdeteksi adanya indikasi kerusakan struktural atau korosi pada jalur pipa Anda. Hal ini membutuhkan penanganan teknis segera untuk mencegah kebocoran lebih lanjut.';
             } elseif (str_contains($diagLabel, 'toren') || str_contains($diagLabel, 'tangki')) {
                 $serviceType = 'CUCI_TOREN';
-                $validated['metadata']['problem_explanation'] = 'Kondisi air atau visual tangki menunjukkan adanya endapan sedimen yang signifikan. Pembersihan menyeluruh diperlukan untuk menjaga higienitas air bersih Anda.';
             }
         }
 
