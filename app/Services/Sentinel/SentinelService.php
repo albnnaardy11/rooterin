@@ -291,19 +291,8 @@ class SentinelService
 
     protected function repairAiCore()
     {
-        $modelsPath = public_path('models');
-        if (!File::isDirectory($modelsPath)) {
-            File::makeDirectory($modelsPath, 0755, true);
-        }
-
-        $requiredFiles = ['vision-model.json', 'vision-model.bin', 'audio-classifier.json', 'audio-classifier.bin'];
-        foreach ($requiredFiles as $file) {
-            if (!File::exists($modelsPath . '/' . $file)) {
-                // Self-healing: In production we'd re-download, here we ensure the path is ready or create placeholder
-                File::put($modelsPath . '/' . $file, json_encode(['version' => '1.0', 'status' => 'Recovered']));
-                Log::info("[SENTINEL] AI Core: Restored missing file $file");
-            }
-        }
+        // Legacy AI Core Restoration decommissioned - system migrated to Gemini Cloud AI
+        Log::info("[SENTINEL] AI Core: Skipping legacy recovery (System Migrated to Gemini).");
 
         $workerPath = public_path('assets/ai/workers');
         if (!File::isDirectory($workerPath)) File::makeDirectory($workerPath, 0755, true);
@@ -394,12 +383,7 @@ class SentinelService
     protected function checkAiIntegrity()
     {
         $modelsPath = public_path('models');
-        $requiredFiles = [
-            'vision-model.json',
-            'vision-model.bin',
-            'audio-classifier.json',
-            'audio-classifier.bin'
-        ];
+        $requiredFiles = []; // Legacy local models decommissioned
 
         $files = [];
         $healthyCount = 0;
@@ -414,8 +398,8 @@ class SentinelService
             ];
         }
 
-        // Web Worker Heartbeat
-        $workerExists = File::exists(public_path('assets/ai/workers/ai-processor.js'));
+        // Web Worker Heartbeat - Legacy
+        $workerExists = false;
 
         // Neural Performance (FPS/Inference Speed)
         // In a real setup, this would be updated via a /api/sentinel/heartbeat endpoint from the client

@@ -6,13 +6,21 @@ export default defineConfig({
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js'],
-            refresh: true,
+            refresh: [
+                {
+                    paths: ['resources/views/**'],
+                    config: { delay: 500 } // Add throttle to avoid rapid reloads
+                }
+            ],
         }),
         tailwindcss(),
     ],
     server: {
         watch: {
-            ignored: ['**/storage/framework/views/**'],
+            ignored: [
+                '**/storage/**',
+                '**/public/sitemap.xml'
+            ],
         },
     },
 });

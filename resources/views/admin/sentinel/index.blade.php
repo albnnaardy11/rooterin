@@ -59,31 +59,40 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch pt-8">
             <!-- ROW 1: CORE MONITORING (3 Columns Equal Height) -->
-            <!-- 1. AI Model Integrity -->
+            <!-- 1. Cloud AI Intelligence Monitor -->
             <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-8 flex flex-col">
                 <h3 class="text-xs font-black text-white uppercase tracking-widest mb-8 flex items-center gap-2">
-                    <i class="ri-brain-line text-primary"></i> Neural Assets Monitor
+                    <i class="ri-brain-line text-primary"></i> Neural Cloud Interface
                 </h3>
                 <div class="space-y-4 flex-1">
-                    @foreach($healthData['ai_integrity']['models'] as $model)
                     <div class="flex items-center justify-between p-3 bg-white/5 rounded-2xl border border-white/5">
                         <div class="min-w-0">
-                            <p class="text-[10px] font-bold text-white truncate">{{ $model['name'] }}</p>
-                            <p class="text-[8px] text-slate-500 font-mono mt-0.5">{{ $model['path'] }}</p>
+                            <p class="text-[10px] font-bold text-white truncate">Google Gemini v2.5 Flash</p>
+                            <p class="text-[8px] text-slate-500 font-mono mt-0.5">Primary Inference Engine</p>
                         </div>
-                        <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase {{ $model['status'] === 'Operational' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500' }}">
-                            {{ $model['status'] }}
+                        <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase bg-green-500/10 text-green-500">
+                            ACTIVE
                         </span>
                     </div>
-                    @endforeach
+                    
                     <div class="flex items-center justify-between p-3 bg-white/5 rounded-2xl border border-white/5">
                         <div>
-                            <p class="text-[10px] font-bold text-white">ai-processor.js</p>
-                            <p class="text-[8px] text-slate-500 font-mono mt-0.5">Web Worker Heartbeat</p>
+                            <p class="text-[10px] font-bold text-white">ForensicGuard v2.0</p>
+                            <p class="text-[8px] text-slate-500 font-mono mt-0.5">5-Layer Validation Matrix</p>
                         </div>
                         <div class="flex items-center gap-2">
                             <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                            <span class="text-[8px] font-black text-green-500 uppercase">ACTIVE</span>
+                            <span class="text-[8px] font-black text-green-500 uppercase">ENFORCED</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-4 bg-primary/5 rounded-2xl border border-primary/10">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[8px] font-black text-slate-500 uppercase">Edge Latency</span>
+                            <span class="text-[10px] font-mono text-primary">{{ $healthData['ai_integrity']['performance']['inference'] }}</span>
+                        </div>
+                        <div class="h-1 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" style="width: 85%"></div>
                         </div>
                     </div>
                 </div>

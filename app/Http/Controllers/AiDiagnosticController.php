@@ -107,10 +107,13 @@ class AiDiagnosticController extends Controller
         $serviceType     = 'MAMPET';
         $materialWarning = null;  // LAYER 3 output — surfaced to frontend
 
+        \Illuminate\Support\Facades\Log::info('[ForensicAI] Raw Neural Diagnosis Data:', ['data' => $neuralDiagnosis]);
+
         if ($neuralDiagnosis && is_array($neuralDiagnosis)) {
             $validated['result_label']                        = $neuralDiagnosis['diagnosis'] ?? 'Neural Blockage Detect';
             $vScore                                           = $neuralDiagnosis['blockage_percentage'] ?? 80;
             $validated['recommended_tools']                   = $neuralDiagnosis['technical_report'] ?? 'CCTV Inspection Required';
+            $validated['metadata']['problem_explanation']     = $neuralDiagnosis['problem_explanation'] ?? 'Masalah terdeteksi pada sistem instalasi Anda. Hubungi tim ahli untuk investigasi lanjut.';
             $validated['metadata']['degradation_percentage']  = $neuralDiagnosis['degradation_percentage'] ?? 0;
             $validated['metadata']['ai_engine']               = 'Google Gemini 2.5 Flash (ForensicGuard v2)';
             $validated['metadata']['detected_material']       = $neuralDiagnosis['detected_material'] ?? null;
@@ -125,10 +128,18 @@ class AiDiagnosticController extends Controller
             $vScore = $validated['confidence_score'] ?? 85;
             $validated['result_label'] = $validated['result_label'] ?? 'Potential Blockage';
             
+            // Fallback User-Friendly Explanation
+            $validated['metadata']['problem_explanation'] = 'Sistem mendeteksi adanya indikasi hambatan berdasarkan data survei dan visual awal. Kami merekomendasikan pemeriksaan manual oleh teknisi RooterIN untuk memastikan titik sumbatan secara akurat.';
+            
             // Keyword fallback mapping
             $diagLabel = strtolower($validated['result_label']);
-            if (str_contains($diagLabel, 'korosi') || str_contains($diagLabel, 'retak') || str_contains($diagLabel, 'bocor')) $serviceType = 'REPARASI';
-            elseif (str_contains($diagLabel, 'toren') || str_contains($diagLabel, 'tangki')) $serviceType = 'CUCI_TOREN';
+            if (str_contains($diagLabel, 'korosi') || str_contains($diagLabel, 'retak') || str_contains($diagLabel, 'bocor')) {
+                $serviceType = 'REPARASI';
+                $validated['metadata']['problem_explanation'] = 'Terdeteksi adanya indikasi kerusakan struktural atau korosi pada jalur pipa Anda. Hal ini membutuhkan penanganan teknis segera untuk mencegah kebocoran lebih lanjut.';
+            } elseif (str_contains($diagLabel, 'toren') || str_contains($diagLabel, 'tangki')) {
+                $serviceType = 'CUCI_TOREN';
+                $validated['metadata']['problem_explanation'] = 'Kondisi air atau visual tangki menunjukkan adanya endapan sedimen yang signifikan. Pembersihan menyeluruh diperlukan untuk menjaga higienitas air bersih Anda.';
+            }
         }
 
         $aScore = $validated['audio_confidence'] ?? 0;
@@ -186,12 +197,14 @@ class AiDiagnosticController extends Controller
                 'status' => 'pending'
             ]);
 
-            // Optional cache eviction
+            // Optional cache eviction - disabled to avoid triggering Vite reload
+            /*
             try {
                 \Illuminate\Support\Facades\Cache::forget('ai_intelligence_heatmap');
             } catch (\Exception $e) {
                 \Illuminate\Support\Facades\Log::warning("Cache eviction failed: " . $e->getMessage());
             }
+            */
 
             return response()->json([
                 'success'          => true,

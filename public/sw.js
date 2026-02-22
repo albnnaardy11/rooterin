@@ -3,16 +3,14 @@
  * Handles Offline-First capabilities and asset caching for AI Diagnostic
  */
 
-const CACHE_NAME = 'rooterin-ai-v2'; // Updated version
+const CACHE_NAME = 'rooterin-ai-v3-gemini'; // Migration to Gemini Vision
 const ASSETS_TO_CACHE = [
-    '/assets/ai/workers/ai-processor.js',
-    'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0',
     'https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css'
 ];
 
 self.addEventListener('install', (event) => {
-    // NOTE: skipWaiting() removed — it caused forced page reloads via clients.claim()
-    // The new SW will wait until all tabs are closed before activating.
+    // FORCE immediate activation of new version
+    self.skipWaiting();
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
             return cache.addAll(ASSETS_TO_CACHE);
@@ -21,7 +19,9 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-    // NOTE: clients.claim() removed — it caused all open tabs to reload when SW updated.
+    // Take control of all pages immediately 
+    event.waitUntil(clients.claim());
+    
     // Clean up old caches only
     event.waitUntil(
         caches.keys().then((cacheNames) => {

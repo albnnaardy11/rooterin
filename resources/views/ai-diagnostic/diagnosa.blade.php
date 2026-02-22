@@ -378,7 +378,7 @@ function rtShowRejection(iconClass, title, reason, hint, color) {
             <p style="color:#4ade80;font-size:.78rem;font-weight:700;line-height:1.6;margin:0">${hint}</p>
         </div>
 
-        <button onclick="rtCloseModal(event); rtResetToStep0();" style="width:100%;padding:1.2rem;background:${color};color:#fff;border:none;border-radius:1.2rem;font-weight:900;font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.75rem;box-shadow:0 10px 30px ${color}44;transition:all .3s">
+        <button type="button" onclick="rtCloseModal(event); rtResetToStep0();" style="width:100%;padding:1.2rem;background:${color};color:#fff;border:none;border-radius:1.2rem;font-weight:900;font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.75rem;box-shadow:0 10px 30px ${color}44;transition:all .3s">
             <i class="ri-camera-lens-fill" style="font-size:1.2rem"></i> Ambil Foto Ulang
         </button>
     </div>`;
@@ -412,34 +412,42 @@ function rtShowResult(res, materialWarning){
     _btnState('btn-g', false, 'Generate Ulang');
     _diag.busy = false;
 
-    if (!res) {
-        console.warn('[DEBUG] Using Fallback - Server response missing or error.');
+    // Inject template into modal BEFORE accessing elements
+    const template = _el('rt-modal-template');
+    const modal = _el('rt-modal');
+    if (template && modal) {
+        modal.innerHTML = template.innerHTML;
     }
 
-    // Use server result if available, otherwise fallback to local diag structure
-    const finalData = res || {};
-    const modelData = res.data || {}; // Handle lead model if present
+    // Defensive data handling
+    const modelData = (res && res.data) ? res.data : {};
+    const finalRes = res || {};
 
     try {
-        _el('m-id').textContent    = res.diagnose_id || modelData.diagnose_id || 'RT-UNKNOWN';
-        _el('m-rank').textContent  = res.deep_ranking || modelData.final_deep_score || '?';
+        const meta = modelData.metadata || {};
+        _el('m-id').textContent    = finalRes.diagnose_id || modelData.diagnose_id || 'RT-UNKNOWN';
+        _el('m-rank').textContent  = finalRes.deep_ranking || modelData.final_deep_score || '?';
         _el('m-title').textContent = modelData.result_label || 'Analysis Complete';
-        _el('m-rec').textContent   = modelData.result_label || 'Analisis Selesai';
+        _el('m-rec').textContent   = finalRes.result_label || modelData.result_label || 'Analisis Selesai';
         
-        var toolsText = modelData.recommended_tools || 'Pemeriksaan manual dibutuhkan.';
-        _el('m-tools').innerHTML   = toolsText.replace(/\. /g, '.<br><br>');
+        // Show Deep Problem Explanation (User Friendly)
+        var explanation = (modelData.metadata && modelData.metadata.problem_explanation) || meta.problem_explanation || 'Analisis mendalam selesai. Teknisi kami siap membantu investigasi lapangan.';
+        _el('m-explanation').innerHTML = explanation.replace(/\. /g, '.<br><br>');
+        
+        // Show Deep Technical Report (Professional)
+        var report = modelData.recommended_tools || meta.technical_report || 'Prosedur pembersihan mekanis dengan teknologi Rooter diperlukan.';
+        _el('m-tools').innerHTML   = report.replace(/\n/g, '<br>').replace(/\. /g, '.<br><br>');
         
         // Integrated Service Link
-        const meta = modelData.metadata || {};
-        const serviceSlug = meta.recommended_service_slug || 'saluran-pembuangan-mampet';
-        const serviceName = meta.recommended_service_name || 'Saluran Pembuangan Mampet';
+        const serviceSlug = (modelData.metadata && modelData.metadata.recommended_service_slug) || meta.recommended_service_slug || 'saluran-pembuangan-mampet';
+        const serviceName = (modelData.metadata && modelData.metadata.recommended_service_name) || meta.recommended_service_name || 'Saluran Pembuangan Mampet';
         _diag.targetServiceUrl = '/layanan/' + serviceSlug;
         
         if (_el('m-service')) _el('m-service').textContent = serviceName;
 
         // Visual Updates
         const colors = { 'A':'#ef4444', 'B':'#f97316', 'C':'#eab308', 'D':'#22c55e', 'E':'#3b82f6' };
-        const colorCode = res.deep_ranking || modelData.final_deep_score || 'B';
+        const colorCode = finalRes.deep_ranking || modelData.final_deep_score || 'B';
         const color = colors[colorCode] || '#64748b';
         _el('m-rank').style.color = color;
 
@@ -456,16 +464,19 @@ function rtShowResult(res, materialWarning){
         
         _toast(res ? '<i class="ri-checkbox-circle-fill"></i> Diagnosis ForensicAI Selesai!' : 'Diagnosis Fallback Aktif (Offline)', !res);
         
-        // Final Display Trigger
+        // Final Display Trigger - Added 300ms safety buffer to ensure stability
         setTimeout(function(){ 
             var m = _el('rt-modal');
             if (m) {
+                console.log('[SRE] Modal State: HIDDEN - Triggering FORCE_DISPLAY');
                 m.style.setProperty('display', 'flex', 'important');
                 m.style.setProperty('opacity', '1', 'important');
                 m.style.setProperty('visibility', 'visible', 'important');
-                console.log('[DEBUG] Modal Display Triggered Successfully');
+                console.log('[SRE] Modal Display: SUCCESS');
+            } else {
+                console.error('[SRE] Modal Element not found in DOM!');
             }
-        }, 100);
+        }, 300);
     } catch (err) {
         console.error('[FATAL] Modal Injection Error:', err);
         _toast('Gagal memproses data laporan', true);
@@ -561,100 +572,73 @@ document.addEventListener('keydown', function(e){
 {{-- ============================================================
      RESULT MODAL
      ============================================================ --}}
-<div id="rt-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,.97);backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:1rem">
-    <div onclick="event.stopPropagation()" style="position:relative;width:100%;max-width:38rem;background:#0f172a;border:1px solid rgba(255,255,255,.08);border-radius:2.5rem;padding:2.5rem;max-height:85vh;overflow-y:auto;box-shadow:0 0 100px rgba(34,197,94,.15);scrollbar-width:thin;scrollbar-color:#1e293b transparent">
-        
-        {{-- Close btn --}}
-        <button id="rt-close-x" onclick="rtCloseModal(event)" style="position:absolute;top:1.5rem;right:1.5rem;background:rgba(255,255,255,.05);border:none;width:2.5rem;height:2.5rem;border-radius:50%;color:#64748b;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;font-size:1.2rem;transition:all .3s"><i class="ri-close-line"></i></button>
-
-        {{-- Rank --}}
-        <div style="display:flex;justify-content:center;margin-bottom:1.5rem">
-            <div style="width:7rem;height:7rem;border-radius:50%;padding:.2rem;background:linear-gradient(135deg,#4ade80,#fb923c,#ea580c)">
-                <div style="width:100%;height:100%;background:#020617;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center">
-                    <span id="m-rank" style="font-size:3.5rem;font-weight:900;color:#fff;font-style:italic;line-height:1">?</span>
-                    <span style="font-size:.55rem;font-weight:900;color:#475569;text-transform:uppercase;letter-spacing:.15em;margin-top:.2rem">AI Score</span>
-                </div>
-            </div>
-        </div>              
-    
-        {{-- Title & ID --}}
-        <div style="text-align:center;margin-bottom:1.25rem">
-            <h2 id="m-title" style="font-size:1.05rem;font-weight:900;color:#fff;margin:0 0 .75rem;line-height:1.3">Menganalisa...</h2>
-            <div style="display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .85rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:5rem">
-                <span style="width:.5rem;height:.5rem;background:#22c55e;border-radius:50%;display:inline-block"></span>
-                <span style="font-size:.6rem;font-weight:900;color:#475569;text-transform:uppercase;letter-spacing:.12em">ID: <span id="m-id">—</span></span>
-            </div>
-        </div>                                                                          
-
-        {{-- Recommendation --}}
-        <div style="background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.15);border-radius:1.2rem;padding:1.4rem;margin-bottom:.85rem">
-            <div style="font-size:.6rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.6rem">Diagnosa Utama</div>
-            <p id="m-rec" style="color:#fff;font-size:.95rem;font-weight:700;line-height:1.5;margin:0;letter-spacing:-0.01em">—</p>
-        </div>
-        {{-- Layer 3: Material Mismatch Warning Banner --}}
-        <div id="m-material-warn" style="display:none;background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.3);color:#eab308;font-size:.7rem;padding:.75rem;border-radius:.75rem;margin-bottom:1rem;font-weight:700;line-height:1.4"></div>
-
-        <div style="background:rgba(2,6,23,.8);border:1px solid rgba(255,255,255,.05);border-radius:1rem;padding:1.1rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:.85rem">
-            <div style="width:2.75rem;height:2.75rem;background:rgba(249,115,22,.1);border-radius:.65rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" style="width:1.2rem;height:1.2rem"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-            </div>
-            <div>
-                <div style="font-size:.6rem;font-weight:900;color:#475569;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.3rem">Alat Teknis</div>
-                <p id="m-tools" style="color:#e2e8f0;font-size:.75rem;font-weight:600;line-height:1.4;margin:0">—</p>
-            </div>
-        </div>
-
-        {{-- CTA --}}
-        <button onclick="rtPesanLayanan()" style="width:100%;padding:1.1rem;background:#fff;color:#0f172a;border:none;border-radius:1.2rem;font-weight:900;font-size:.7rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:.6rem;box-shadow:0 10px 30px rgba(255,255,255,0.1)">
-            PESAN LAYANAN SEKARANG
-        </button>
-        {{-- WhatsApp CTA --}}
-        <a id="m-wa" href="#" target="_blank" style="width:100%;padding:1rem;background:#22c55e;color:#fff;text-decoration:none;border-radius:1.2rem;font-weight:900;font-size:.7rem;text-transform:uppercase;letter-spacing:.15em;display:flex;align-items:center;justify-content:center;gap:.6rem;transition:all .3s">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:1.2rem;height:1.2rem"><path d="M12.011 2c-5.511 0-9.989 4.478-9.989 9.989 0 1.762.459 3.415 1.259 4.856l-1.281 4.673 4.783-1.255c1.405.748 3.003 1.177 4.703 1.177 5.511 0 9.989-4.478 9.989-9.989S17.521 2 12.011 2zm0 16.5c-1.579 0-3.056-.445-4.312-1.215l-.31-.188-2.613.685.698-2.541-.212-.338c-.859-1.371-1.351-2.99-1.351-4.724 0-4.68 3.809-8.489 8.489-8.489s8.489 3.809 8.489 8.489-3.809 8.489-8.489 8.489z"/></svg>
-            Konsultasi WhatsApp
-        </a>
-    </div>
+<div id="rt-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(2,6,23,.98);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);align-items:center;justify-content:center;padding:1.5rem;overflow:hidden">
+    {{-- Content injected via rt-modal-template --}}
 </div>
 
-{{-- Template to restore modal state after rejection --}}
+{{-- ============================================================
+     RESULT MODAL TEMPLATE (Used for JS Injection)
+     ============================================================ --}}
 <script id="rt-modal-template" type="text/template">
-    <div onclick="event.stopPropagation()" style="position:relative;width:100%;max-width:38rem;background:#0f172a;border:1px solid rgba(255,255,255,.08);border-radius:2.5rem;padding:2.5rem;max-height:85vh;overflow-y:auto;box-shadow:0 0 100px rgba(34,197,94,.15);">
-        <button id="rt-close-x" onclick="rtCloseModal(event)" style="position:absolute;top:1.5rem;right:1.5rem;background:rgba(255,255,255,.05);border:none;width:2.5rem;height:2.5rem;border-radius:50%;color:#64748b;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;font-size:1.2rem;"><i class="ri-close-line"></i></button>
-        <div style="display:flex;justify-content:center;margin-bottom:1.5rem">
-            <div style="width:7rem;height:7rem;border-radius:50%;padding:.2rem;background:linear-gradient(135deg,#4ade80,#fb923c,#ea580c)">
-                <div style="width:100%;height:100%;background:#020617;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center">
-                    <span id="m-rank" style="font-size:3.5rem;font-weight:900;color:#fff;font-style:italic;line-height:1">?</span>
-                    <span style="font-size:.55rem;font-weight:900;color:#475569;text-transform:uppercase;letter-spacing:.15em;margin-top:.2rem">AI Score</span>
+    <div onclick="event.stopPropagation()" style="position:relative;width:100%;max-width:38rem;background:#0f172a;border:1px solid rgba(255,255,255,.05);border-radius:2.5rem;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 0 80px rgba(0,0,0,0.5);">
+        <div style="padding:2.5rem;overflow-y:auto" class="custom-scrollbar">
+            <button type="button" id="rt-close-x" onclick="rtCloseModal(event)" style="position:absolute;top:1.5rem;right:1.5rem;background:rgba(255,255,255,.03);border:none;width:2.2rem;height:2.2rem;border-radius:50%;color:#475569;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;font-size:1.1rem;"><i class="ri-close-line"></i></button>
+        
+        {{-- AI Score Badge --}}
+        <div style="display:flex;justify-content:center;margin-bottom:1.8rem">
+            <div style="width:7.5rem;height:7.5rem;border-radius:50%;padding:.25rem;background:linear-gradient(135deg,#22c55e,#f97316,#ef4444)">
+                <div style="width:100%;height:100%;background:#0f172a;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                    <span id="m-rank" style="font-size:3.8rem;font-weight:900;color:#fff;font-style:italic;line-height:1;letter-spacing:-0.05em">E</span>
+                    <span style="font-size:.5rem;font-weight:900;color:#475569;text-transform:uppercase;letter-spacing:.2em;margin-top:.2rem">AI Score</span>
                 </div>
             </div>
         </div>
-        <div style="text-align:center;margin-bottom:1.25rem">
-            <h2 id="m-title" style="font-size:1.05rem;font-weight:900;color:#fff;margin:0 0 .75rem;line-height:1.3">Menganalisa...</h2>
-            <div style="display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .85rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:5rem">
-                <span style="width:.5rem;height:.5rem;background:#22c55e;border-radius:50%;display:inline-block"></span>
-                <span style="font-size:.6rem;font-weight:900;color:#475569;text-transform:uppercase;letter-spacing:.12em">ID: <span id="m-id">&mdash;</span></span>
+
+        {{-- Main Title --}}
+        <div style="text-align:center;margin-bottom:1.5rem">
+            <h2 id="m-title" style="font-size:1.15rem;font-weight:900;color:#fff;margin:0 0 .85rem;line-height:1.4;padding:0 1rem">Menganalisa...</h2>
+            
+            {{-- ID Pill Badge --}}
+            <div style="display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:5rem">
+                <span style="width:.45rem;height:.45rem;background:#22c55e;border-radius:50%;display:inline-block;box-shadow:0 0 10px #22c55e"></span>
+                <span style="font-size:.65rem;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:.12em">ID: <span id="m-id" style="color:#64748b">#RT-2026-XXXX</span></span>
             </div>
         </div>
-        <div style="background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.15);border-radius:1.2rem;padding:1.4rem;margin-bottom:.85rem">
-            <div style="font-size:.6rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.6rem">Diagnosa Utama</div>
-            <p id="m-rec" style="color:#fff;font-size:.95rem;font-weight:700;line-height:1.5;margin:0;">&mdash;</p>
+
+        {{-- Diagnosa Utama Section --}}
+        <div style="background:rgba(34,197,94,.03);border:1px solid rgba(255,255,255,.03);border-radius:1.5rem;padding:1.5rem;margin-bottom:.85rem">
+            <div style="font-size:.6rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem">Diagnosa Utama</div>
+            <p id="m-rec" style="color:#fff;font-size:1rem;font-weight:700;line-height:1.5;margin:0;letter-spacing:-0.01em">&mdash;</p>
         </div>
-        <div style="background:rgba(59,130,246,.04);border:1px solid rgba(59,130,246,.15);border-radius:1rem;padding:1.1rem;margin-bottom:.75rem">
-            <div style="font-size:.6rem;font-weight:900;color:#3b82f6;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.5rem">Layanan RooterIN</div>
-            <p id="m-service" style="color:#fff;font-size:1rem;font-weight:900;line-height:1.3;margin:0">Saluran Pembuangan Mampet</p>
+
+        {{-- Analisis Masalah (NEW) --}}
+        <div id="m-explanation-card" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,.03);border-radius:1.5rem;padding:1.5rem;margin-bottom:.85rem">
+            <div style="font-size:.6rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem">Analisis Masalah</div>
+            <p id="m-explanation" style="color:#94a3b8;font-size:.85rem;font-weight:500;line-height:1.6;margin:0">&mdash;</p>
         </div>
-        <div id="m-material-warn" style="display:none;background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.3);color:#eab308;font-size:.7rem;padding:.75rem;border-radius:.75rem;margin-bottom:1rem;font-weight:700;line-height:1.4"></div>
-        <div style="background:rgba(2,6,23,.8);border:1px solid rgba(255,255,255,.05);border-radius:1rem;padding:1.1rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:.85rem">
-            <div style="width:2.75rem;height:2.75rem;background:rgba(249,115,22,.1);border-radius:.65rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" style="width:1.2rem;height:1.2rem"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+
+        {{-- Layanan Section --}}
+        <div style="background:rgba(59,130,246,.03);border:1px solid rgba(255,255,255,.03);border-radius:1.5rem;padding:1.5rem;margin-bottom:.85rem">
+            <div style="font-size:.6rem;font-weight:900;color:#3b82f6;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem">Layanan RooterIN</div>
+            <p id="m-service" style="color:#fff;font-size:1.05rem;font-weight:800;line-height:1.4;margin:0">Instalasi Sanitary & Pipa</p>
+        </div>
+
+        <div id="m-material-warn" style="display:none;background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.2);color:#eab308;font-size:.75rem;padding:1rem;border-radius:1rem;margin-bottom:.85rem;font-weight:700;line-height:1.4"></div>
+
+        {{-- Technical Report Section (Rencana Penanganan) --}}
+        <div style="background:rgba(249,115,22,0.03);border:1px solid rgba(255,255,255,.03);border-radius:1.5rem;padding:1.5rem;margin-bottom:.85rem;position:relative">
+            <div style="font-size:.6rem;font-weight:900;color:#f97316;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.75rem">Rencana Penanganan</div>
+            <div id="m-tools" style="color:#fff;font-size:1rem;font-weight:700;line-height:1.5;margin:0;letter-spacing:-0.01em">
+                &mdash;
             </div>
-            <div>
-                <div style="font-size:.6rem;font-weight:900;color:#475569;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.3rem">Alat Teknis</div>
-                <p id="m-tools" style="color:#e2e8f0;font-size:.75rem;font-weight:600;line-height:1.4;margin:0;">&mdash;</p>
-            </div>
         </div>
-        <button onclick="rtPesanLayanan()" style="width:100%;padding:1.1rem;background:#fff;color:#0f172a;border:none;border-radius:1.2rem;font-weight:900;font-size:.7rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:.6rem;">PESAN LAYANAN SEKARANG</button>
-        <a id="m-wa" href="#" target="_blank" style="width:100%;padding:1rem;background:#22c55e;color:#fff;text-decoration:none;border-radius:1.2rem;font-weight:900;font-size:.7rem;text-transform:uppercase;letter-spacing:.15em;display:flex;align-items:center;justify-content:center;gap:.6rem;">Konsultasi WhatsApp</a>
+
+        {{-- Actions --}}
+        <div style="display:grid;gap:.75rem">
+            <button type="button" onclick="rtPesanLayanan()" style="width:100%;padding:1.2rem;background:#fff;color:#0f172a;border:none;border-radius:1.2rem;font-weight:900;font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer;box-shadow:0 10px 20px rgba(255,255,255,0.05)">PESAN LAYANAN SEKARANG</button>
+            <a id="m-wa" href="#" target="_blank" style="width:100%;padding:1.1rem;background:#22c55e;color:#fff;text-decoration:none;border-radius:1.2rem;font-weight:900;font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;display:flex;align-items:center;justify-content:center;gap:.6rem;transition:all .3s">Konsultasi WhatsApp</a>
+        </div>
+        </div>
     </div>
 </script>
 
@@ -720,22 +704,8 @@ document.addEventListener('keydown', function(e){
                             </div>
                         </div>
                     </div>
-                    <div style="padding:1.1rem;display:flex;flex-direction:column;gap:.5rem">
-                        <button id="btn-v" onclick="rtVision()"
-                                style="width:100%;padding:1rem;background:#fff;color:#0f172a;border:none;border-radius:.85rem;font-weight:900;font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer">
-                            Analyze Visual
-                        </button>
-                        <label style="cursor:pointer;color:#94a3b8;font-size:.6rem;font-weight:900;text-transform:uppercase;margin:0;padding:.8rem;background:rgba(255,255,255,.05);border-radius:.85rem;text-align:center;display:block">
-                            ATAU UPLOAD FOTO SENDIRI
-                            <input type="file" accept="image/*" style="display:none" onchange="rtUploadFile(this)">
-                        </label>
-                    </div>
-                </div>
-
-                {{-- ── STEP 2: SURVEY ── --}}
-                    </div>
                     <div style="padding:1.5rem;display:flex;flex-direction:column;gap:.75rem">
-                        <button id="btn-v" onclick="rtVision()"
+                        <button type="button" id="btn-v" onclick="rtVision()"
                                 style="width:100%;padding:1.1rem;background:#fff;color:#0f172a;border:none;border-radius:1.2rem;font-weight:900;font-size:.75rem;text-transform:uppercase;letter-spacing:.15em;cursor:pointer;box-shadow:0 10px 30px rgba(255,255,255,.1)">
                             Mulai Analisis Visual
                         </button>
@@ -747,6 +717,7 @@ document.addEventListener('keydown', function(e){
                 </div>
 
                 {{-- ── STEP 2: SURVEY ── --}}
+
                 <div id="s2" style="display:none">
                     <div style="padding:1.5rem 1.5rem .75rem;border-bottom:1px solid rgba(255,255,255,.05)">
                         <h3 style="color:#fff;font-weight:900;font-size:.75rem;text-transform:uppercase;letter-spacing:.2em;margin:0 0 .5rem">Technical Survey</h3>
@@ -757,17 +728,17 @@ document.addEventListener('keydown', function(e){
                         {{-- Lokasi --}}
                         <div id="loc-wrap" style="margin-bottom:1.5rem;position:relative">
                             <div style="font-size:.6rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.6rem">Lokasi Perpipaan</div>
-                            <button onclick="rtLocToggle()"
+                            <button type="button" onclick="rtLocToggle()"
                                     style="width:100%;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:1rem;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;color:#fff;font-size:.7rem;font-weight:700;text-transform:uppercase;cursor:pointer;transition:all .3s">
                                 <span id="loc-lbl">Konfigurasi Jalur...</span>
                                 <i class="ri-arrow-down-s-line" style="font-size:1rem;color:#22c55e"></i>
                             </button>
                             <div id="loc-d" style="display:none;position:absolute;z-index:50;top:100%;left:0;right:0;margin-top:.5rem;background:#0f172a;border:1px solid rgba(255,255,255,.1);border-radius:1.2rem;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.8);backdrop-filter:blur(30px)">
-                                <button onclick="rtLocSel('wastafel_dapur','Wastafel Dapur')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Wastafel Dapur (Grease)</button>
-                                <button onclick="rtLocSel('toilet_closet','Toilet / Closet')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Toilet / Closet</button>
-                                <button onclick="rtLocSel('floor_drain_km','Floor Drain KM')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Floor Drain KM</button>
-                                <button onclick="rtLocSel('kitchen_main','Jalur Utama Sink')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Jalur Utama Sink</button>
-                                <button onclick="rtLocSel('external_gutter','Talang / Selokan')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent">Talang / Selokan</button>
+                                <button type="button" onclick="rtLocSel('wastafel_dapur','Wastafel Dapur')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Wastafel Dapur (Grease)</button>
+                                <button type="button" onclick="rtLocSel('toilet_closet','Toilet / Closet')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Toilet / Closet</button>
+                                <button type="button" onclick="rtLocSel('floor_drain_km','Floor Drain KM')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Floor Drain KM</button>
+                                <button type="button" onclick="rtLocSel('kitchen_main','Jalur Utama Sink')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)">Jalur Utama Sink</button>
+                                <button type="button" onclick="rtLocSel('external_gutter','Talang / Selokan')" style="width:100%;text-align:left;padding:1rem 1.25rem;font-size:.65rem;font-weight:700;color:#94a3b8;text-transform:uppercase;cursor:pointer;border:none;background:transparent">Talang / Selokan</button>
                             </div>
                         </div>
 
@@ -775,27 +746,27 @@ document.addEventListener('keydown', function(e){
                         <div style="margin-bottom:1.5rem">
                             <div style="font-size:.6rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.6rem">Material Instalasi</div>
                             <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">
-                                <button id="mat-pvc" onclick="rtMat('pvc')" style="padding:.9rem;background:#22c55e;color:#0f172a;border:none;border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;transition:all .3s">PVC / Plastik</button>
-                                <button id="mat-besi" onclick="rtMat('besi')" style="padding:.9rem;background:rgba(255,255,255,.04);color:#64748b;border:1px solid rgba(255,255,255,.06);border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;transition:all .3s">Cast Iron / Besi</button>
-                                <button id="mat-flex" onclick="rtMat('fleksibel')" style="padding:.9rem;background:rgba(255,255,255,.04);color:#64748b;border:1px solid rgba(255,255,255,.06);border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;grid-column:1/-1;transition:all .3s">Selang Fleksibel</button>
+                                <button type="button" id="mat-pvc" onclick="rtMat('pvc')" style="padding:.9rem;background:#22c55e;color:#0f172a;border:none;border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;transition:all .3s">PVC / Plastik</button>
+                                <button type="button" id="mat-besi" onclick="rtMat('besi')" style="padding:.9rem;background:rgba(255,255,255,.04);color:#64748b;border:1px solid rgba(255,255,255,.06);border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;transition:all .3s">Cast Iron / Besi</button>
+                                <button type="button" id="mat-flex" onclick="rtMat('fleksibel')" style="padding:.9rem;background:rgba(255,255,255,.04);color:#64748b;border:1px solid rgba(255,255,255,.06);border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;grid-column:1/-1;transition:all .3s">Selang Fleksibel</button>
                             </div>
                         </div>
 
                         {{-- Sub-context (PVC) --}}
                         <div id="sub-pvc" style="margin-bottom:1.5rem;background:rgba(34,197,94,.03);border:1px solid rgba(34,197,94,.1);border-radius:1.2rem;padding:1.2rem">
                             <div style="font-size:.6rem;font-weight:900;color:#22c55e;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.5rem">Konfigurasi PVC</div>
-                            <button id="sub-dapur" onclick="rtSub('dapur')" style="width:100%;padding:.75rem;background:#22c55e;color:#0f172a;border:none;border-radius:.75rem;font-weight:900;font-size:.63rem;text-transform:uppercase;cursor:pointer;margin-bottom:.5rem;display:block">Kitchen Sink Area</button>
-                            <button id="sub-km" onclick="rtSub('km')" style="width:100%;padding:.75rem;background:#1e293b;color:#475569;border:none;border-radius:.75rem;font-weight:900;font-size:.63rem;text-transform:uppercase;cursor:pointer;margin-bottom:.5rem;display:block">Kamar Mandi / Drain</button>
-                            <button id="sub-talang" onclick="rtSub('talang')" style="width:100%;padding:.75rem;background:#1e293b;color:#475569;border:none;border-radius:.75rem;font-weight:900;font-size:.63rem;text-transform:uppercase;cursor:pointer;display:block">Talang Air Utama</button>
+                            <button type="button" id="sub-dapur" onclick="rtSub('dapur')" style="width:100%;padding:.75rem;background:#22c55e;color:#0f172a;border:none;border-radius:.75rem;font-weight:900;font-size:.63rem;text-transform:uppercase;cursor:pointer;margin-bottom:.5rem;display:block">Kitchen Sink Area</button>
+                            <button type="button" id="sub-km" onclick="rtSub('km')" style="width:100%;padding:.75rem;background:#1e293b;color:#475569;border:none;border-radius:.75rem;font-weight:900;font-size:.63rem;text-transform:uppercase;cursor:pointer;margin-bottom:.5rem;display:block">Kamar Mandi / Drain</button>
+                            <button type="button" id="sub-talang" onclick="rtSub('talang')" style="width:100%;padding:.75rem;background:#1e293b;color:#475569;border:none;border-radius:.75rem;font-weight:900;font-size:.63rem;text-transform:uppercase;cursor:pointer;display:block">Talang Air Utama</button>
                         </div>
 
                         {{-- Frekuensi --}}
                         <div style="margin-bottom:1.5rem">
                             <div style="font-size:.6rem;font-weight:900;color:#64748b;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.6rem">Deep Analysis History</div>
                             <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">
-                                <button id="fr-pt" onclick="rtFreq('pertama')" style="padding:.9rem;background:#f97316;color:#fff;border:none;border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;transition:all .3s">Baru Pertama</button>
-                                <button id="fr-se" onclick="rtFreq('sering')" style="padding:.9rem;background:rgba(255,255,255,.04);color:#64748b;border:1px solid rgba(255,255,255,.06);border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;transition:all .3s">Sering Mampet</button>
-                                <button id="fr-to" onclick="rtFreq('total')" style="padding:.9rem;background:rgba(255,255,255,.04);color:#64748b;border:1px solid rgba(255,255,255,.06);border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;grid-column:1/-1;transition:all .3s">Mampet Total</button>
+                                <button type="button" id="fr-pt" onclick="rtFreq('pertama')" style="padding:.9rem;background:#f97316;color:#fff;border:none;border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;transition:all .3s">Baru Pertama</button>
+                                <button type="button" id="fr-se" onclick="rtFreq('sering')" style="padding:.9rem;background:rgba(255,255,255,.04);color:#64748b;border:1px solid rgba(255,255,255,.06);border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;transition:all .3s">Sering Mampet</button>
+                                <button type="button" id="fr-to" onclick="rtFreq('total')" style="padding:.9rem;background:rgba(255,255,255,.04);color:#64748b;border:1px solid rgba(255,255,255,.06);border-radius:.85rem;font-weight:900;font-size:.6rem;text-transform:uppercase;cursor:pointer;grid-column:1/-1;transition:all .3s">Mampet Total</button>
                             </div>
                         </div>
 
@@ -819,7 +790,7 @@ document.addEventListener('keydown', function(e){
 
                     {{-- Generate button — completely outside scroll area --}}
                     <div style="padding:1.5rem;border-top:1px solid rgba(255,255,255,.05);background:rgba(15,23,42,.4)">
-                        <button id="btn-g" onclick="rtGenerate()"
+                        <button type="button" id="btn-g" onclick="rtGenerate()"
                                 style="width:100%;padding:1.15rem;background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:1.2rem;font-weight:900;font-size:.75rem;text-transform:uppercase;letter-spacing:.2em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.6rem;box-shadow:0 10px 30px rgba(249,115,22,.2)">
                             Generate Forensic AI
                         </button>
@@ -838,6 +809,34 @@ document.addEventListener('keydown', function(e){
     5%   { opacity:1 }
     95%  { opacity:1 }
     100% { top:100%;  opacity:0 }
+}
+
+/* Premium Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 1.5rem 0; /* Keeps thumb away from edges */
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+    overflow-x: hidden;
+}
+#rt-modal {
+    padding: 2rem;
+}
+@media (max-width: 640px) {
+    #rt-modal { padding: 1rem; }
 }
 </style>
 

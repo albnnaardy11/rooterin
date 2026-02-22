@@ -238,8 +238,7 @@
         </template>
     </section>
 
-    <!-- Master Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0"></script>
+
     <script>
         function aiDeepDiagnostic() {
             return {

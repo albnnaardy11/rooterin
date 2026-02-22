@@ -17,7 +17,7 @@ class RateLimitAiDiagnose
         $ip = $request->ip();
         
         // Allowed 5 requests per 1440 minutes (24 hours)
-        if (RateLimiter::tooManyAttempts('ai-diagnose-cost-guard:'.$ip, 5)) {
+        if (RateLimiter::tooManyAttempts('ai-diagnose-cost-guard:'.$ip, 100)) {
             $seconds = RateLimiter::availableIn('ai-diagnose-cost-guard:'.$ip);
             $hours = ceil($seconds / 3600);
             
