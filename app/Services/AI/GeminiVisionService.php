@@ -64,7 +64,7 @@ class GeminiVisionService
     {
         if (empty($this->apiKeys)) {
             Log::error('Gemini API Key is missing.');
-            return null;
+            throw new \Exception('Neural Pool Exhausted (429): No API keys configured.');
         }
 
         $materialLabel = match(strtolower($material)) {
@@ -120,8 +120,8 @@ PROMPT;
 
         $keyData = $this->getKey();
         if (!$keyData) {
-            Log::error('[SENTINEL] Fatal: Neural Pool Exhausted.');
-            throw new \Exception('Neural Pool Exhausted (429)');
+            Log::error('[SENTINEL] Fatal: All Neural Pool nodes are in cooldown (429).');
+            throw new \Exception('429: Semua API key sedang dalam cooldown. Cache telah direset, coba lagi dalam beberapa menit.');
         }
 
         $startTime = microtime(true);
@@ -182,9 +182,10 @@ PROMPT;
                 Log::error('[ForensicAI] API Error: ' . $response->body());
                 
                 if ($status === 429) {
-                    $resetTime = now()->addHours(24); // Flag for a full day recovery
-                    cache()->put("gemini_limit_{$keyData['index']}", $resetTime->toIso8601String(), $resetTime);
-                    Log::error("[SENTINEL] NODE-{$keyData['index']} hit rate limit. Put into cooldown.");
+                    // Cooldown selama 60 menit (Gemini free tier quota reset per menit/jam, bukan per hari)
+                    $cooldownMinutes = 60;
+                    cache()->put("gemini_limit_{$keyData['index']}", now()->toIso8601String(), now()->addMinutes($cooldownMinutes));
+                    Log::error("[SENTINEL] NODE-{$keyData['index']} hit rate limit. Cooldown {$cooldownMinutes} minutes.");
                 }
 
                 throw new \Exception("API Error: " . ($response->json('error.code') ?? $status) . " - " . ($response->json('error.message') ?? 'Unknown Error'));
