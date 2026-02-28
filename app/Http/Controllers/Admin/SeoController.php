@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Cache;
 
 class SeoController extends Controller
 {
-    public function index(SentinelService $sentinel, OrphanScannerService $orphanScanner, SeoAutomationOptimizer $optimizer)
+    public function index(SentinelService $sentinel, OrphanScannerService $orphanScanner, SeoAutomationOptimizer $optimizer, \App\Services\Seo\GoogleSearchConsoleService $gscService)
     {
         // Auto-Heal Check (10% chance on load to keep things moving)
         $autoHeals = [
@@ -33,6 +33,13 @@ class SeoController extends Controller
         if (rand(1, 10) === 7) { 
             $autoHeals['interlinks'] = $optimizer->autoInterlinkOrphans();
             $autoHeals['404_fixes'] = $optimizer->autoFix404s();
+        }
+
+        // Proactive Key Sync: If file exists but DB key is missing, sync it once.
+        if (!SeoSetting::get('google_search_console_key') && File::exists(storage_path('app/google-service-account.json'))) {
+            $jsonContent = File::get(storage_path('app/google-service-account.json'));
+            SeoSetting::set('google_search_console_key', $jsonContent);
+            SeoSetting::set('google_indexing_key', $jsonContent);
         }
 
         $healthData = $sentinel->monitorAll();
@@ -74,18 +81,12 @@ class SeoController extends Controller
             ->limit(20)
             ->get();
 
-        $gscData = Cache::remember('gsc_mock_data', 3600, function() {
-            return [
-                ['query' => 'jasa deteksi pipa bocor', 'clicks' => 342, 'impressions' => 12500, 'ctr' => '2.7%', 'position' => 3.4],
-                ['query' => 'biaya perbaikan pipa pecah', 'clicks' => 89, 'impressions' => 4500, 'ctr' => '1.9%', 'position' => 6.2],
-                ['query' => 'rooterin plumbing auditor', 'clicks' => 156, 'impressions' => 320, 'ctr' => '48%', 'position' => 1.1],
-                ['query' => 'jasa deteksi kebocoran air', 'clicks' => 210, 'impressions' => 5600, 'ctr' => '3.8%', 'position' => 4.5],
-            ];
-        });
+        // REAL DATA: Fetch from Google Search Console
+        $gscData = $gscService->getPerformanceData();
 
         $orphanPages = $orphanScanner->scan();
 
-        return view('admin.seo.index', compact('settings', 'redirects', 'robotsContent', 'topPages', 'deviceStats', 'keywords', 'cities', 'reviews', 'healthData', 'errorLogs', 'gscData', 'orphanPages', 'autoHeals'));
+        return view('admin.seo.index', compact('settings', 'redirects', 'robotsContent', 'topPages', 'deviceStats', 'keywords', 'cities', 'reviews', 'healthData', 'errorLogs', 'gscData', 'orphanPages', 'autoHeals', 'gscService'));
     }
 
     public function analyze(Request $request, SeoGraderService $grader)

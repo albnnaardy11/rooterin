@@ -101,6 +101,8 @@ Route::prefix('admin')->name('admin.')->middleware(['audit'])->group(function() 
         Route::get('/seo/ping', function() { return redirect()->route('admin.seo.index'); });
         Route::post('/seo/clear-cache', [\App\Http\Controllers\Admin\SeoController::class, 'clearCache'])->name('seo.clear-cache');
         Route::get('/seo/clear-cache', function() { return redirect()->route('admin.seo.index'); });
+        
+        Route::post('/seo/settings', [\App\Http\Controllers\Admin\SeoController::class, 'updateSettings'])->name('seo.settings.update');
 
         // Authority Keywords
         Route::post('/seo/keywords', [\App\Http\Controllers\Admin\SeoController::class, 'storeKeyword'])->name('seo.keywords.store');

@@ -4,81 +4,86 @@ namespace App\Services\Seo;
 
 use Google\Client;
 use Google\Service\SearchConsole;
+use App\Models\SeoSetting;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class GoogleSearchConsoleService
 {
-    protected $searchConsole;
+    protected $client;
+    protected $isConfigured = false;
     protected $siteUrl;
 
     public function __construct()
     {
-        $client = new Client();
-        $keyPath = storage_path('app/google-service-account.json');
-        
-        if (file_exists($keyPath)) {
-            $client->setAuthConfig($keyPath);
-            $client->addScope(SearchConsole::WEBMASTERS_READONLY);
-            $this->searchConsole = new SearchConsole($client);
-            $this->siteUrl = config('app.url'); // Ensure this matches exactly what's in GSC
+        $this->client = new Client();
+        $this->isConfigured = $this->setupClient();
+        $this->siteUrl = config('app.url');
+    }
+
+    protected function setupClient()
+    {
+        $jsonKey = SeoSetting::where('key', 'google_search_console_key')->first()?->value 
+                   ?? SeoSetting::where('key', 'google_indexing_key')->first()?->value;
+
+        if ($jsonKey) {
+            try {
+                $credentials = json_decode($jsonKey, true);
+                if ($credentials) {
+                    $this->client->setAuthConfig($credentials);
+                    $this->client->addScope(SearchConsole::WEBMASTERS_READONLY);
+                    return true;
+                }
+            } catch (\Exception $e) {
+                Log::error('GSC API Auth Error: ' . $e->getMessage());
+            }
         }
+        return false;
+    }
+
+    public function isConfigured()
+    {
+        return $this->isConfigured;
     }
 
     /**
-     * Get search performance data.
-     * 
-     * @param int $days
-     * @return array
+     * Get real performance data from GSC
      */
-    public function getPerformanceStats(int $days = 30): array
+    public function getPerformanceData($days = 30)
     {
-        if (!$this->searchConsole || !$this->siteUrl) {
-            return ['active' => false];
-        }
+        if (!$this->isConfigured) return null;
 
-        try {
-            $request = new SearchConsole\SearchAnalyticsQueryRequest();
-            $request->setStartDate(now()->subDays($days)->format('Y-m-d'));
-            $request->setEndDate(now()->subDays(1)->format('Y-m-d')); // GSC has delay
-            $request->setDimensions(['date']);
-            $request->setRowLimit(100);
+        return Cache::remember('gsc_real_performance_data', 3600, function() use ($days) {
+            try {
+                $service = new SearchConsole($this->client);
+                
+                $request = new \Google\Service\SearchConsole\SearchAnalyticsQueryRequest();
+                $request->setStartDate(date('Y-m-d', strtotime("-$days days")));
+                $request->setEndDate(date('Y-m-d', strtotime("-1 day"))); // Usually 2-day delay in GSC
+                $request->setDimensions(['query']);
+                $request->setRowLimit(10);
 
-            $response = $this->searchConsole->searchanalytics->query($this->siteUrl, $request);
-            
-            return [
-                'active' => true,
-                'rows' => $response->getRows(),
-            ];
-        } catch (\Exception $e) {
-            Log::error('Google Search Console API Error: ' . $e->getMessage());
-            return ['active' => false, 'error' => $e->getMessage()];
-        }
-    }
+                $query = $service->searchanalytics->query($this->siteUrl, $request);
+                $rows = $query->getRows();
 
-    /**
-     * Get top queries performance.
-     * 
-     * @param int $limit
-     * @return array
-     */
-    public function getTopQueries(int $limit = 5): array
-    {
-        if (!$this->searchConsole || !$this->siteUrl) {
-            return [];
-        }
+                if (!$rows) return [];
 
-        try {
-            $request = new SearchConsole\SearchAnalyticsQueryRequest();
-            $request->setStartDate(now()->subDays(30)->format('Y-m-d'));
-            $request->setEndDate(now()->subDays(1)->format('Y-m-d'));
-            $request->setDimensions(['query']);
-            $request->setRowLimit($limit);
+                $data = [];
+                foreach ($rows as $row) {
+                    $data[] = [
+                        'query' => $row->getKeys()[0],
+                        'clicks' => $row->getClicks(),
+                        'impressions' => $row->getImpressions(),
+                        'ctr' => round($row->getCtr() * 100, 2) . '%',
+                        'position' => round($row->getPosition(), 1)
+                    ];
+                }
 
-            $response = $this->searchConsole->searchanalytics->query($this->siteUrl, $request);
-            return $response->getRows() ?: [];
-        } catch (\Exception $e) {
-            Log::error('GSC Top Queries Error: ' . $e->getMessage());
-            return [];
-        }
+                return $data;
+            } catch (\Exception $e) {
+                Log::error('GSC Performance Query Error: ' . $e->getMessage());
+                return null;
+            }
+        });
     }
 }

@@ -426,16 +426,59 @@
 
             <!-- GSC Meta Sync -->
             <div x-show="tab === 'gsc'" class="space-y-8" x-cloak>
+                @if(!$gscService->isConfigured())
+                <!-- GSC Setup Screen -->
+                <div class="bg-indigo-900/10 p-12 rounded-[3rem] border border-indigo-500/20 backdrop-blur-3xl text-center space-y-8">
+                    <div class="w-24 h-24 bg-white/5 rounded-[2rem] border border-white/10 flex items-center justify-center mx-auto shadow-2xl shadow-indigo-500/10 animate-pulse">
+                        <i class="ri-google-fill text-6xl text-white opacity-20"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-3xl font-heading font-black text-white tracking-tight italic">Connect <span class="text-indigo-500">Search Console.</span></h2>
+                        <p class="text-slate-400 font-medium text-xs mt-4 leading-relaxed max-w-xl mx-auto uppercase tracking-widest leading-loose">
+                            To unlock real search performance meta-data, you must provide your <span class="text-indigo-400 font-black underline decoration-indigo-500/30 decoration-2">Google Service Account</span> JSON key.
+                            This will sync live clicks, impressions, and ranking positions directly into your Rooter-Green dashboard.
+                        </p>
+                    </div>
+                    
+                    <form action="{{ route('admin.seo.settings.update') }}" method="POST" class="max-w-2xl mx-auto bg-slate-950 p-8 rounded-[2rem] border border-white/5 space-y-4">
+                        @csrf
+                        <div class="space-y-2 text-left">
+                            <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                <i class="ri-key-2-line text-indigo-500"></i>
+                                Service Account JSON Key
+                            </label>
+                            <textarea name="google_search_console_key" rows="6" class="w-full bg-slate-900 border-none rounded-2xl text-indigo-400 font-mono text-xs p-5 focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-slate-700" placeholder='{ "type": "service_account", ... }'></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all shadow-xl shadow-indigo-900/40 flex items-center justify-center gap-3 group">
+                            <i class="ri-plug-2-line text-xl group-hover:rotate-12 transition-transform"></i>
+                            Activate Real-Time Intelligence
+                        </button>
+                        <p class="text-[8px] text-slate-600 font-bold uppercase tracking-widest">Secured via Phantom Shield & Google Cloud IAM</p>
+                    </form>
+                </div>
+                @elseif(!$gscData)
+                <!-- GSC Loading / Error Screen -->
+                <div class="bg-indigo-900/10 p-12 rounded-[3rem] border border-indigo-500/20 backdrop-blur-3xl text-center">
+                    <div class="space-y-6">
+                        <i class="ri-radar-line text-6xl text-indigo-400 animate-spin flex justify-center"></i>
+                        <h3 class="text-xl font-black text-white uppercase tracking-widest italic">Scanning Google Cloud Radar...</h3>
+                        <p class="text-xs text-slate-500 font-bold uppercase tracking-widest">
+                            Configuration detected. If you don't see results, ensure your Service Account has "Viewer" permission on the site <span class="text-indigo-400">{{ config('app.url') }}</span>.
+                        </p>
+                    </div>
+                </div>
+                @else
+                <!-- GSC Dashboard Screen -->
                 <div class="bg-indigo-900/10 p-8 rounded-[3rem] border border-indigo-500/20 backdrop-blur-xl">
                     <div class="flex items-center justify-between mb-8">
                         <div>
                             <h3 class="text-white font-black text-xl flex items-center gap-3">
                                 <i class="ri-google-fill text-indigo-500"></i>
-                                Search Console Metrics
+                                Real Search Intelligence
                             </h3>
                             <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2 flex items-center gap-2">
                                 <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-                                Live Sync (Auto)
+                                Live Sync ({{ now()->format('H:i') }})
                             </p>
                         </div>
                     </div>
@@ -458,6 +501,7 @@
                         @endforeach
                     </div>
                 </div>
+                @endif
             </div>
 
             <!-- Orphan Radar Scanner -->

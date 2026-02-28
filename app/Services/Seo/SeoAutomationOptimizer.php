@@ -12,6 +12,13 @@ use Illuminate\Support\Str;
 
 class SeoAutomationOptimizer
 {
+    protected $indexing;
+
+    public function __construct(GoogleIndexingService $indexing)
+    {
+        $this->indexing = $indexing;
+    }
+
     /**
      * Auto-Link Orphan Pages based on keywords
      */
@@ -32,6 +39,12 @@ class SeoAutomationOptimizer
                 $link = "<a href=\"$path\" class=\"text-primary font-bold hover:underline\">$targetKeyword</a>";
                 $provider->description = str_replace($targetKeyword, $link, $provider->description);
                 $provider->save();
+                
+                // Ping Google for the provider page (change)
+                $this->indexing->notifyUpdate(url($provider instanceof WikiEntity ? "/wiki/{$provider->slug}" : "/layanan/{$provider->slug}"));
+                // Ping Google for the orphan page (new incoming link)
+                $this->indexing->notifyUpdate(url($path));
+                
                 $count++;
             }
         }
@@ -66,6 +79,10 @@ class SeoAutomationOptimizer
 
                 $log->is_redirected = true;
                 $log->save();
+                
+                // Ping Google for the fixed destination
+                $this->indexing->notifyUpdate(url($destination));
+                
                 $fixed++;
             }
         }
