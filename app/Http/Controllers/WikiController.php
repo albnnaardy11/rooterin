@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Artesaos\SEOTools\Facades\SEOTools;
 use Spatie\SchemaOrg\Schema as SchemaOrg;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 
 class WikiController extends Controller
 {
@@ -28,7 +29,8 @@ class WikiController extends Controller
         $entity = WikiEntity::where('slug', $slug)->firstOrFail();
 
         SEOTools::setTitle("{$entity->title} - WikiPipa RooterIn");
-        SEOTools::setDescription(substr($entity->description, 0, 160));
+        $cleanDesc = strip_tags(Str::markdown($entity->description));
+        SEOTools::setDescription(substr($cleanDesc, 0, 160));
 
         // 1. Semantic Entity Schema (TechArticle for Technical Otoritas)
         $schema = SchemaOrg::techArticle()

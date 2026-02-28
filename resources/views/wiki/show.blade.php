@@ -84,9 +84,7 @@
                         {{-- Article Body --}}
                         <div class="p-8 sm:p-20 pt-16">
                             <div class="prose prose-xl prose-slate max-w-none prose-headings:font-heading prose-headings:font-black prose-headings:text-secondary prose-headings:tracking-tight prose-p:text-gray-600 prose-p:leading-relaxed prose-strong:text-secondary prose-blockquote:border-l-primary prose-blockquote:bg-stone-50 prose-blockquote:p-10 prose-blockquote:rounded-[2.5rem] prose-blockquote:italic prose-blockquote:font-medium">
-                                <p class="text-2xl font-medium text-secondary/80 leading-relaxed italic border-l-4 border-primary pl-8 mb-16">
-                                    {{ $entity->description }}
-                                </p>
+                                {!! Str::markdown($entity->description) !!}
 
                                 {{-- UNICORP-GRADE: Invisible Watermarking --}}
                                 <div style="opacity:0; position:absolute; font-size:1px; pointer-events:none;">

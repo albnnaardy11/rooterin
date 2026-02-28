@@ -59,9 +59,28 @@
                         {{ $entity->wikidata_id ?: 'NO_LINK' }}
                     </td>
                     <td class="px-8 py-6">
-                        <div class="flex flex-wrap gap-2">
-                            @foreach($entity->attributes ?? [] as $key => $val)
-                            <span class="px-2 py-1 bg-white/5 rounded-lg text-[8px] font-bold text-slate-400 uppercase tracking-tighter">{{ $key }}</span>
+                        <div class="flex flex-wrap gap-1.5 max-w-[300px]">
+                            @php
+                                $mainNodes = [
+                                    'schema' => 'SCHM',
+                                    'keywords' => 'KEYW',
+                                    'meta_title' => 'META',
+                                    'internal_link' => 'LINK',
+                                    'semantic_signals' => 'SEMNT'
+                                ];
+                                $attrs = $entity->attributes ?? [];
+                            @endphp
+                            
+                            @foreach($mainNodes as $key => $label)
+                                <span class="px-2 py-1 rounded-md text-[7px] font-black tracking-tighter transition-all {{ isset($attrs[$key]) ? 'bg-primary/20 text-primary border border-primary/20' : 'bg-white/5 text-slate-600 border border-white/5 opacity-40' }}">
+                                    {{ $label }}
+                                </span>
+                            @endforeach
+
+                            @foreach(collect($attrs)->except(array_keys($mainNodes)) as $key => $val)
+                                <span class="px-2 py-1 bg-white/5 border border-white/10 rounded-md text-[7px] font-bold text-slate-400 uppercase tracking-tighter">
+                                    {{ str_replace('_', ' ', $key) }}
+                                </span>
                             @endforeach
                         </div>
                     </td>
@@ -115,7 +134,7 @@
                     </div>
                     <div>
                         <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Wikidata ID (Optional)</label>
-                        <input type="text" name="wikidata_id" placeholder="Q12345" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white">
+                        <input type="text" name="wikidata_id" x-model="wikidata_id" placeholder="Q12345" class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white">
                     </div>
                 </div>
 
@@ -145,6 +164,7 @@ function wikiAutomator() {
         name: '',
         description: '',
         attributes: '',
+        wikidata_id: '',
         loading: false,
         
         async autoInference() {
@@ -164,6 +184,7 @@ function wikiAutomator() {
                 
                 const data = await response.json();
                 this.description = data.description;
+                this.wikidata_id = data.wikidata_id;
                 if (window.cmsEditors && window.cmsEditors['description']) {
                     window.cmsEditors['description'].setData(data.description);
                 }

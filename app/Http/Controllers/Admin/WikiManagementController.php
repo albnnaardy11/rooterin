@@ -51,7 +51,8 @@ class WikiManagementController extends Controller
 
         return response()->json([
             'description' => $generated['desc'],
-            'attributes' => $generated['attrs']
+            'attributes' => $generated['attrs'],
+            'wikidata_id' => $generated['wikidata'] ?? ''
         ]);
     }
 }
