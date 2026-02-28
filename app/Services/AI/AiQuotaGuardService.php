@@ -39,26 +39,40 @@ class AiQuotaGuardService
             return null;
         }
 
-        // Check if current key is blocked (Rate limited)
-        $blockedUntil = Cache::get('sentinel_ai_key_blocked_at_' . $this->currentKeyIndex);
-        if ($blockedUntil && now()->lessThan($blockedUntil)) {
-            $this->rotateKey();
+        // UNICORP-GRADE: Atomic Index Management
+        $index = (int) Cache::get('sentinel_ai_current_key_index', 0);
+        
+        // Cyclic check: Try all keys starting from current index
+        for ($i = 0; $i < count($this->keys); $i++) {
+            $checkIndex = ($index + $i) % count($this->keys);
+            
+            $blockedUntil = Cache::get('sentinel_ai_key_blocked_at_' . $checkIndex);
+            if (!$blockedUntil || now()->greaterThan($blockedUntil)) {
+                // Update persistent index if we moved
+                if ($checkIndex !== $index) {
+                    Cache::put('sentinel_ai_current_key_index', $checkIndex, 86400);
+                }
+                $this->currentKeyIndex = $checkIndex;
+                return $this->keys[$checkIndex];
+            }
         }
 
-        return $this->keys[$this->currentKeyIndex];
+        Log::emergency("[SENTINEL-AI] ALL NODES EXHAUSTED. System entering Failover-Static mode.");
+        return null;
     }
 
     /**
-     * UNICORP-GRADE: Masterpiece Rotation Protocol
+     * UNICORP-GRADE: Masterpiece Rotation Protocol (Atomic)
      */
     public function rotateKey()
     {
-        $this->currentKeyIndex++;
-        if ($this->currentKeyIndex >= count($this->keys)) {
-            $this->currentKeyIndex = 0; // Wrap around
-        }
-
+        // Atomically increment the index
+        $index = Cache::increment('sentinel_ai_current_key_index');
+        $this->currentKeyIndex = $index % count($this->keys);
+        
+        // Persist the wrapped value back to avoid overflow issues (optional but cleaner)
         Cache::put('sentinel_ai_current_key_index', $this->currentKeyIndex, 86400);
+
         Log::warning("[SENTINEL-AI] Node Failover: Rotated to Key Index: " . $this->currentKeyIndex);
     }
 

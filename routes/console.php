@@ -8,17 +8,35 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 /**
- * UNICORP-GRADE: SEO Intelligence Synchronizer
+ * UNICORP-GRADE: SEO Intelligence Synchronizer (With Exponential Backoff)
  */
 Artisan::command('seo:sync-gsc', function () {
     $this->info("[SENTINEL] Initiating GSC Intelligence Sync...");
     $service = app(\App\Services\Seo\GoogleSearchConsoleService::class);
-    if ($service->syncHistoricalData(7)) {
-        $this->info("[SENTINEL] GSC Sync Successful.");
-    } else {
-        $this->error("[SENTINEL] GSC Sync Failed (Auth/Quota).");
+    
+    $maxAttempts = 3;
+    $attempt = 0;
+    $success = false;
+
+    while ($attempt < $maxAttempts && !$success) {
+        $attempt++;
+        if ($service->syncHistoricalData(7)) {
+            $success = true;
+            $this->info("[SENTINEL] GSC Sync Successful on Attempt $attempt.");
+        } else {
+            if ($attempt < $maxAttempts) {
+                $wait = pow(2, $attempt) * 5; // 10s, 20s...
+                $this->warn("[SENTINEL] GSC Sync Failed. Retrying in {$wait}s... (Attempt $attempt/$maxAttempts)");
+                sleep($wait);
+            }
+        }
     }
-})->purpose('Synchronize historical GSC data (7 days window)');
+
+    if (!$success) {
+        $this->error("[SENTINEL] GSC Sync FATAL FAIL after $maxAttempts attempts.");
+        app(\App\Services\Sentinel\SentinelService::class)->sendWhatsAppAlert("CRITICAL: GSC Sync Failed after $maxAttempts retry cycles.");
+    }
+})->purpose('Synchronize historical GSC data with Resilience Protocol');
 
 /**
  * UNICORP-GRADE: AI-Powered Dead Link Repository Healing

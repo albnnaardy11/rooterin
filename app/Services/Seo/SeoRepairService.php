@@ -89,9 +89,15 @@ class SeoRepairService
 
     public function applyRedirect($suggestion, $link)
     {
+        // UNICORP-GRADE: Model Synchronization (Correcting fillable mapping)
         \App\Models\SeoRedirect::updateOrCreate(
-            ['old_url' => $suggestion->source_url],
-            ['new_url' => $suggestion->suggested_url, 'type' => 301]
+            ['source_url' => $suggestion->source_url], // source_url in model
+            [
+                'destination_url' => $suggestion->suggested_url, // destination_url in model
+                'status_code' => 301,
+                'is_active' => true,
+                'last_hit_at' => now() // Initialize tracking
+            ]
         );
 
         $suggestion->update([
@@ -102,5 +108,30 @@ class SeoRepairService
         $link->update(['is_redirected' => true]);
 
         Log::info("[SENTINEL-SEO] Auto-Healed 404: {$suggestion->source_url} -> {$suggestion->suggested_url}");
+    }
+
+    /**
+     * UNICORP-GRADE: Entropy Recovery (Auto-Pruning Algorithm)
+     * Prune redirects that haven't received traffic for 180 days to maintain latency below 50ms.
+     */
+    public function pruneExpiredRedirects($days = 180)
+    {
+        Log::info("[SENTINEL-SEO] Initiating Redirect Cache Pruning (Entropy Recovery)...");
+
+        $expiredCount = \App\Models\SeoRedirect::where(function ($query) use ($days) {
+                $query->where('last_hit_at', '<', now()->subDays($days))
+                      ->orWhere(function ($q) {
+                          $q->whereNull('last_hit_at')
+                            ->where('created_at', '<', now()->subDays(30)); // Cold start protection
+                      });
+            })
+            ->where('is_active', true)
+            ->delete();
+
+        if ($expiredCount > 0) {
+            Log::info("[SENTINEL-SEO] ENTROPY RECOVERED: $expiredCount stale redirects purged from memory cluster.");
+        }
+
+        return $expiredCount;
     }
 }

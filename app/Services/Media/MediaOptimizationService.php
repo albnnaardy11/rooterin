@@ -37,17 +37,21 @@ class MediaOptimizationService
             
             $image->toWebp(80)->save($webpPath);
 
-            // 2. Generate AI Alt Tag via Gemini Vision (if available)
-            // Note: In a real Unicorp setup, this would be queued
-            $altTag = $this->generateAiAltTag($path);
+            // 2. Generate AI Alt Tag & Long Description via Gemini Vision
+            $aiResult = $this->generateAiAltTag($path);
 
             // 3. Update DB record if exists
             $media = Media::where('file_path', 'like', '%' . basename($path))->first();
             if ($media) {
+                $meta = is_array($media->metadata) ? $media->metadata : [];
+                $meta['long_description'] = $aiResult['long_desc'] ?? null;
+                $meta['ai_processed_at'] = now()->toIso8601String();
+
                 $media->update([
                     'file_path' => str_replace(public_path(), '', $webpPath),
-                    'alt' => $altTag ?: $media->alt,
-                    'is_optimized' => true
+                    'alt' => $aiResult['alt'] ?? $media->alt,
+                    'is_optimized' => true,
+                    'metadata' => $meta
                 ]);
             }
 
@@ -69,11 +73,17 @@ class MediaOptimizationService
 
             $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" . $apiKey;
 
+            // UNICORP-GRADE: Semantic Enrichment Prompt
+            $prompt = "Analyze this plumbing/drain cleaning image. 
+            1. Provide a short 5-word SEO-friendly Alt text (Indonesian).
+            2. Provide a 30-word Semantic Long Description for accessibility (Indonesian).
+            Return ONLY JSON: {\"alt\": \"...\", \"long_desc\": \"...\"}";
+
             $response = \Illuminate\Support\Facades\Http::timeout(30)->post($endpoint, [
                 'contents' => [
                     [
                         'parts' => [
-                            ['text' => "Identify the main subject in this plumbing/drain cleaning image. Provide a 5-word SEO-friendly Alt text for an Indonesian website. Return ONLY the text."],
+                            ['text' => $prompt],
                             ['inline_data' => [
                                 'mime_type' => \Illuminate\Support\Facades\File::mimeType($imagePath),
                                 'data' => base64_encode(\Illuminate\Support\Facades\File::get($imagePath))
@@ -85,11 +95,14 @@ class MediaOptimizationService
 
             if ($response->successful()) {
                 $result = $response->json();
-                return $result['candidates'][0]['content']['parts'][0]['text'] ?? null;
+                $text = $result['candidates'][0]['content']['parts'][0]['text'] ?? null;
+                if ($text && preg_match('/\{.*\}/s', $text, $matches)) {
+                    return json_decode($matches[0], true);
+                }
             }
             return null;
         } catch (\Exception $e) {
-            Log::error("[SENTINEL-MEDIA] AI Alt Gen Failure: " . $e->getMessage());
+            Log::error("[SENTINEL-MEDIA] Semantic Enrichment Failure: " . $e->getMessage());
             return null;
         }
     }
