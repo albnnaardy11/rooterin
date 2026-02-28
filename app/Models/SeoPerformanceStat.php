@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class SeoPerformanceStat extends Model
 {
-    //
+    protected $guarded = [];
 }

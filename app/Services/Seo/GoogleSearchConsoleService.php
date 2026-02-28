@@ -60,8 +60,8 @@ class GoogleSearchConsoleService
                 $request = new \Google\Service\SearchConsole\SearchAnalyticsQueryRequest();
                 $request->setStartDate(date('Y-m-d', strtotime("-$days days")));
                 $request->setEndDate(date('Y-m-d', strtotime("-1 day"))); // Usually 2-day delay in GSC
-                $request->setDimensions(['query']);
-                $request->setRowLimit(10);
+                $request->setDimensions(['query', 'page']);
+                $request->setRowLimit(100);
 
                 $query = $service->searchanalytics->query($this->siteUrl, $request);
                 $rows = $query->getRows();
@@ -72,6 +72,7 @@ class GoogleSearchConsoleService
                 foreach ($rows as $row) {
                     $data[] = [
                         'query' => $row->getKeys()[0],
+                        'url' => $row->getKeys()[1],
                         'clicks' => $row->getClicks(),
                         'impressions' => $row->getImpressions(),
                         'ctr' => round($row->getCtr() * 100, 2) . '%',
@@ -102,8 +103,8 @@ class GoogleSearchConsoleService
             $request = new \Google\Service\SearchConsole\SearchAnalyticsQueryRequest();
             $request->setStartDate($startDate);
             $request->setEndDate($endDate);
-            $request->setDimensions(['query', 'date']);
-            $request->setRowLimit(500);
+            $request->setDimensions(['query', 'page', 'date']);
+            $request->setRowLimit(5000);
 
             $query = $service->searchanalytics->query($this->siteUrl, $request);
             $rows = $query->getRows();
@@ -114,7 +115,8 @@ class GoogleSearchConsoleService
                 \App\Models\SeoPerformanceStat::updateOrCreate(
                     [
                         'query' => $row->getKeys()[0],
-                        'date' => $row->getKeys()[1],
+                        'url' => $row->getKeys()[1],
+                        'date' => $row->getKeys()[2],
                     ],
                     [
                         'clicks' => $row->getClicks(),

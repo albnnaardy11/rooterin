@@ -95,7 +95,12 @@ class SeoController extends Controller
             ->where('is_in_sitemap', false)
             ->count();
 
-        return view('admin.seo.index', compact('settings', 'redirects', 'robotsContent', 'topPages', 'deviceStats', 'keywords', 'cities', 'reviews', 'healthData', 'errorLogs', 'gscData', 'orphanPages', 'autoHeals', 'gscService', 'crawlLogs', 'orphanCrawlCount'));
+        $cannibalSuggestions = \App\Models\SeoRedirectSuggestion::where('type', 'CANNIBAL')
+            ->where('is_applied', false)
+            ->latest()
+            ->get();
+
+        return view('admin.seo.index', compact('settings', 'redirects', 'robotsContent', 'topPages', 'deviceStats', 'keywords', 'cities', 'reviews', 'healthData', 'errorLogs', 'gscData', 'orphanPages', 'autoHeals', 'gscService', 'crawlLogs', 'orphanCrawlCount', 'cannibalSuggestions'));
     }
 
     public function analyze(Request $request, SeoGraderService $grader)

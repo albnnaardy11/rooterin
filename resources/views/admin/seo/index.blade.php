@@ -140,9 +140,14 @@
                 <span class="text-sm">Orphan Radar</span>
             </button>
             <button @click="tab = 'ghost'" :class="tab === 'ghost' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-white/5 text-slate-400 hover:bg-white/10'" 
-                    class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all font-bold text-left border border-emerald-500/20 mb-4">
+                    class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all font-bold text-left border border-emerald-500/20">
                 <i class="ri-radar-fill text-xl"></i>
                 <span class="text-sm">Ghost-Crawl Monitor</span>
+            </button>
+            <button @click="tab = 'cannibal'" :class="tab === 'cannibal' ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/20' : 'bg-white/5 text-slate-400 hover:bg-white/10'" 
+                    class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all font-bold text-left border border-orange-500/20 mb-4">
+                <i class="ri-fire-fill text-xl"></i>
+                <span class="text-sm">Cannibal Radar</span>
             </button>
             <button @click="tab = 'tools'" :class="tab === 'tools' ? 'bg-primary text-white' : 'bg-white/5 text-slate-400 hover:bg-white/10'" 
                     class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all font-bold text-left">
@@ -622,6 +627,72 @@
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cannibal Radar Panel -->
+            <div x-show="tab === 'cannibal'" class="space-y-8" x-cloak>
+                <div class="bg-slate-900/50 p-8 rounded-[3rem] border border-white/5 backdrop-blur-xl">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 class="text-white font-black text-xl flex items-center gap-3">
+                                <i class="ri-fire-fill text-orange-500"></i>
+                                Keyword Conflict Zone
+                            </h3>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">URLs fighting for the same search intent (Cannibalization).</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        @forelse($cannibalSuggestions as $suggestion)
+                        <div class="bg-slate-950/50 border border-white/5 rounded-3xl p-6 relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 p-4">
+                                <span class="px-3 py-1 bg-orange-500/20 text-orange-500 rounded-lg text-[10px] font-black uppercase tracking-widest border border-orange-500/20">
+                                    Conflict Detected
+                                </span>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                                <div>
+                                    <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 italic">Target Query</h4>
+                                    <p class="text-xl font-black text-white italic">"{{ $suggestion->metadata['query'] ?? 'Unknown' }}"</p>
+                                    
+                                    <div class="mt-8 p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl">
+                                        <p class="text-[8px] font-black text-emerald-500 uppercase tracking-widest mb-2 italic">AI Recommendation: {{ $suggestion->metadata['suggested_action'] ?? 'DECIDE' }}</p>
+                                        <p class="text-xs text-white leading-relaxed">{{ $suggestion->reason }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
+                                        <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1 italic">Master URL (Winner)</p>
+                                        <p class="text-[10px] font-mono text-emerald-400 truncate">{{ $suggestion->suggested_url }}</p>
+                                    </div>
+                                    <div class="p-4 bg-white/5 rounded-2xl border border-white/5 opacity-60">
+                                        <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1 italic">Competing URL (Loser)</p>
+                                        <p class="text-[10px] font-mono text-rose-400 truncate">{{ $suggestion->source_url }}</p>
+                                    </div>
+                                    
+                                    <div class="pt-4 flex gap-3">
+                                        <button class="flex-grow py-3 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all">Apply Resolution</button>
+                                        <button class="px-4 py-3 bg-white/5 text-slate-400 rounded-xl hover:text-white"><i class="ri-delete-bin-line"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @empty
+                        <div class="p-12 text-center text-slate-500">
+                            <i class="ri-shield-user-fill text-5xl mb-4 text-emerald-500/20 block"></i>
+                            <p class="font-bold uppercase tracking-widest text-white">No Active Conflicts</p>
+                            <p class="text-[10px] mt-2 uppercase tracking-widest text-slate-400 opacity-60 italic">Every keyword has its unique territory. System Aligned.</p>
+                        </div>
+                        @endforelse
+                    </div>
+
+                    <div class="mt-8 p-6 bg-orange-500/5 border border-orange-500/10 rounded-2xl">
+                        <p class="text-[8px] font-black text-orange-500 uppercase tracking-widest mb-2 italic">How to resolve manually?</p>
+                        <p class="text-[10px] text-slate-400 leading-loose uppercase tracking-widest">Run <code class="text-white px-2 py-0.5 bg-white/5 rounded italic uppercase font-mono">php artisan seo:resolve-cannibal</code> to trigger deep scan & AI analysis.</p>
                     </div>
                 </div>
             </div>
