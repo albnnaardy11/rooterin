@@ -143,6 +143,9 @@ Route::prefix('admin')->name('admin.')->middleware(['audit'])->group(function() 
         Route::get('/ai-central-ops', [\App\Http\Controllers\Admin\AiCentralOpsController::class, 'index'])->name('ai.central.ops.index');
         Route::post('/ai-central-ops/flush', [\App\Http\Controllers\Admin\AiCentralOpsController::class, 'flushNodes'])->name('ai.central.ops.flush');
 
+        Route::post('/seo/analyze', [\App\Http\Controllers\Admin\SeoController::class, 'analyze'])->name('seo.analyze');
+        Route::post('/seo/scan-orphans', [\App\Http\Controllers\Admin\SeoController::class, 'scanOrphans'])->name('seo.scan-orphans');
+
         Route::resource('faq-categories', \App\Http\Controllers\Admin\FaqCategoryController::class);
         Route::resource('faqs', \App\Http\Controllers\Admin\FaqController::class);
     });

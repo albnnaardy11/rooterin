@@ -84,13 +84,36 @@
                     </div>
                 </div>
 
-                <div class="p-8 bg-primary/5 border border-primary/10 rounded-[2.5rem]">
-                    <h4 class="text-[10px] font-bold text-primary uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <i class="ri-information-line text-lg"></i>
-                        Industrial Standard Tip
-                    </h4>
-                    <p class="text-slate-500 text-xs leading-relaxed">
-                        Gunakan **AI Automator** untuk merumuskan definisi operasional berbasis fisika dan menyusun tabel spesifikasi 3-kolom (**Atribut | Parameter | Analisis RooterIn**) yang dioptimalkan untuk Google Featured Snippets.
+                <div class="p-8 bg-primary/5 border border-primary/10 rounded-[2.5rem] space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-[10px] font-bold text-primary uppercase tracking-widest flex items-center gap-2">
+                            <i class="ri-pulse-line text-lg"></i>
+                            SEO Audit Score
+                        </h4>
+                        <div class="px-3 py-1 bg-primary text-white text-[10px] font-black rounded-lg" x-text="seoReport.score + '/100'">0/100</div>
+                    </div>
+                    
+                    <div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                        <div class="h-full bg-primary transition-all duration-1000" :style="'width: ' + seoReport.score + '%'"></div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <template x-for="warn in seoReport.warnings">
+                            <div class="flex gap-2 text-[9px] font-medium text-rose-400 leading-tight">
+                                <i class="ri-error-warning-line"></i>
+                                <span x-text="warn"></span>
+                            </div>
+                        </template>
+                        <template x-for="succ in seoReport.success">
+                            <div class="flex gap-2 text-[9px] font-medium text-green-500 leading-tight">
+                                <i class="ri-checkbox-circle-line"></i>
+                                <span x-text="succ"></span>
+                            </div>
+                        </template>
+                    </div>
+
+                    <p class="text-[9px] text-slate-600 font-bold uppercase tracking-widest pt-4 border-t border-white/5">
+                        Stats: <span x-text="seoReport.stats.word_count">0</span> words | <span x-text="seoReport.stats.keyword_density">0%</span> density
                     </p>
                 </div>
             </div>
@@ -132,6 +155,46 @@ function wikiForm() {
         @endphp
         attributes: {!! json_encode($attrs) !!},
         loading: false,
+        seoReport: { score: 0, warnings: [], success: [], stats: { word_count: 0, keyword_density: '0%' } },
+        analyzeTimeout: null,
+
+        init() {
+            this.$watch('name', () => this.debouncedAnalyze());
+            // Hook to Rich Editor changes
+            setInterval(() => {
+                if (window.cmsEditors && window.cmsEditors['description']) {
+                    const content = window.cmsEditors['description'].getData();
+                    if (content !== this.lastContent) {
+                        this.lastContent = content;
+                        this.debouncedAnalyze();
+                    }
+                }
+            }, 3000);
+        },
+
+        debouncedAnalyze() {
+            clearTimeout(this.analyzeTimeout);
+            this.analyzeTimeout = setTimeout(() => this.runSeoAudit(), 1000);
+        },
+
+        async runSeoAudit() {
+            const content = window.cmsEditors && window.cmsEditors['description'] ? window.cmsEditors['description'].getData() : '';
+            try {
+                const response = await fetch('/admin/seo/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ 
+                        title: this.name,
+                        content: content,
+                        target_keyword: this.name // Assumed target keyword is the name
+                    })
+                });
+                this.seoReport = await response.json();
+            } catch (e) {}
+        },
 
         async autoInference() {
             if (!this.name) return alert('Identitas objek master diperlukan sebelum pemrosesan neural.');
@@ -158,6 +221,7 @@ function wikiForm() {
                     window.cmsEditors['description'].setData(data.description);
                 }
                 this.attributes = JSON.stringify(data.attributes, null, 4);
+                this.runSeoAudit();
             } catch (e) {
                 alert('Neural Network Disruption. Sceduling manual input protocol.');
             } finally {

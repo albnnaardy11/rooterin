@@ -1,6 +1,24 @@
 @extends('admin.layout')
 
 @section('content')
+    @if($autoHeals['interlinks'] > 0 || $autoHeals['404_fixes'] > 0)
+    <div class="mb-8" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 8000)" x-transition x-cloak>
+        <div class="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 text-green-400 px-6 py-4 rounded-[2rem] backdrop-blur-xl flex items-center justify-between shadow-2xl shadow-green-900/10">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-green-500 text-slate-900 flex items-center justify-center shadow-lg shadow-green-500/20 scale-90">
+                    <i class="ri-magic-line text-2xl animate-pulse"></i>
+                </div>
+                <div>
+                    <h4 class="font-black text-xs uppercase tracking-[0.2em] mb-1">SEO Auto-Heal: System Self-Repaired</h4>
+                    <p class="text-[10px] font-bold opacity-80 uppercase tracking-widest">
+                        Successfully anchored {{ $autoHeals['interlinks'] }} orphans and re-routed {{ $autoHeals['404_fixes'] }} broken paths into your network.
+                    </p>
+                </div>
+            </div>
+            <button @click="show = false" class="text-green-500/50 hover:text-green-500 transition-colors"><i class="ri-close-circle-fill text-2xl"></i></button>
+        </div>
+    </div>
+    @endif
 <div class="space-y-12">
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -105,6 +123,21 @@
                     class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all font-bold text-left">
                 <i class="ri-line-chart-line text-xl"></i>
                 <span class="text-sm">Conversion Tracker</span>
+            </button>
+            <button @click="tab = '404'" :class="tab === '404' ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' : 'bg-white/5 text-slate-400 hover:bg-white/10'" 
+                    class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all font-bold text-left mt-4 border border-rose-500/20">
+                <i class="ri-error-warning-line text-xl"></i>
+                <span class="text-sm">404 Guard</span>
+            </button>
+            <button @click="tab = 'gsc'" :class="tab === 'gsc' ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-white/5 text-slate-400 hover:bg-white/10'" 
+                    class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all font-bold text-left border border-indigo-500/20">
+                <i class="ri-google-fill text-xl"></i>
+                <span class="text-sm">GSC Sync</span>
+            </button>
+            <button @click="tab = 'orphan'" :class="tab === 'orphan' ? 'bg-yellow-500 text-white shadow-lg shadow-yellow-500/20' : 'bg-white/5 text-slate-400 hover:bg-white/10'" 
+                    class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all font-bold text-left border border-yellow-500/20 mb-4">
+                <i class="ri-links-line text-xl"></i>
+                <span class="text-sm">Orphan Radar</span>
             </button>
             <button @click="tab = 'tools'" :class="tab === 'tools' ? 'bg-primary text-white' : 'bg-white/5 text-slate-400 hover:bg-white/10'" 
                     class="w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all font-bold text-left">
@@ -339,7 +372,142 @@
                 </div>
             </div>
 
-            <!-- Tools Tab -->
+            <!-- 404 Monitor Guard -->
+            <div x-show="tab === '404'" class="space-y-8" x-cloak>
+                <div class="bg-slate-900/50 p-8 rounded-[3rem] border border-white/5 backdrop-blur-xl">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 class="text-white font-black text-xl flex items-center gap-3">
+                                <i class="ri-error-warning-fill text-rose-500"></i>
+                                404 Loss Prevention
+                            </h3>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">Recover dead traffic into leads.</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-500 border border-rose-500/20">
+                            {{ $errorLogs->count() }}
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-hidden rounded-3xl border border-white/5 bg-slate-950/50">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-white/5">
+                                <tr>
+                                    <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500">Broken Path</th>
+                                    <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-center text-slate-500">Hits</th>
+                                    <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500">Last Seen</th>
+                                    <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-right text-slate-500">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5">
+                                @forelse($errorLogs as $log)
+                                <tr class="hover:bg-white/5 transition-colors">
+                                    <td class="px-6 py-4 font-mono text-rose-400 truncate max-w-xs">{{ $log->url }}</td>
+                                    <td class="px-6 py-4 font-black text-white text-center">{{ $log->hits }}</td>
+                                    <td class="px-6 py-4 text-xs text-slate-500">{{ $log->last_hit->diffForHumans() }}</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button class="px-4 py-2 bg-primary/20 text-primary hover:bg-primary hover:text-white rounded-lg text-[10px] font-black uppercase tracking-widest transition-all">
+                                            Redirect 301
+                                        </button>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="px-6 py-12 text-center text-slate-500 text-sm font-bold">
+                                        <i class="ri-shield-check-line text-3xl mb-2 block text-green-500"></i>
+                                        No broken links detected. Shield is fully operational.
+                                    </td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GSC Meta Sync -->
+            <div x-show="tab === 'gsc'" class="space-y-8" x-cloak>
+                <div class="bg-indigo-900/10 p-8 rounded-[3rem] border border-indigo-500/20 backdrop-blur-xl">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 class="text-white font-black text-xl flex items-center gap-3">
+                                <i class="ri-google-fill text-indigo-500"></i>
+                                Search Console Metrics
+                            </h3>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2 flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                                Live Sync (Auto)
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        @foreach($gscData as $data)
+                        <div class="bg-slate-950/50 border border-white/5 rounded-2xl p-6 hover:border-indigo-500/50 transition-colors group">
+                            <h4 class="text-xs font-black text-indigo-400 truncate mb-4" title="{{ $data['query'] }}">{{ $data['query'] }}</h4>
+                            <div class="flex items-end justify-between">
+                                <div>
+                                    <div class="text-2xl font-black text-white leading-none">{{ $data['clicks'] }}</div>
+                                    <div class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">Clicks</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-black text-green-400">Pos {{ $data['position'] }}</div>
+                                    <div class="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">CTR: {{ $data['ctr'] }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orphan Radar Scanner -->
+            <div x-show="tab === 'orphan'" class="space-y-8" x-cloak>
+                <div class="bg-yellow-900/10 p-8 rounded-[3rem] border border-yellow-500/20 backdrop-blur-xl">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 class="text-white font-black text-xl flex items-center gap-3">
+                                <i class="ri-radar-line text-yellow-500"></i>
+                                Orphan Node Radar
+                            </h3>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">Entities disconnected from the main crawl network.</p>
+                        </div>
+                        <form action="{{ route('admin.seo.scan-orphans') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="px-6 py-3 bg-yellow-500/20 hover:bg-yellow-500 text-yellow-500 hover:text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+                                Run Deep Scan
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="space-y-4">
+                        @forelse($orphanPages as $page)
+                        <div class="flex flex-col md:flex-row md:items-center justify-between p-6 rounded-2xl bg-slate-950/50 border border-white/5 gap-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center text-yellow-500">
+                                    <i class="ri-page-separator"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-bold text-sm">{{ $page['title'] }}</h4>
+                                    <p class="text-[10px] font-mono text-slate-500 mt-1">{{ $page['url'] }}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="px-3 py-1 bg-white/5 rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-400">{{ $page['type'] }}</span>
+                                <a href="{{ $page['url'] }}" target="_blank" class="w-8 h-8 rounded-lg bg-yellow-500 border border-yellow-400 flex items-center justify-center text-slate-900 hover:scale-110 transition-transform">
+                                    <i class="ri-arrow-right-up-line"></i>
+                                </a>
+                            </div>
+                        </div>
+                        @empty
+                        <div class="p-8 text-center text-slate-500">
+                            <i class="ri-rocket-2-line text-4xl mb-4 text-green-500 block"></i>
+                            <p class="font-bold">Perfect Architecture!</p>
+                            <p class="text-xs">All {{ \App\Models\WikiEntity::count() + \App\Models\Service::count() }} entities are perfectly interlinked.</p>
+                        </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
             <div x-show="tab === 'tools'" class="bg-slate-900/50 p-8 rounded-[3rem] border border-white/5 backdrop-blur-xl grid grid-cols-1 md:grid-cols-2 gap-8" x-cloak>
                 <div class="p-8 rounded-3xl bg-white/5 border border-white/5 text-center">
                     <i class="ri-radar-fill text-4xl text-indigo-500 mb-4 inline-block"></i>

@@ -33,7 +33,23 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, \Illuminate\Http\Request $request) {
+            if (!$request->wantsJson() && !$request->is('admin*') && !$request->is('api*') && !$request->is('storage*') && !$request->is('build*')) {
+                try {
+                    $url = rtrim($request->url(), '/');
+                    \App\Models\Seo404Log::updateOrCreate(
+                        ['url' => $url],
+                        [
+                            'hits' => \Illuminate\Support\Facades\DB::raw('hits + 1'),
+                            'last_hit' => now(),
+                            'is_redirected' => false
+                        ]
+                    );
+                } catch (\Exception $ex) {
+                    \Illuminate\Support\Facades\Log::error('Failed logging 404: ' . $ex->getMessage());
+                }
+            }
+        });
     })
     ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule) {
         // Sentinel Core Observability
