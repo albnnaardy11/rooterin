@@ -70,25 +70,25 @@
     </div>
 
     <!-- Advanced Filter & Search Hub -->
-    <div class="bg-white/5 border border-white/5 rounded-[3rem] p-10 shadow-2xl">
-        <form action="{{ route('admin.wiki.index') }}" method="GET" class="flex flex-col lg:flex-row gap-6">
-            <div class="flex-grow relative">
+    <div class="bg-white/5 border border-white/5 rounded-[3rem] p-6 lg:p-10 shadow-2xl">
+        <form action="{{ route('admin.wiki.index') }}" method="GET" class="flex flex-col lg:flex-row gap-4 lg:gap-6">
+            <div class="flex-grow relative w-full lg:w-auto">
                 <i class="ri-search-2-line absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 text-xl"></i>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari entitas, Wikidata ID, atau spesialisasi..." class="w-full bg-slate-900/50 border border-white/10 rounded-2xl pl-16 pr-6 py-5 text-white focus:border-primary outline-none text-sm font-medium transition-all focus:shadow-[0_0_30px_rgba(var(--color-primary-rgb),0.1)]">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari entitas..." class="w-full bg-slate-900/50 border border-white/10 rounded-2xl pl-16 pr-6 py-4 lg:py-5 text-white focus:border-primary outline-none text-sm font-medium transition-all focus:shadow-[0_0_30px_rgba(var(--color-primary-rgb),0.1)]">
             </div>
-            <div class="flex gap-4">
-                <select name="category" class="bg-slate-900/50 border border-white/10 rounded-2xl px-8 py-5 text-white outline-none focus:border-primary appearance-none cursor-pointer font-bold text-xs uppercase tracking-widest min-w-[200px]">
+            <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+                <select name="category" class="w-full sm:w-auto bg-slate-900/50 border border-white/10 rounded-2xl px-6 lg:px-8 py-4 lg:py-5 text-white outline-none focus:border-primary appearance-none cursor-pointer font-bold text-xs uppercase tracking-widest min-w-[200px]">
                     <option value="all">Semua Kategori</option>
                     @foreach($categories as $cat)
                         <option value="{{ $cat }}" {{ request('category') == $cat ? 'selected' : '' }}>{{ $cat }}</option>
                     @endforeach
                 </select>
-                <button type="submit" class="px-10 py-5 bg-secondary text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-secondary/80 transition-all flex items-center gap-3">
+                <button type="submit" class="w-full sm:w-auto px-6 lg:px-10 py-4 lg:py-5 bg-secondary text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-secondary/80 transition-all flex items-center justify-center gap-3">
                     <i class="ri-filter-3-line"></i>
                     Apply Filters
                 </button>
                 @if(request()->hasAny(['search', 'category']))
-                <a href="{{ route('admin.wiki.index') }}" class="px-8 py-5 bg-white/5 text-slate-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:text-white transition-all flex items-center justify-center">
+                <a href="{{ route('admin.wiki.index') }}" class="w-full sm:w-auto px-6 lg:px-8 py-4 lg:py-5 bg-white/5 text-slate-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:text-white transition-all flex items-center justify-center">
                     Reset
                 </a>
                 @endif
@@ -97,9 +97,9 @@
     </div>
 
     <!-- Data Manifest -->
-    <div class="bg-white/5 border border-white/5 rounded-[3rem] overflow-hidden shadow-2xl">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
+    <div class="bg-white/5 border border-white/5 rounded-3xl lg:rounded-[3rem] shadow-2xl overflow-hidden w-full max-w-[100vw]">
+        <div class="overflow-x-auto w-full no-scrollbar pb-6">
+            <table class="w-full text-left border-collapse min-w-[800px]">
                 <thead>
                     <tr class="bg-white/5">
                         <th class="px-10 py-8 text-[11px] font-black text-slate-500 uppercase tracking-widest">Master Entity Signature</th>

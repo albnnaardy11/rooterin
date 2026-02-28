@@ -20,9 +20,12 @@
 </head>
 <body class="bg-slate-950 text-slate-300">
 
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen w-full" x-data="{ sidebarOpen: false }">
+        <!-- Mobile Sidebar Overlay -->
+        <div x-show="sidebarOpen" class="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm lg:hidden" @click="sidebarOpen = false" x-transition.opacity style="display: none;"></div>
+
         <!-- Sidebar (Fixed) -->
-        <aside class="w-64 bg-slate-925 border-r border-white/5 flex flex-col fixed top-0 left-0 h-screen z-50 overflow-hidden bg-slate-900 shadow-2xl">
+        <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="w-64 transform lg:translate-x-0 transition-transform duration-300 border-r border-white/5 flex flex-col fixed top-0 left-0 h-screen z-50 overflow-hidden bg-slate-900 shadow-2xl">
             <!-- Pinned Header -->
             <div class="p-8 border-b border-white/5 flex-shrink-0 bg-slate-900">
                 <div class="flex items-center gap-3">
@@ -151,9 +154,24 @@
         </aside>
 
         <!-- Main Content Area (Offset by Sidebar Width) -->
-        <main class="flex-grow bg-slate-950 p-8 sm:p-12 ml-64 min-h-screen">
-            @yield('content')
-        </main>
+        <div class="flex-grow flex flex-col min-w-0 bg-slate-950 min-h-screen lg:ml-64">
+            <!-- Mobile Navigation Bar -->
+            <header class="lg:hidden flex items-center justify-between bg-slate-900 border-b border-white/5 p-4 sticky top-0 z-30 shadow-md">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                        <i class="ri-flashlight-fill text-lg"></i>
+                    </div>
+                    <span class="font-heading font-black text-lg text-white tracking-widest">ROOTER<span class="text-primary">IN</span></span>
+                </div>
+                <button @click="sidebarOpen = true" class="w-10 h-10 flex items-center justify-center rounded-lg bg-white/5 text-white hover:bg-primary hover:text-white transition-all">
+                    <i class="ri-menu-line text-xl"></i>
+                </button>
+            </header>
+
+            <main class="flex-grow p-4 sm:p-8 lg:p-12 overflow-x-hidden">
+                @yield('content')
+            </main>
+        </div>
     </div>
 
     @stack('scripts')
