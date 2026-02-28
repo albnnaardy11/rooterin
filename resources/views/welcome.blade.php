@@ -6,6 +6,8 @@
     {{-- 2. Trust Banner - Unique Selling Propositions --}}
     <x-sections.trust-banner />
 
+
+
     {{-- 3. Features Section - Problem Solver Explanation --}}
     <x-sections.features />
 
@@ -14,6 +16,9 @@
 
     {{-- 5. Services Section - Detailed Solutions Offering --}}
     <x-sections.services :services="$services" />
+
+        {{-- 2.1 Industrial Partners - Social Proof --}}
+    <x-sections.partners />
 
     {{-- 6. Gallery Section - Visual Proof of Completion --}}
     <x-sections.gallery :items="$projects" />

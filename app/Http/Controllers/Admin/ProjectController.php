@@ -10,10 +10,14 @@ use Illuminate\Support\Facades\Storage;
 class ProjectController extends Controller
 {
     protected $projectRepo;
+    protected $imageService;
 
-    public function __construct(ProjectRepositoryInterface $projectRepo)
-    {
+    public function __construct(
+        ProjectRepositoryInterface $projectRepo,
+        \App\Services\Image\ImageOptimizationService $imageService
+    ) {
         $this->projectRepo = $projectRepo;
+        $this->imageService = $imageService;
     }
 
     public function index()
@@ -37,8 +41,8 @@ class ProjectController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('projects', 'public');
-            $validated['images'] = ['/storage/' . $path];
+            $path = $this->imageService->optimize($request->file('image'), 'projects');
+            $validated['images'] = [$path];
         }
 
         unset($validated['image']);
@@ -71,8 +75,8 @@ class ProjectController extends Controller
             if ($oldImages && isset($oldImages[0]) && strpos($oldImages[0], '/storage/') === 0) {
                 Storage::disk('public')->delete(str_replace('/storage/', '', $oldImages[0]));
             }
-            $path = $request->file('image')->store('projects', 'public');
-            $validated['images'] = ['/storage/' . $path];
+            $path = $this->imageService->optimize($request->file('image'), 'projects');
+            $validated['images'] = [$path];
         }
 
         unset($validated['image']);

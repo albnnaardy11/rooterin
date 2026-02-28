@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
+    protected $imageService;
+
+    public function __construct(\App\Services\Image\ImageOptimizationService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
     public function index()
     {
         $files = Media::latest()->paginate(24);
@@ -21,19 +28,20 @@ class MediaController extends Controller
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $path = $file->store('uploads', 'public');
+            $fullPath = $this->imageService->optimize($file, 'uploads');
+            $relativePath = str_replace('/storage/', '', $fullPath);
 
             Media::create([
-                'filename' => basename($path),
+                'filename' => basename($relativePath),
                 'original_name' => $file->getClientOriginalName(),
-                'mime_type' => $file->getMimeType(),
-                'size' => $file->getSize(),
-                'path' => $path,
+                'mime_type' => 'image/webp',
+                'size' => Storage::disk('public')->size($relativePath),
+                'path' => $relativePath,
                 'disk' => 'public',
             ]);
         }
 
-        return back()->with('success', 'File uploaded to library.');
+        return back()->with('success', 'File uploaded and optimized to WebP.');
     }
 
     public function destroy($id)

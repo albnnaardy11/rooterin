@@ -7,9 +7,9 @@
           class="mx-auto bg-secondary/95 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-[1.75rem] shadow-[0_25px_50px_rgba(0,0,0,0.35)] transition-all duration-500 px-6 lg:px-9 flex items-center justify-between relative">
         
         <!-- Logo Area -->
-        <div class="flex-shrink-0 flex items-center gap-4 group cursor-pointer relative">
-            <div class="relative w-10 h-10 sm:w-12 sm:h-12 bg-primary flex items-center justify-center rounded-2xl shadow-lg shadow-primary/20 transition-all duration-500 group-hover:scale-105">
-                <i class="ri-flashlight-fill text-white text-2xl sm:text-2xl"></i>
+        <div class="flex-shrink-0 flex items-center gap-3 sm:gap-4 group cursor-pointer relative">
+            <div class="relative w-9 h-9 sm:w-12 sm:h-12 bg-primary flex items-center justify-center rounded-xl sm:rounded-2xl shadow-lg shadow-primary/20 transition-all duration-500 group-hover:scale-105">
+                <i class="ri-flashlight-fill text-white text-xl sm:text-2xl"></i>
             </div>
             <div class="relative flex flex-col">
                 @php
@@ -17,7 +17,7 @@
                     $firstPart = substr($siteName, 0, -2);
                     $lastPart = substr($siteName, -2);
                 @endphp
-                <span class="font-heading font-black text-xl sm:text-2xl text-white tracking-widest leading-none">{{ strtoupper($firstPart) }}<span class="text-primary">{{ strtoupper($lastPart) }}</span></span>
+                <span class="font-heading font-black text-lg sm:text-2xl text-white tracking-widest leading-none">{{ strtoupper($firstPart) }}<span class="text-primary">{{ strtoupper($lastPart) }}</span></span>
                 <span class="hidden sm:block text-[9px] text-gray-500 font-black tracking-[0.4em] uppercase mt-1.5">Organic Plumbing Hub</span>
             </div>
         </div>
@@ -76,8 +76,8 @@
 
         <!-- Action Area -->
         <div class="flex items-center gap-2 sm:gap-4">
-            <!-- Ghostwriting Search Component -->
-            <div x-data="ghostSearch()" class="flex items-center relative">
+            <!-- Ghostwriting Search Component (Desktop Only) -->
+            <div x-data="ghostSearch()" class="hidden md:flex items-center relative">
                 <div x-show="searchOpen" class="absolute right-0 top-full mt-4 w-[280px] sm:w-[400px] bg-secondary/95 backdrop-blur-3xl border border-white/10 rounded-3xl p-6 shadow-3xl z-[100]" x-cloak @click.away="searchOpen = false">
                     <input type="text" x-model="query" @input.debounce.300ms="fetchSuggestions" placeholder="Cari masalah pipa anda..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white text-sm focus:outline-none focus:border-primary transition-all">
                     
@@ -97,7 +97,6 @@
                                         <p class="text-slate-500 text-[10px] italic mt-1" x-text="item.snippet"></p>
                                     </a>
                                 </template>
-                                <div x-show="results.length === 0 && query.length > 2" class="text-slate-500 text-xs italic text-center py-4">Tidak ada saran cepat...</div>
                             </div>
                         </template>
                     </div>
@@ -108,8 +107,9 @@
                 </button>
             </div>
 
+            <!-- WA Button - Desktop/Tablet Only -->
             <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281246668749')) }}" 
-               class="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 px-3 sm:px-4 xl:px-6 py-2 sm:py-2.5 xl:py-3 rounded-2xl transition-all duration-300 group">
+               class="hidden md:flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 px-3 sm:px-4 xl:px-6 py-2 sm:py-2.5 xl:py-3 rounded-2xl transition-all duration-300 group">
                 <div class="hidden xl:block text-right">
                     <div class="text-[9px] text-gray-400 font-black uppercase tracking-widest leading-none mb-1.5">Butuh Bantuan?</div>
                     <div class="text-white font-black text-[11px] uppercase tracking-widest leading-none">WhatsApp SOS</div>
@@ -121,14 +121,14 @@
 
             <!-- Pop-out Hamburger -->
             <button @click="open = ! open" 
-                    class="relative xl:hidden w-11 h-11 flex items-center justify-center rounded-2xl transition-all duration-500 z-[70]"
+                    class="relative xl:hidden w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-xl sm:rounded-2xl transition-all duration-500 z-[70]"
                     :class="open ? 'bg-primary scale-110 shadow-[0_10px_25px_rgba(31,175,90,0.4)]' : 'bg-white/10'">
                 <div class="relative w-6 h-5 flex items-center justify-center">
-                    <span class="absolute h-[3px] bg-white rounded-full transition-all duration-500 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)]"
+                    <span class="absolute h-[2.5px] bg-white rounded-full transition-all duration-500 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)]"
                           :class="open ? 'w-6 rotate-45' : 'w-6 -translate-y-2'"></span>
-                    <span class="absolute h-[3px] bg-white rounded-full transition-all duration-300"
+                    <span class="absolute h-[2.5px] bg-white rounded-full transition-all duration-300"
                           :class="open ? 'w-0 opacity-0 translate-x-4' : 'w-4 translate-x-1.5'"></span>
-                    <span class="absolute h-[3px] bg-white rounded-full transition-all duration-500 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)]"
+                    <span class="absolute h-[2.5px] bg-white rounded-full transition-all duration-500 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)]"
                           :class="open ? 'w-6 -rotate-45' : 'w-6 translate-y-2'"></span>
                 </div>
             </button>
@@ -143,8 +143,28 @@
          x-transition:leave="transition ease-in duration-400"
          x-transition:leave-start="opacity-100 translate-y-0 scale-100"
          x-transition:leave-end="opacity-0 translate-y-10 scale-95"
-         class="xl:hidden absolute top-[90px] sm:top-[120px] left-4 right-4 sm:left-8 sm:right-8 bg-secondary/98 backdrop-blur-3xl border border-white/10 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-8 shadow-[0_40px_100px_rgba(0,0,0,0.5)] max-h-[calc(100vh-140px)] overflow-y-auto no-scrollbar">
+         class="xl:hidden absolute top-[85px] sm:top-[120px] left-4 right-4 sm:left-8 sm:right-8 bg-secondary/98 backdrop-blur-3xl border border-white/10 rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 shadow-[0_40px_100px_rgba(0,0,0,0.5)] max-h-[calc(100vh-120px)] overflow-y-auto no-scrollbar">
         
+        <!-- Mobile Search Area -->
+        <div class="mb-8 md:hidden" x-data="ghostSearch()">
+            <div class="relative">
+                <input type="text" x-model="query" @input.debounce.300ms="fetchSuggestions" placeholder="Cari masalah pipa anda..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white text-sm focus:outline-none focus:border-primary transition-all">
+                <i class="ri-search-line absolute right-5 top-1/2 -translate-y-1/2 text-gray-500"></i>
+            </div>
+            
+            <div x-show="query.length >= 3" class="mt-4 space-y-3">
+                <div x-show="loading" class="flex justify-center py-4">
+                    <div class="w-5 h-5 border-2 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+                </div>
+                <template x-for="item in results" :key="item.title">
+                    <a :href="item.url" class="block p-3 rounded-xl bg-white/5 border border-transparent hover:border-white/10">
+                        <span class="text-[7px] font-black text-primary uppercase" x-text="item.type"></span>
+                        <h4 class="text-white font-bold text-xs" x-text="item.title"></h4>
+                    </a>
+                </template>
+            </div>
+        </div>
+
         <div class="relative flex flex-col gap-1 z-20">
             @php 
                 $index = 1; 

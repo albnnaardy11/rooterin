@@ -80,6 +80,8 @@ Route::prefix('admin')->name('admin.')->middleware(['audit'])->group(function() 
     Route::post('/settings/bulk', [\App\Http\Controllers\Admin\SettingController::class, 'updateBulk'])->name('settings.bulk');
     Route::put('/settings/{id}', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
     
+    Route::resource('/partners', \App\Http\Controllers\Admin\PartnerController::class);
+
     // Messages
     Route::get('/messages', [\App\Http\Controllers\Admin\MessageController::class, 'index'])->name('messages.index');
     Route::get('/messages/{id}', [\App\Http\Controllers\Admin\MessageController::class, 'show'])->name('messages.show');

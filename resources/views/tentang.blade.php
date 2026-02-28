@@ -15,6 +15,9 @@
     {{-- 5. FAQ Section - Detailed Information --}}
     <x-sections.tentang.faq-complex :categories="$categories" />
 
+    {{-- 5.1 Industrial Partners --}}
+    <x-sections.partners />
+
     {{-- 6. Final CTA --}}
     <x-sections.tentang.cta />
 
