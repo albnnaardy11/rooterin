@@ -84,5 +84,27 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('backup:clean')
                  ->dailyAt('01:30')
                  ->timezone('Asia/Jakarta');
+
+        // --- UNICORP-GRADE: AUTOMATION PIPELINES ---
+        
+        // 1. Intelligence Sync: Pull GSC Performance Daily
+        $schedule->command('seo:sync-gsc')
+                 ->dailyAt('02:30')
+                 ->timezone('Asia/Jakarta');
+
+        // 2. Self-Healing: Repair Dead Links Hourly
+        $schedule->command('seo:repair-404')
+                 ->hourly()
+                 ->withoutOverlapping();
+
+        // 3. Asset Hardening: Image Optimization & AI Alt Tags
+        $schedule->command('media:optimize')
+                 ->everyThreeHours()
+                 ->withoutOverlapping();
+
+        // 4. Admin Intelligence: WhatsApp Daily Summary (08:00 AM)
+        $schedule->command('sentinel:report-daily')
+                 ->dailyAt('08:00')
+                 ->timezone('Asia/Jakarta');
     })
     ->create();

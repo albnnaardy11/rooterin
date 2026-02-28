@@ -86,4 +86,50 @@ class GoogleSearchConsoleService
             }
         });
     }
+
+    /**
+     * UNICORP-GRADE: Synchronize historical performance to local DB
+     */
+    public function syncHistoricalData($days = 3)
+    {
+        if (!$this->isConfigured) return false;
+
+        try {
+            $service = new SearchConsole($this->client);
+            $startDate = date('Y-m-d', strtotime("-$days days"));
+            $endDate = date('Y-m-d', strtotime("-1 day"));
+
+            $request = new \Google\Service\SearchConsole\SearchAnalyticsQueryRequest();
+            $request->setStartDate($startDate);
+            $request->setEndDate($endDate);
+            $request->setDimensions(['query', 'date']);
+            $request->setRowLimit(500);
+
+            $query = $service->searchanalytics->query($this->siteUrl, $request);
+            $rows = $query->getRows();
+
+            if (!$rows) return true;
+
+            foreach ($rows as $row) {
+                \App\Models\SeoPerformanceStat::updateOrCreate(
+                    [
+                        'query' => $row->getKeys()[0],
+                        'date' => $row->getKeys()[1],
+                    ],
+                    [
+                        'clicks' => $row->getClicks(),
+                        'impressions' => $row->getImpressions(),
+                        'ctr' => round($row->getCtr() * 100, 2),
+                        'position' => round($row->getPosition(), 2)
+                    ]
+                );
+            }
+
+            Log::info("[SENTINEL-GSC] Synced " . count($rows) . " performance records.");
+            return true;
+        } catch (\Exception $e) {
+            Log::error('GSC Sync Error: ' . $e->getMessage());
+            return false;
+        }
+    }
 }

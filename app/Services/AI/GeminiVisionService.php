@@ -4,63 +4,25 @@ namespace App\Services\AI;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class GeminiVisionService
 {
     protected $apiKeys = [];
     protected $endpointTemplate = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
-    public function __construct()
-    {
-        // FORCE-READ: Manually parse .env to bypass Laragon/PHP-CGI environment caching
-        $envPath = base_path('.env');
-        $envContent = file_exists($envPath) ? file_get_contents($envPath) : '';
-        
-        for ($i = 1; $i <= 10; $i++) {
-            $keyName = $i === 1 ? 'GEMINI_API_KEY' : "GEMINI_API_KEY_{$i}";
-            
-            // Try standard env first, then manually grep from file if needed
-            $key = env($keyName);
-            if (empty($key) || str_starts_with($key, 'AIzaSyCK')) { // If empty or stuck on common old key prefix
-                if (preg_match("/^{$keyName}=(.*)$/m", $envContent, $matches)) {
-                    $key = trim($matches[1], "\"' ");
-                }
-            }
-
-            if ($key) {
-                $this->apiKeys[] = $key;
-                Log::info("[SENTINEL] Node-{$i} Loaded. Fingerprint: " . substr($key, 0, 8) . "...");
-            }
-        }
-        
-        if (empty($this->apiKeys)) {
-            Log::error('[SENTINEL] No API keys found in Neural Pool!');
-        }
-    }
-
     /**
-     * Round-Robin Key Selector (With Rate-Limit Evasion)
+     * UNICORP-GRADE: Neural Core (Centralized AI Gatekeeper)
      */
     private function getKey()
     {
-        if (empty($this->apiKeys)) return null;
+        $guard = app(\App\Services\Ai\AiQuotaGuardService::class);
+        $key = $guard->getActiveKey();
         
-        $keyCount = count($this->apiKeys);
-        
-        // Use a persistent pointer to rotate fairly, but try ALL keys in one go if needed
-        for ($attempts = 0; $attempts < $keyCount; $attempts++) {
-            $index = cache()->increment('sentinel_key_index') % $keyCount;
-            $nodeId = $index + 1;
-
-            if (!cache()->has("gemini_limit_{$nodeId}")) {
-                return [
-                    'key' => $this->apiKeys[$index],
-                    'index' => $nodeId
-                ];
-            }
-        }
-
-        return null;
+        return $key ? [
+            'key' => $key,
+            'index' => Cache::get('sentinel_ai_current_key_index', 0) + 1
+        ] : null;
     }
 
     /**
