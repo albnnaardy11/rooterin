@@ -174,6 +174,150 @@
         </div>
     </div>
 
+    {{-- ============================================================ --}}
+    {{-- NEW LIGHT-THEMED GLOBAL MODAL & TOAST --}}
+    {{-- ============================================================ --}}
+    <div id="cmsGlobalModal" class="fixed inset-0 z-[9999] flex items-center justify-center p-4" style="display: none;">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="CMS.modal.hide()"></div>
+        <div id="cmsModalPanel" class="relative w-full max-w-[420px] bg-slate-900 border border-white/5 rounded-[2rem] shadow-2xl p-8 transform transition-all duration-300 scale-95 opacity-0">
+            <!-- Icon -->
+            <div class="mx-auto w-16 h-16 rounded-full bg-slate-950 border border-white/5 shadow-inner flex items-center justify-center mb-6 relative z-10">
+                <div id="cmsModalIconWrap" class="w-10 h-10 rounded-full flex items-center justify-center">
+                    <i id="cmsModalIcon" class="text-2xl"></i>
+                </div>
+            </div>
+            
+            <!-- Text -->
+            <h3 id="cmsModalTitle" class="text-xl font-bold text-white text-center mb-3">Konfirmasi</h3>
+            <p id="cmsModalMessage" class="text-[13px] text-slate-400 text-center leading-relaxed mb-8 mx-auto max-w-sm"></p>
+            
+            <!-- Buttons -->
+            <div class="flex items-center gap-4">
+                <button onclick="CMS.modal.hide()" class="flex-1 py-3.5 px-4 rounded-xl border border-white/10 text-slate-300 font-bold hover:bg-white/5 transition-colors text-sm">Batal</button>
+                <button id="cmsModalConfirmBtn" onclick="CMS.modal.proceed()" class="flex-1 py-3.5 px-4 rounded-xl text-white font-bold transition-all duration-300 text-sm shadow-lg hover:-translate-y-0.5">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cmsToastContainer" class="fixed top-6 right-6 z-[9999] flex flex-col gap-4 pointer-events-none w-full max-w-[340px]"></div>
+
+    <script>
+    window.CMS = (() => {
+        let currentCallback = null;
+
+        const modal = {
+            show(message, callback, options = {}) {
+                currentCallback = callback;
+                const m = document.getElementById('cmsGlobalModal');
+                const panel = document.getElementById('cmsModalPanel');
+                const title = document.getElementById('cmsModalTitle');
+                const msg = document.getElementById('cmsModalMessage');
+                const btn = document.getElementById('cmsModalConfirmBtn');
+                const iconWrap = document.getElementById('cmsModalIconWrap');
+                const icon = document.getElementById('cmsModalIcon');
+
+                msg.innerHTML = message;
+                title.innerText = options.title || 'Konfirmasi';
+                btn.innerText = options.okText || 'Ya, Hapus';
+
+                const type = options.type || 'danger';
+                if(type === 'danger') {
+                    iconWrap.className = 'w-10 h-10 rounded-full flex items-center justify-center bg-rose-500/20 text-rose-500';
+                    icon.className = 'ri-error-warning-line text-2xl';
+                    btn.className = 'flex-1 py-3.5 px-4 rounded-xl text-white font-bold transition-all duration-300 text-sm shadow-[0_8px_20px_rgba(244,63,94,0.3)] bg-rose-500 hover:bg-rose-600 hover:-translate-y-0.5';
+                } else if(type === 'warning') {
+                    iconWrap.className = 'w-10 h-10 rounded-full flex items-center justify-center bg-amber-500/20 text-amber-500';
+                    icon.className = 'ri-alert-line text-2xl';
+                    btn.className = 'flex-1 py-3.5 px-4 rounded-xl text-white font-bold transition-all duration-300 text-sm shadow-[0_8px_20px_rgba(245,158,11,0.3)] bg-amber-500 hover:bg-amber-600 hover:-translate-y-0.5';
+                } else {
+                    iconWrap.className = 'w-10 h-10 rounded-full flex items-center justify-center bg-emerald-500/20 text-emerald-500';
+                    icon.className = 'ri-checkbox-circle-line text-2xl';
+                    btn.className = 'flex-1 py-3.5 px-4 rounded-xl text-white font-bold transition-all duration-300 text-sm shadow-[0_8px_20px_rgba(16,185,129,0.3)] bg-emerald-500 hover:bg-emerald-600 hover:-translate-y-0.5';
+                }
+
+                m.style.removeProperty('display');
+                m.style.display = 'flex';
+                setTimeout(() => {
+                    panel.classList.remove('scale-95', 'opacity-0');
+                    panel.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            },
+            hide() {
+                const m = document.getElementById('cmsGlobalModal');
+                const panel = document.getElementById('cmsModalPanel');
+                panel.classList.remove('scale-100', 'opacity-100');
+                panel.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => { m.style.display = 'none'; }, 300);
+            },
+            proceed() {
+                if(currentCallback) currentCallback();
+                this.hide();
+            }
+        };
+
+        const toast = {
+            show(title, message, type = 'success', duration = 4000) {
+                const container = document.getElementById('cmsToastContainer');
+                const id = 'toast_' + Date.now();
+                
+                const cfg = {
+                    success: { bg: 'bg-emerald-500', text: 'text-emerald-500', light: 'bg-emerald-500/20', icon: 'ri-checkbox-circle-line' },
+                    error: { bg: 'bg-rose-500', text: 'text-rose-500', light: 'bg-rose-500/20', icon: 'ri-error-warning-line' },
+                    warning: { bg: 'bg-amber-500', text: 'text-amber-500', light: 'bg-amber-500/20', icon: 'ri-alert-line' },
+                    info: { bg: 'bg-blue-500', text: 'text-blue-500', light: 'bg-blue-500/20', icon: 'ri-information-line' }
+                }[type] || { bg: 'bg-slate-500', text: 'text-slate-500', light: 'bg-slate-500/20', icon: 'ri-information-line' };
+
+                const el = document.createElement('div');
+                el.id = id;
+                el.className = `bg-slate-900 border border-white/5 rounded-[1rem] shadow-lg p-4 pr-10 flex items-start gap-3 relative overflow-hidden pointer-events-auto transform transition-all duration-500 translate-x-full opacity-0`;
+                el.innerHTML = `
+                    <div class="absolute left-0 top-0 bottom-0 w-1.5 ${cfg.bg}"></div>
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center ${cfg.text} flex-shrink-0 mt-0.5">
+                        <i class="${cfg.icon} text-[26px]"></i>
+                    </div>
+                    <div class="flex-1 min-w-0 pr-2">
+                        <h4 class="text-[14px] font-extrabold text-white mb-0.5 leading-tight">${title}</h4>
+                        <p class="text-[13px] text-slate-400 leading-snug">${message}</p>
+                    </div>
+                    <button onclick="CMS.toast.dismiss('${id}')" class="absolute top-4 right-3 text-slate-500 hover:text-slate-300 outline-none w-6 h-6 flex items-center justify-center">
+                        <i class="ri-close-line text-lg"></i>
+                    </button>
+                    <div class="absolute bottom-0 left-0 right-0 h-1 ${cfg.light}">
+                        <div class="h-full ${cfg.bg} transition-all origin-left" style="width:100%; transition-duration: ${duration}ms; transition-timing-function: linear;"></div>
+                    </div>
+                `;
+                container.appendChild(el);
+
+                setTimeout(() => {
+                    el.classList.remove('translate-x-full', 'opacity-0');
+                    const prog = el.querySelector('div.absolute.bottom-0 > div');
+                    if(prog) { setTimeout(() => { prog.style.width = '0%'; }, 50); }
+                }, 10);
+
+                setTimeout(() => this.dismiss(id), duration);
+            },
+            dismiss(id) {
+                const el = document.getElementById(id);
+                if(el){
+                    el.classList.add('translate-x-full', 'opacity-0');
+                    setTimeout(() => el.remove(), 500);
+                }
+            }
+        };
+
+        function confirmAction(formId, itemName, titleLabel="Hapus Data?") {
+            const msg = `Apakah Anda yakin ingin menghapus <b>&quot;${itemName}&quot;</b>?<br>Tindakan ini tidak dapat dibatalkan.`;
+            modal.show(msg, () => document.getElementById(formId).submit(), { title: titleLabel, type: 'danger', okText: 'Ya, Hapus' });
+        }
+
+        return { modal, toast, confirmAction };
+    })();
+
+    @if(session('success')) document.addEventListener('DOMContentLoaded', () => CMS.toast.show('Success', @json(session('success')), 'success')); @endif
+    @if(session('error')) document.addEventListener('DOMContentLoaded', () => CMS.toast.show('Error', @json(session('error')), 'error')); @endif
+    @if(session('warning')) document.addEventListener('DOMContentLoaded', () => CMS.toast.show('Warning', @json(session('warning')), 'warning')); @endif
+    </script>
+    
     @stack('scripts')
 </body>
 </html>

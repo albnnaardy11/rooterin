@@ -19,19 +19,7 @@
         </a>
     </div>
 
-    @if(session('success'))
-    <div class="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-2xl flex items-center gap-3 text-emerald-500 text-xs font-bold uppercase tracking-widest">
-        <i class="ri-checkbox-circle-line text-xl"></i>
-        {{ session('success') }}
-    </div>
-    @endif
 
-    @if(session('error'))
-    <div class="bg-red-500/10 border border-red-500/20 p-4 rounded-2xl flex items-center gap-3 text-red-500 text-xs font-bold uppercase tracking-widest">
-        <i class="ri-error-warning-line text-xl"></i>
-        {{ session('error') }}
-    </div>
-    @endif
 
     <!-- Table -->
     <div class="bg-slate-900/50 rounded-[2.5rem] border border-white/5 overflow-hidden backdrop-blur-xl">
@@ -79,10 +67,10 @@
                                 <a href="{{ route('admin.users.edit', $user->id) }}" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:bg-white/10 hover:text-white transition-all border border-white/5">
                                     <i class="ri-edit-2-line text-lg"></i>
                                 </a>
-                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Terminate this access permanently?')">
+                                <form id="deleteUserForm_{{ $user->id }}" action="{{ route('admin.users.destroy', $user->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all border border-red-500/20">
+                                    <button type="button" onclick="CMS.confirmAction('deleteUserForm_{{ $user->id }}', '{{ addslashes($user->name) }}', 'Hapus Akses User?')" class="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition-all border border-red-500/20">
                                         <i class="ri-delete-bin-7-line text-lg"></i>
                                     </button>
                                 </form>

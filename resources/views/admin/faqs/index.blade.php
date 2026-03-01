@@ -119,11 +119,7 @@
         </div>
     </div>
 
-    @if(session('success'))
-    <div class="p-6 bg-emerald-500/10 border border-emerald-500/20 rounded-3xl text-emerald-500 text-sm font-bold animate-in zoom-in duration-300">
-        <i class="ri-checkbox-circle-line mr-2"></i> {{ session('success') }}
-    </div>
-    @endif
+
 
     <!-- Tables Container with Multi-Table Logic -->
     <div class="grid grid-cols-1 gap-12">
@@ -203,10 +199,10 @@
                                         <a href="{{ route('admin.faqs.edit', $faq->id) }}" class="flex items-center gap-2 px-5 py-2.5 bg-white/5 text-[9px] font-black text-slate-300 uppercase tracking-widest rounded-xl hover:bg-primary hover:text-white transition-all">
                                             <i class="ri-edit-2-line"></i> EDIT
                                         </a>
-                                        <form action="{{ route('admin.faqs.destroy', $faq->id) }}" method="POST" class="inline">
+                                        <form id="deleteAboutFaqForm_{{ $faq->id }}" action="{{ route('admin.faqs.destroy', $faq->id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="w-10 h-10 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all flex items-center justify-center" onclick="return confirm('Initiate secure deletion of this logic entry?')">
+                                            <button type="button" onclick="CMS.confirmAction('deleteAboutFaqForm_{{ $faq->id }}', '{{ addslashes($faq->question) }}', 'Hapus FAQ?')" class="w-10 h-10 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all flex items-center justify-center">
                                                 <i class="ri-delete-bin-4-line text-lg"></i>
                                             </button>
                                         </form>
@@ -286,10 +282,10 @@
                                         <a href="{{ route('admin.faqs.edit', $faq->id) }}" class="flex items-center gap-2 px-5 py-2 calc bg-white/5 text-[9px] font-black text-slate-300 uppercase tracking-widest rounded-xl hover:bg-accent hover:text-white transition-all shadow-lg hover:shadow-accent/20">
                                             <i class="ri-settings-5-line"></i> CONFIGURE
                                         </a>
-                                        <form action="{{ route('admin.faqs.destroy', $faq->id) }}" method="POST" class="inline">
+                                        <form id="deleteLandingFaqForm_{{ $faq->id }}" action="{{ route('admin.faqs.destroy', $faq->id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="w-10 h-10 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shadow-lg hover:shadow-red-500/20" onclick="return confirm('Purge this intelligence entry from production?')">
+                                            <button type="button" onclick="CMS.confirmAction('deleteLandingFaqForm_{{ $faq->id }}', '{{ addslashes($faq->question) }}', 'Hapus FAQ?')" class="w-10 h-10 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all flex items-center justify-center shadow-lg hover:shadow-red-500/20">
                                                 <i class="ri-delete-bin-line text-lg"></i>
                                             </button>
                                         </form>

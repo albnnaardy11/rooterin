@@ -28,7 +28,7 @@ trait LogsActivity
         $newValues = null;
 
         if ($event === 'updated') {
-            $newValues = array_diff_assoc($this->getAttributes(), $this->getOriginal());
+            $newValues = $this->getChanges();
             $oldValues = array_intersect_key($this->getOriginal(), $newValues);
             
             // Filter out timestamps and irrelevant fields

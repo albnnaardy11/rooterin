@@ -22,11 +22,7 @@
         </a>
     </div>
 
-    @if(session('success'))
-    <div class="p-6 bg-emerald-500/10 border border-emerald-500/20 rounded-3xl text-emerald-500 text-sm font-bold animate-in zoom-in duration-300">
-        <i class="ri-checkbox-circle-line mr-2"></i> {{ session('success') }}
-    </div>
-    @endif
+
 
     <!-- Partners Grid Matrix -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -37,10 +33,10 @@
                 <a href="{{ route('admin.partners.edit', $partner->id) }}" class="w-10 h-10 bg-white/10 hover:bg-white/20 backdrop-blur-xl rounded-xl flex items-center justify-center text-white transition-all">
                     <i class="ri-edit-line"></i>
                 </a>
-                <form action="{{ route('admin.partners.destroy', $partner->id) }}" method="POST" onsubmit="return confirm('Disconnect this partner?')">
+                <form id="deletePartnerForm_{{ $partner->id }}" action="{{ route('admin.partners.destroy', $partner->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button class="w-10 h-10 bg-red-500/10 hover:bg-red-500/20 backdrop-blur-xl rounded-xl flex items-center justify-center text-red-500 transition-all">
+                    <button type="button" onclick="CMS.confirmAction('deletePartnerForm_{{ $partner->id }}', '{{ addslashes($partner->name) }}', 'Hapus Partner?')" class="w-10 h-10 bg-red-500/10 hover:bg-red-500/20 backdrop-blur-xl rounded-xl flex items-center justify-center text-red-500 transition-all">
                         <i class="ri-delete-bin-line"></i>
                     </button>
                 </form>

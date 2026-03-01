@@ -180,12 +180,13 @@
                                 <a href="{{ route('wiki.detail', $entity->slug) }}" target="_blank" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:bg-primary transition-all shadow-lg">
                                     <i class="ri-external-link-line"></i>
                                 </a>
-                                <form action="{{ route('admin.wiki.destroy', $entity->id) }}" method="POST" onsubmit="return confirm('WARNING: Tindakan ini permanen. Hapus entitas?')">
-                                    @csrf @method('DELETE')
-                                    <button class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-600 hover:text-red-500 hover:bg-red-500/10 transition-all">
-                                        <i class="ri-delete-bin-line"></i>
-                                    </button>
-                                </form>
+                                    <form id="deleteWikiForm_{{ $entity->id }}" action="{{ route('admin.wiki.destroy', $entity->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" onclick="CMS.confirmAction('deleteWikiForm_{{ $entity->id }}', '{{ addslashes($entity->title) }}', 'Hapus Wiki?')" class="w-10 h-10 bg-red-500/10 hover:bg-red-500/20 backdrop-blur-xl rounded-xl flex items-center justify-center text-red-500 transition-all border border-red-500/20" title="Delete Directive">
+                                            <i class="ri-delete-bin-line"></i>
+                                        </button>
+                                    </form>
                             </div>
                         </td>
                     </tr>

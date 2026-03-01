@@ -26,11 +26,7 @@
         </div>
     </div>
 
-    @if(session('success'))
-    <div class="p-6 bg-emerald-500/10 border border-emerald-500/20 rounded-3xl text-emerald-500 text-sm font-bold">
-        {{ session('success') }}
-    </div>
-    @endif
+
 
     <!-- Category Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -64,10 +60,10 @@
                             <a href="{{ route('admin.faq-categories.edit', $category->id) }}" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-all shadow-lg">
                                 <i class="ri-settings-4-line text-xl"></i>
                             </a>
-                            <form action="{{ route('admin.faq-categories.destroy', $category->id) }}" method="POST" class="inline">
+                            <form id="deleteCatForm_{{ $category->id }}" action="{{ route('admin.faq-categories.destroy', $category->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:bg-red-500 hover:text-white transition-all shadow-lg" onclick="return confirm('Securely delete this category matrix?')">
+                                <button type="button" onclick="CMS.confirmAction('deleteCatForm_{{ $category->id }}', '{{ addslashes($category->name) }}', 'Hapus Kategori?')" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:bg-red-500 hover:text-white transition-all shadow-lg">
                                     <i class="ri-delete-bin-line text-xl"></i>
                                 </button>
                             </form>

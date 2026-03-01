@@ -54,10 +54,10 @@
                         <a href="{{ route('admin.projects.edit', $project->id) }}" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white hover:scale-110 transition-all duration-300 shadow-lg">
                             <i class="ri-edit-2-fill text-lg"></i>
                         </a>
-                        <form action="{{ route('admin.projects.destroy', $project->id) }}" method="POST" class="inline">
+                        <form id="deleteProjectForm_{{ $project->id }}" action="{{ route('admin.projects.destroy', $project->id) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:bg-red-500 hover:text-white hover:scale-110 transition-all duration-300 shadow-lg" onclick="return confirm('Initiate archival sequence for this asset?')">
+                            <button type="button" onclick="CMS.confirmAction('deleteProjectForm_{{ $project->id }}', '{{ addslashes($project->title) }}', 'Arsipkan Aset?')" class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-400 hover:bg-red-500 hover:text-white hover:scale-110 transition-all duration-300 shadow-lg">
                                 <i class="ri-delete-bin-7-fill text-lg"></i>
                             </button>
                         </form>

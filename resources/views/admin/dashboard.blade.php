@@ -163,6 +163,8 @@
         </div>
     </div>
     @endif
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2 space-y-6">
             <div class="flex items-center justify-between px-2">
                 <h3 class="text-xl font-heading font-black text-white tracking-tight">Recent <span class="text-primary italic">Articles.</span></h3>
