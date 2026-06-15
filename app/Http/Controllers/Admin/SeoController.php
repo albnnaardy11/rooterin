@@ -225,18 +225,23 @@ class SeoController extends Controller
 
     public function pushIndexing(GoogleIndexingService $indexingService)
     {
-        $cities = SeoCity::where('is_active', true)->get();
-        $urls = [url('/')];
-        foreach ($cities as $city) {
-            $urls[] = route('local.city', $city->slug);
-            $services = \App\Models\Service::where('is_active', true)->get();
-            foreach ($services as $service) {
-                $urls[] = route('local.service', [$city->slug, $service->slug]);
+        try {
+            $cities = SeoCity::where('is_active', true)->get();
+            $urls = [url('/')];
+            foreach ($cities as $city) {
+                $urls[] = route('local.city', $city->slug);
+                $services = \App\Models\Service::where('is_active', true)->get();
+                foreach ($services as $service) {
+                    $urls[] = route('local.service', [$city->slug, $service->slug]);
+                }
             }
+            $targetUrls = array_slice($urls, 0, 100); 
+            $results = $indexingService->batchNotify($targetUrls);
+            $successCount = collect($results)->where('success', true)->count();
+            return back()->with('success', "Rocket Fired! $successCount URLs pushed to Google. Crawler is on its way.");
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Seo Rocket Error: ' . $e->getMessage());
+            return back()->with('error', 'Gagal meluncurkan Index Rocket. Periksa koneksi API Google Anda.');
         }
-        $targetUrls = array_slice($urls, 0, 100); 
-        $results = $indexingService->batchNotify($targetUrls);
-        $successCount = collect($results)->where('success', true)->count();
-        return back()->with('success', "Rocket Fired! $successCount URLs pushed to Google. Crawler is on its way.");
     }
 }

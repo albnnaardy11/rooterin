@@ -29,25 +29,30 @@ class ServiceController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|max:255',
-            'icon' => 'required',
-            'description_short' => 'required',
-            'description_full' => 'required',
-            'price' => 'nullable|numeric',
-            'is_active' => 'boolean',
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|max:255',
+                'icon' => 'required',
+                'description_short' => 'required',
+                'description_full' => 'required',
+                'price' => 'nullable|numeric',
+                'is_active' => 'boolean',
+            ]);
 
-        $validated['slug'] = Str::slug($request->name);
-        $validated['is_active'] = $request->has('is_active');
+            $validated['slug'] = Str::slug($request->name);
+            $validated['is_active'] = $request->has('is_active');
 
-        $service = $this->serviceRepo->create($validated);
+            $service = $this->serviceRepo->create($validated);
 
-        if ($request->has('seo')) {
-            $service->seo()->create($request->seo);
+            if ($request->has('seo')) {
+                $service->seo()->create($request->seo);
+            }
+
+            return redirect()->route('admin.services.index')->with('success', 'Service created successfully.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Service Store Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal membuat layanan. Silakan coba lagi.')->withInput();
         }
-
-        return redirect()->route('admin.services.index')->with('success', 'Service created successfully.');
     }
 
     public function edit($id)
@@ -58,32 +63,42 @@ class ServiceController extends Controller
 
     public function update(Request $request, $id)
     {
-        $service = $this->serviceRepo->find($id);
-        
-        $validated = $request->validate([
-            'name' => 'required|max:255',
-            'icon' => 'required',
-            'description_short' => 'required',
-            'description_full' => 'required',
-            'price' => 'nullable|numeric',
-            'is_active' => 'boolean',
-        ]);
+        try {
+            $service = $this->serviceRepo->find($id);
+            
+            $validated = $request->validate([
+                'name' => 'required|max:255',
+                'icon' => 'required',
+                'description_short' => 'required',
+                'description_full' => 'required',
+                'price' => 'nullable|numeric',
+                'is_active' => 'boolean',
+            ]);
 
-        $validated['slug'] = Str::slug($request->name);
-        $validated['is_active'] = $request->has('is_active');
+            $validated['slug'] = Str::slug($request->name);
+            $validated['is_active'] = $request->has('is_active');
 
-        $this->serviceRepo->update($id, $validated);
+            $this->serviceRepo->update($id, $validated);
 
-        if ($request->has('seo')) {
-            $service->seo()->updateOrCreate([], $request->seo);
+            if ($request->has('seo')) {
+                $service->seo()->updateOrCreate([], $request->seo);
+            }
+
+            return redirect()->route('admin.services.index')->with('success', 'Service updated successfully.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Service Update Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal memperbarui layanan. Silakan coba lagi.')->withInput();
         }
-
-        return redirect()->route('admin.services.index')->with('success', 'Service updated successfully.');
     }
 
     public function destroy($id)
     {
-        $this->serviceRepo->delete($id);
-        return redirect()->route('admin.services.index')->with('success', 'Service deleted successfully.');
+        try {
+            $this->serviceRepo->delete($id);
+            return redirect()->route('admin.services.index')->with('success', 'Service deleted successfully.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Service Delete Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus layanan. Data mungkin sedang digunakan.');
+        }
     }
 }

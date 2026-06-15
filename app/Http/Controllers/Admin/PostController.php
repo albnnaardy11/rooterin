@@ -43,36 +43,41 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|max:255',
-            'category' => 'required',
-            'content' => 'required',
-            'status' => 'required|in:draft,published',
-            'featured_image' => 'nullable|image|max:5120',
-        ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|max:255',
+                'category' => 'required',
+                'content' => 'required',
+                'status' => 'required|in:draft,published',
+                'featured_image' => 'nullable|image|max:5120',
+            ]);
 
-        $validated['slug'] = Str::slug($request->title);
-        
-        if ($request->hasFile('featured_image')) {
-            $validated['featured_image'] = $this->imageService->optimize(
-                $request->file('featured_image'), 
-                'posts'
-            );
+            $validated['slug'] = Str::slug($request->title);
+            
+            if ($request->hasFile('featured_image')) {
+                $validated['featured_image'] = $this->imageService->optimize(
+                    $request->file('featured_image'), 
+                    'posts'
+                );
+            }
+
+            $post = $this->postRepo->create($validated);
+
+            if ($request->has('seo')) {
+                $post->seo()->create($request->seo);
+            }
+
+            // SEO Automation
+            if ($post->status === 'published') {
+                $this->sitemapService->generate();
+                $this->indexingService->notifyUpdate(url("/tips/{$post->slug}"));
+            }
+
+            return redirect()->route('admin.posts.index')->with('success', 'Article created and indexed successfully.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Post Store Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menyimpan artikel. Terjadi kesalahan sistem.')->withInput();
         }
-
-        $post = $this->postRepo->create($validated);
-
-        if ($request->has('seo')) {
-            $post->seo()->create($request->seo);
-        }
-
-        // SEO Automation
-        if ($post->status === 'published') {
-            $this->sitemapService->generate();
-            $this->indexingService->notifyUpdate(url("/tips/{$post->slug}"));
-        }
-
-        return redirect()->route('admin.posts.index')->with('success', 'Article created and indexed successfully.');
     }
 
     public function edit($id)
@@ -83,59 +88,69 @@ class PostController extends Controller
 
     public function update(Request $request, $id)
     {
-        $post = $this->postRepo->find($id);
-        
-        $validated = $request->validate([
-            'title' => 'required|max:255',
-            'category' => 'required',
-            'content' => 'required',
-            'status' => 'required|in:draft,published',
-            'featured_image' => 'nullable|image|max:5120',
-        ]);
+        try {
+            $post = $this->postRepo->find($id);
+            
+            $validated = $request->validate([
+                'title' => 'required|max:255',
+                'category' => 'required',
+                'content' => 'required',
+                'status' => 'required|in:draft,published',
+                'featured_image' => 'nullable|image|max:5120',
+            ]);
 
-        $validated['slug'] = Str::slug($request->title);
-        
-        if ($request->hasFile('featured_image')) {
-            // Delete old image if exists
-            if ($post->featured_image && strpos($post->featured_image, '/storage/') === 0) {
-                Storage::disk('public')->delete(str_replace('/storage/', '', $post->featured_image));
+            $validated['slug'] = Str::slug($request->title);
+            
+            if ($request->hasFile('featured_image')) {
+                // Delete old image if exists
+                if ($post->featured_image && strpos($post->featured_image, '/storage/') === 0) {
+                    Storage::disk('public')->delete(str_replace('/storage/', '', $post->featured_image));
+                }
+                $validated['featured_image'] = $this->imageService->optimize(
+                    $request->file('featured_image'), 
+                    'posts'
+                );
             }
-            $validated['featured_image'] = $this->imageService->optimize(
-                $request->file('featured_image'), 
-                'posts'
-            );
+
+            $this->postRepo->update($id, $validated);
+
+            if ($request->has('seo')) {
+                $post->seo()->updateOrCreate([], $request->seo);
+            }
+
+            // SEO Automation
+            if ($validated['status'] === 'published') {
+                $this->sitemapService->generate();
+                $this->indexingService->notifyUpdate(url("/tips/{$post->slug}"));
+            }
+
+            return redirect()->route('admin.posts.index')->with('success', 'Article updated and re-indexed.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Post Update Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal memperbarui artikel. Silakan coba lagi.')->withInput();
         }
-
-        $this->postRepo->update($id, $validated);
-
-        if ($request->has('seo')) {
-            $post->seo()->updateOrCreate([], $request->seo);
-        }
-
-        // SEO Automation
-        if ($validated['status'] === 'published') {
-            $this->sitemapService->generate();
-            $this->indexingService->notifyUpdate(url("/tips/{$post->slug}"));
-        }
-
-        return redirect()->route('admin.posts.index')->with('success', 'Article updated and re-indexed.');
     }
 
     public function destroy($id)
     {
-        $post = $this->postRepo->find($id);
-        
-        if ($post->featured_image && strpos($post->featured_image, '/storage/') === 0) {
-            Storage::disk('public')->delete(str_replace('/storage/', '', $post->featured_image));
+        try {
+            $post = $this->postRepo->find($id);
+            
+            if ($post->featured_image && strpos($post->featured_image, '/storage/') === 0) {
+                Storage::disk('public')->delete(str_replace('/storage/', '', $post->featured_image));
+            }
+            
+            $url = url("/tips/{$post->slug}");
+            $this->postRepo->delete($id);
+
+            // SEO Automation
+            $this->sitemapService->generate();
+            $this->indexingService->notifyUpdate($url, 'URL_DELETED');
+
+            return redirect()->route('admin.posts.index')->with('success', 'Article deleted and removed from index.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Post Delete Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus artikel. Data mungkin sedang digunakan.');
         }
-        
-        $url = url("/tips/{$post->slug}");
-        $this->postRepo->delete($id);
-
-        // SEO Automation
-        $this->sitemapService->generate();
-        $this->indexingService->notifyUpdate($url, 'URL_DELETED');
-
-        return redirect()->route('admin.posts.index')->with('success', 'Article deleted and removed from index.');
     }
 }

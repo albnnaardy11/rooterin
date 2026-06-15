@@ -43,22 +43,27 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|max:255',
-            'category' => 'required',
-            'location' => 'nullable',
-            'image' => 'required|image|max:2048',
-        ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|max:255',
+                'category' => 'required',
+                'location' => 'nullable',
+                'image' => 'required|image|max:2048',
+            ]);
 
-        if ($request->hasFile('image')) {
-            $path = $this->imageService->optimize($request->file('image'), 'projects');
-            $validated['images'] = [$path];
+            if ($request->hasFile('image')) {
+                $path = $this->imageService->optimize($request->file('image'), 'projects');
+                $validated['images'] = [$path];
+            }
+
+            unset($validated['image']);
+            $this->projectRepo->create($validated);
+
+            return redirect()->route('admin.projects.index')->with('success', 'Project created successfully.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Project Store Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal membuat proyek. Silakan coba lagi.')->withInput();
         }
-
-        unset($validated['image']);
-        $this->projectRepo->create($validated);
-
-        return redirect()->route('admin.projects.index')->with('success', 'Project created successfully.');
     }
 
     public function edit($id)
@@ -70,44 +75,54 @@ class ProjectController extends Controller
 
     public function update(Request $request, $id)
     {
-        $project = $this->projectRepo->find($id);
-        
-        $validated = $request->validate([
-            'title' => 'required|max:255',
-            'category' => 'required',
-            'location' => 'nullable',
-            'image' => 'nullable|image|max:2048',
-        ]);
+        try {
+            $project = $this->projectRepo->find($id);
+            
+            $validated = $request->validate([
+                'title' => 'required|max:255',
+                'category' => 'required',
+                'location' => 'nullable',
+                'image' => 'nullable|image|max:2048',
+            ]);
 
-        if ($request->hasFile('image')) {
-            // Delete old image
-            $oldImages = $project->images;
-            if ($oldImages && isset($oldImages[0]) && strpos($oldImages[0], '/storage/') === 0) {
-                Storage::disk('public')->delete(str_replace('/storage/', '', $oldImages[0]));
+            if ($request->hasFile('image')) {
+                // Delete old image
+                $oldImages = $project->images;
+                if ($oldImages && isset($oldImages[0]) && strpos($oldImages[0], '/storage/') === 0) {
+                    Storage::disk('public')->delete(str_replace('/storage/', '', $oldImages[0]));
+                }
+                $path = $this->imageService->optimize($request->file('image'), 'projects');
+                $validated['images'] = [$path];
             }
-            $path = $this->imageService->optimize($request->file('image'), 'projects');
-            $validated['images'] = [$path];
+
+            unset($validated['image']);
+            $this->projectRepo->update($id, $validated);
+
+            return redirect()->route('admin.projects.index')->with('success', 'Project updated successfully.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Project Update Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal memperbarui proyek. Silakan coba lagi.')->withInput();
         }
-
-        unset($validated['image']);
-        $this->projectRepo->update($id, $validated);
-
-        return redirect()->route('admin.projects.index')->with('success', 'Project updated successfully.');
     }
 
     public function destroy($id)
     {
-        $project = $this->projectRepo->find($id);
-        $oldImages = $project->images;
-        if ($oldImages) {
-            foreach ($oldImages as $img) {
-                if (strpos($img, '/storage/') === 0) {
-                    Storage::disk('public')->delete(str_replace('/storage/', '', $img));
+        try {
+            $project = $this->projectRepo->find($id);
+            $oldImages = $project->images;
+            if ($oldImages) {
+                foreach ($oldImages as $img) {
+                    if (strpos($img, '/storage/') === 0) {
+                        Storage::disk('public')->delete(str_replace('/storage/', '', $img));
+                    }
                 }
             }
-        }
-        $this->projectRepo->delete($id);
+            $this->projectRepo->delete($id);
 
-        return redirect()->route('admin.projects.index')->with('success', 'Project deleted successfully.');
+            return redirect()->route('admin.projects.index')->with('success', 'Project deleted successfully.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Project Delete Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus proyek. Data mungkin digunakan di tempat lain.');
+        }
     }
 }

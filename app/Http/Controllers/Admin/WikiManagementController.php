@@ -50,44 +50,59 @@ class WikiManagementController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|unique:wiki_entities,title',
-            'category' => 'required',
-            'description' => 'required',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'required|unique:wiki_entities,title',
+                'category' => 'required',
+                'description' => 'required',
+            ]);
 
-        $data = $request->all();
-        if ($request->has('attributes_json')) {
-            $data['attributes'] = json_decode($request->attributes_json, true);
+            $data = $request->all();
+            if ($request->has('attributes_json')) {
+                $data['attributes'] = json_decode($request->attributes_json, true);
+            }
+
+            WikiEntity::create($data);
+
+            return redirect()->route('admin.wiki.index')->with('success', 'Entitas Wiki berhasil diinjeksikan ke Database Pengetahuan.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Wiki Store Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menyimpan entitas. Silakan coba lagi.')->withInput();
         }
-
-        WikiEntity::create($data);
-
-        return redirect()->route('admin.wiki.index')->with('success', 'Entitas Wiki berhasil diinjeksikan ke Database Pengetahuan.');
     }
 
     public function update(Request $request, WikiEntity $entity)
     {
-        $request->validate([
-            'title' => 'required|unique:wiki_entities,title,' . $entity->id,
-            'category' => 'required',
-            'description' => 'required',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'required|unique:wiki_entities,title,' . $entity->id,
+                'category' => 'required',
+                'description' => 'required',
+            ]);
 
-        $data = $request->all();
-        if ($request->has('attributes_json')) {
-            $data['attributes'] = json_decode($request->attributes_json, true);
+            $data = $request->all();
+            if ($request->has('attributes_json')) {
+                $data['attributes'] = json_decode($request->attributes_json, true);
+            }
+
+            $entity->update($data);
+
+            return redirect()->route('admin.wiki.index')->with('success', 'Otoritas data entitas berhasil disinkronisasi.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Wiki Update Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal mengupdate entitas. Silakan periksa kembali data Anda.')->withInput();
         }
-
-        $entity->update($data);
-
-        return redirect()->route('admin.wiki.index')->with('success', 'Otoritas data entitas berhasil disinkronisasi.');
     }
 
     public function delete(WikiEntity $entity)
     {
-        $entity->delete();
-        return back()->with('success', 'Entitas Wiki dihapus.');
+        try {
+            $entity->delete();
+            return back()->with('success', 'Entitas Wiki dihapus.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Wiki Delete Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus entitas. Data mungkin sedang digunakan.');
+        }
     }
 
     /**

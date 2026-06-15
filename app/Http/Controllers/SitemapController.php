@@ -12,45 +12,49 @@ class SitemapController extends Controller
 {
     public function index()
     {
-        // 1. Halaman statis utama
-        $staticUrls = [
-            route('home'),
-            route('about'),
-            route('services'),
-            route('gallery'),
-            route('tips'),
-            route('harga'),
-            route('contact'),
-        ];
+        $xml = \Illuminate\Support\Facades\Cache::remember('sitemap.xml', now()->addHours(12), function () {
+            // 1. Halaman statis utama
+            $staticUrls = [
+                route('home'),
+                route('about'),
+                route('services'),
+                route('gallery'),
+                route('tips'),
+                route('harga'),
+                route('contact'),
+            ];
 
-        // 2. Halaman tips/artikel (Post dengan status published)
-        $posts = Post::where('status', 'published')->orderBy('updated_at', 'desc')->get();
+            // 2. Halaman tips/artikel (Post dengan status published)
+            $posts = Post::where('status', 'published')->orderBy('updated_at', 'desc')->get();
 
-        // 3. Halaman wiki (WikiEntity)
-        $wikis = WikiEntity::orderBy('updated_at', 'desc')->get();
+            // 3. Halaman wiki (WikiEntity)
+            $wikis = WikiEntity::orderBy('updated_at', 'desc')->get();
 
-        // 4. Halaman area kota (SeoCity dengan is_active true)
-        $cities = SeoCity::where('is_active', true)->orderBy('updated_at', 'desc')->get();
+            // 4. Halaman area kota (SeoCity dengan is_active true)
+            $cities = SeoCity::where('is_active', true)->orderBy('updated_at', 'desc')->get();
 
-        // 5. Halaman kota-layanan (SeoCity x Service)
-        $services = Service::all();
-        $cityServices = [];
-        foreach ($cities as $city) {
-            foreach ($services as $service) {
-                $cityServices[] = [
-                    'city_slug' => $city->slug,
-                    'service_slug' => $service->slug,
-                    'updated_at' => max($city->updated_at, $service->updated_at)
-                ];
+            // 5. Halaman kota-layanan (SeoCity x Service)
+            $services = Service::all();
+            $cityServices = [];
+            foreach ($cities as $city) {
+                foreach ($services as $service) {
+                    $cityServices[] = [
+                        'city_slug' => $city->slug,
+                        'service_slug' => $service->slug,
+                        'updated_at' => max($city->updated_at, $service->updated_at)
+                    ];
+                }
             }
-        }
 
-        return response()->view('sitemap', [
-            'staticUrls' => $staticUrls,
-            'posts' => $posts,
-            'wikis' => $wikis,
-            'cities' => $cities,
-            'cityServices' => $cityServices,
-        ])->header('Content-Type', 'text/xml');
+            return view('sitemap', [
+                'staticUrls' => $staticUrls,
+                'posts' => $posts,
+                'wikis' => $wikis,
+                'cities' => $cities,
+                'cityServices' => $cityServices,
+            ])->render();
+        });
+
+        return response($xml)->header('Content-Type', 'text/xml');
     }
 }
