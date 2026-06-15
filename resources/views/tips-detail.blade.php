@@ -144,7 +144,7 @@
                         
                         {{-- Integrated Header Image & Title --}}
                         <div class="relative h-[400px] sm:h-[550px] overflow-hidden group">
-                            <img src="{{ $post->featured_image }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3000ms]">
+                            <img src="{{ $post->featured_image }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3000ms]" loading="lazy" decoding="async">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
                             
                             <div class="absolute bottom-12 left-8 right-8 sm:left-16 sm:right-16">
@@ -156,7 +156,7 @@
                                 </h1>
                                 <div class="flex items-center gap-6">
                                     <div class="flex items-center gap-3">
-                                        <img src="{{ $authorInfo['avatar'] }}" alt="{{ $authorName }}" class="w-10 h-10 rounded-xl object-cover border border-white/20">
+                                        <img src="{{ $authorInfo['avatar'] }}" alt="{{ $authorName }}" class="w-10 h-10 rounded-xl object-cover border border-white/20" loading="lazy" decoding="async">
                                         <div class="text-left">
                                             <p class="text-white font-black text-[10px] uppercase tracking-wider leading-none">{{ $authorName }}</p>
                                             <p class="text-white/60 text-[8px] font-bold uppercase tracking-widest mt-1">{{ $authorInfo['title'] }}</p>
@@ -194,7 +194,7 @@
                             <div class="mt-16 pt-16 border-t border-slate-100">
                                 <div class="bg-stone-50 rounded-[2.5rem] p-8 sm:p-10 flex flex-col sm:flex-row items-center sm:items-start gap-8 border border-slate-100">
                                     <div class="relative flex-shrink-0">
-                                        <img src="{{ $authorInfo['avatar'] }}" alt="{{ $authorName }}" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-4 border-white shadow-xl">
+                                        <img src="{{ $authorInfo['avatar'] }}" alt="{{ $authorName }}" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-4 border-white shadow-xl" loading="lazy" decoding="async">
                                         <div class="absolute -bottom-1 -right-1 bg-green-500 text-white w-7 h-7 rounded-full flex items-center justify-center border-2 border-white shadow" title="Penulis Ahli Terverifikasi">
                                             <i class="ri-checkbox-circle-fill text-sm"></i>
                                         </div>
@@ -281,6 +281,36 @@
         </div>
     </section>
 
+    {{-- Widget Interlinking Dinamis: Kami Melayani Area Anda --}}
+    @if(isset($serviceCities) && $serviceCities->count() > 0)
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-stone-50 rounded-[3rem] p-10 border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.03)] relative overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 mb-8 border-b border-slate-200/50 pb-8">
+                    <div>
+                        <h3 class="text-2xl font-heading font-black text-secondary flex items-center gap-3">
+                            <i class="ri-map-pin-user-fill text-primary text-3xl"></i>
+                            Kami Melayani Area Anda
+                        </h3>
+                        <p class="text-slate-500 mt-2 font-medium">Layanan profesional RooterIN tersedia di kota-kota berikut dengan garansi penuh.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 relative z-10">
+                    @foreach($serviceCities as $city)
+                        <a href="{{ route('local.city', $city->slug) }}" class="group/city bg-white border border-slate-100 rounded-2xl p-5 text-center hover:shadow-[0_15px_30px_rgba(0,0,0,0.05),0_0_20px_white] hover:-translate-y-1 transition-all duration-300">
+                            <div class="w-12 h-12 mx-auto bg-primary/10 text-primary rounded-full flex items-center justify-center mb-3 group-hover/city:bg-primary group-hover/city:text-white transition-colors">
+                                <i class="ri-map-pin-2-fill text-xl"></i>
+                            </div>
+                            <h4 class="font-black text-secondary text-sm group-hover/city:text-primary transition-colors">{{ $city->name }}</h4>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+    @endif
+
 <section class="py-12 sm:py-20 bg-stone-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- The High-Impact CTA Card (Named Group for Isolation) -->
@@ -289,7 +319,7 @@
             <!-- Background Image from Internet -->
             <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=2000&auto=format&fit=crop" 
                  alt="RooterIn Professional" 
-                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2000ms] group-hover/cta:scale-110">
+                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2000ms] group-hover/cta:scale-110" loading="lazy" decoding="async">
             
             <!-- Darker Gradient Overlay for Maximum Impact -->
             <div class="absolute inset-0 bg-secondary/60 backdrop-blur-[2px]"></div>

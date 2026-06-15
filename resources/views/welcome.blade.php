@@ -1,5 +1,30 @@
 <x-app-layout title="Jasa Saluran Mampet & Pipe Cleaning Premium">
-    
+    <x-slot name="semanticSchema">
+        @php
+            $faqEntities = [];
+            if(isset($faqs) && is_iterable($faqs)) {
+                foreach($faqs as $faq) {
+                    $faqEntities[] = [
+                        "@type" => "Question",
+                        "name" => is_array($faq) ? $faq['question'] : $faq->question,
+                        "acceptedAnswer" => [
+                            "@type" => "Answer",
+                            "text" => strip_tags(is_array($faq) ? $faq['answer'] : $faq->answer)
+                        ]
+                    ];
+                }
+            }
+            $schema = [
+                "@context" => "https://schema.org",
+                "@type" => "FAQPage",
+                "mainEntity" => $faqEntities
+            ];
+        @endphp
+        <script type="application/ld+json">
+            {!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+        </script>
+    </x-slot>
+
     {{-- 1. Hero Section - Primary Entry Point --}}
     <x-sections.hero />
 

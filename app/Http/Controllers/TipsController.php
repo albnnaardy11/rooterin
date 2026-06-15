@@ -63,6 +63,8 @@ class TipsController extends Controller
             $post->content = $this->linker->automate($post->content);
         }
 
-        return view('tips-detail', compact('post'));
+        $serviceCities = \App\Models\SeoCity::where('is_active', true)->inRandomOrder()->limit(6)->get();
+
+        return view('tips-detail', compact('post', 'serviceCities'));
     }
 }

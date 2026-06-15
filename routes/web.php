@@ -34,6 +34,8 @@ Route::get('/models/{file}', function($file) {
     ]);
 })->middleware(['phantom', 'throttle:phantom-api'])->name('neural.asset.serve');
 
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
+
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->middleware('throttle:public-web')->name('home');
 
 Route::get('/tentang', [\App\Http\Controllers\TentangController::class, 'index'])->name('about');

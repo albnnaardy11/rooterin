@@ -80,7 +80,47 @@
         ]
     ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 
-    $semanticSchema = "<script type=\"application/ld+json\">\n" . $serviceCatalogSchema . "\n</script>\n<script type=\"application/ld+json\">\n" . $breadcrumbSchema . "\n</script>";
+    $faqs = [
+        [
+            'q' => 'Apakah biaya jasa ditentukan per titik atau per meter?',
+            'a' => 'RooterIN menerapkan sistem tarif per titik masalah, bukan per meter. Ini jauh lebih menguntungkan karena Anda sudah tahu pasti berapa biaya yang harus dibayar sejak awal tanpa khawatir pipa yang panjang.'
+        ],
+        [
+            'q' => 'Bagaimana jika setelah dikerjakan saluran tetap mampet?',
+            'a' => 'Kami mengutamakan kepuasan pelanggan dengan prinsip "No Cure, No Pay". Jika kami tidak berhasil melancarkan saluran mampet Anda, Anda tidak dikenakan biaya jasa sama sekali.'
+        ],
+        [
+            'q' => 'Apakah ada garansi setelah pengerjaan selesai?',
+            'a' => 'Ya, kami memberikan garansi tertulis selama 30 hari sejak pengerjaan selesai. Jika saluran Anda mampet kembali dalam masa garansi, teknisi kami akan datang membersihkannya secara gratis.'
+        ],
+        [
+            'q' => 'Berapa lama proses pengerjaan saluran mampet?',
+            'a' => 'Rata-rata pengerjaan membutuhkan waktu 1 hingga 2 jam, tergantung tingkat keparahan sumbatan dan panjang saluran pipa.'
+        ],
+        [
+            'q' => 'Apa metode pembayaran yang diterima?',
+            'a' => 'Kami menerima pembayaran tunai (cash) langsung ke teknisi, transfer bank, maupun scan QRIS setelah pengerjaan selesai dilakukan dan berhasil.'
+        ]
+    ];
+
+    $faqEntities = array_map(function($faq) {
+        return [
+            "@type" => "Question",
+            "name" => $faq['q'],
+            "acceptedAnswer" => [
+                "@type" => "Answer",
+                "text" => strip_tags($faq['a'])
+            ]
+        ];
+    }, $faqs);
+
+    $faqSchemaJson = json_encode([
+        "@context" => "https://schema.org",
+        "@type" => "FAQPage",
+        "mainEntity" => $faqEntities
+    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+
+    $semanticSchema = "<script type=\"application/ld+json\">\n" . $serviceCatalogSchema . "\n</script>\n<script type=\"application/ld+json\">\n" . $breadcrumbSchema . "\n</script>\n<script type=\"application/ld+json\">\n" . $faqSchemaJson . "\n</script>";
 @endphp
 
 <x-app-layout :semanticSchema="$semanticSchema">
@@ -303,28 +343,7 @@
             </div>
 
             <div class="space-y-6" x-data="{ activeFaq: null }">
-                @foreach([
-                    [
-                        'q' => 'Apakah biaya jasa ditentukan per titik atau per meter?',
-                        'a' => 'RooterIN menerapkan sistem tarif per titik masalah, bukan per meter. Ini jauh lebih menguntungkan karena Anda sudah tahu pasti berapa biaya yang harus dibayar sejak awal tanpa khawatir pipa yang panjang.'
-                    ],
-                    [
-                        'q' => 'Bagaimana jika setelah dikerjakan saluran tetap mampet?',
-                        'a' => 'Kami mengutamakan kepuasan pelanggan dengan prinsip "No Cure, No Pay". Jika kami tidak berhasil melancarkan saluran mampet Anda, Anda tidak dikenakan biaya jasa sama sekali.'
-                    ],
-                    [
-                        'q' => 'Apakah ada garansi setelah pengerjaan selesai?',
-                        'a' => 'Ya, kami memberikan garansi tertulis selama 30 hari sejak pengerjaan selesai. Jika saluran Anda mampet kembali dalam masa garansi, teknisi kami akan datang membersihkannya secara gratis.'
-                    ],
-                    [
-                        'q' => 'Berapa lama proses pengerjaan saluran mampet?',
-                        'a' => 'Rata-rata pengerjaan membutuhkan waktu 1 hingga 2 jam, tergantung tingkat keparahan sumbatan dan panjang saluran pipa.'
-                    ],
-                    [
-                        'q' => 'Apa metode pembayaran yang diterima?',
-                        'a' => 'Kami menerima pembayaran tunai (cash) langsung ke teknisi, transfer bank, maupun scan QRIS setelah pengerjaan selesai dilakukan dan berhasil.'
-                    ]
-                ] as $index => $faq)
+                @foreach($faqs as $index => $faq)
                     <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden transition-all duration-300">
                         <button 
                             @click="activeFaq === {{ $index }} ? activeFaq = null : activeFaq = {{ $index }}"

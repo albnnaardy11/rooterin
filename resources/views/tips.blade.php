@@ -50,6 +50,7 @@
                         <div class="relative aspect-[4/5] rounded-[4rem] overflow-hidden shadow-[0_0_80px_rgba(255,255,255,0.1),0_50px_100px_-20px_rgba(0,0,0,0.5)] group">
                             <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1200&auto=format&fit=crop" 
                                  class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" 
+                                 loading="lazy" decoding="async"
                                  alt="Plumbing Expert Tips">
                             <div class="absolute inset-0 bg-gradient-to-t from-secondary via-transparent to-transparent opacity-60"></div>
                             
@@ -276,7 +277,7 @@
                             <div class="flex flex-col lg:flex-row items-stretch">
                                 <!-- Image Column -->
                                 <div class="lg:w-[45%] h-[350px] lg:h-auto overflow-hidden relative">
-                                    <img :src="featuredPost.img" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110">
+                                    <img :src="featuredPost.img" class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" loading="lazy" decoding="async">
                                     <div class="absolute inset-0 bg-gradient-to-tr from-secondary/20 to-transparent"></div>
                                     <div class="absolute top-8 left-8">
                                         <span x-text="featuredPost.category" class="px-6 py-2.5 bg-white/90 backdrop-blur-xl text-primary text-[10px] font-black uppercase tracking-[0.2em] rounded-xl shadow-lg"></span>
@@ -345,7 +346,7 @@
                         <template x-for="(post, index) in regularPosts" :key="index">
                             <div class="group bg-white rounded-[3rem] overflow-hidden shadow-[0_20px_40px_-5px_rgba(0,0,0,0.03),0_0_40px_white] transition-all duration-700 hover:-translate-y-3 hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.08),0_0_60px_white]">
                                 <div class="h-72 relative overflow-hidden card-image-container">
-                                    <img :src="post.img" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2500ms]">
+                                    <img :src="post.img" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2500ms]" loading="lazy" decoding="async">
                                     <div class="absolute top-6 left-6">
                                         <span x-text="post.category" class="px-5 py-2 bg-white/95 backdrop-blur-md text-secondary text-[9px] font-black uppercase tracking-widest rounded-full shadow-xl"></span>
                                     </div>
@@ -443,7 +444,7 @@
             <!-- Background Image from Internet -->
             <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=2000&auto=format&fit=crop" 
                  alt="RooterIn Professional" 
-                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2000ms] group-hover/cta:scale-110">
+                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-[2000ms] group-hover/cta:scale-110" loading="lazy" decoding="async">
             
             <!-- Darker Gradient Overlay for Maximum Impact -->
             <div class="absolute inset-0 bg-secondary/60 backdrop-blur-[2px]"></div>
