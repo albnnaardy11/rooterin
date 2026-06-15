@@ -358,7 +358,7 @@
 </script>
 
         <main class="flex-grow">
-            <section class="relative bg-secondary min-h-[75vh] sm:min-h-[95vh] flex items-center overflow-hidden pt-36 sm:pt-48 pb-10 sm:pb-46 sm:pb-42">
+            <section class="relative bg-secondary min-h-[75vh] lg:min-h-[85vh] xl:min-h-[97vh] flex items-center overflow-hidden pt-36 sm:pt-36 lg:pt-44 pb-16 lg:pb-32 xl:pb-40">
     <!-- Background Visuals (Consistent Brand DNA) -->
     <div class="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none"></div>
     <div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
@@ -442,17 +442,17 @@
         </div>
     </div>
 
-    <!-- Section Transition (Triple-Layered Premium Wave) -->
-    <div class="absolute bottom-0 -left-[5%] w-[110%] overflow-hidden leading-[0] z-20 translate-y-[1px]">
+    <!-- Section Transition (Ultra-Smooth Fluid Wave - Gallery Style) -->
+    <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-20 translate-y-[1px]">
         <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[120px] sm:h-[180px]">
-            <!-- Layer 1: Deep Primary Shadow -->
-            <path fill="var(--color-primary)" opacity="0.1" d="M0,40 C200,100 400,20 600,60 C800,100 1000,20 1200,40 L1200,120 L0,120 Z" class="animate-wave-slow"></path>
+            <!-- Layer 1: Soft Accent Ambient -->
+            <path fill="var(--color-accent)" opacity="0.1" d="M0,60 C300,120 900,0 1200,60 L1200,120 L0,120 Z" class="animate-wave-very-slow"></path>
             
-            <!-- Layer 2: Subtle Secondary Depth -->
-            <path fill="var(--color-primary)" opacity="0.2" d="M0,70 C300,120 600,20 900,70 C1050,95 1150,110 1200,80 L1200,120 L0,120 Z" class="animate-wave-mid"></path>
+            <!-- Layer 2: Soft Primary Ambient -->
+            <path fill="var(--color-primary)" opacity="0.1" d="M0,80 C400,140 800,20 1200,80 L1200,120 L0,120 Z" class="animate-wave-mid"></path>
             
             <!-- Layer 3: Main Surface (Stone-50) -->
-            <path fill="currentColor" class="text-stone-50" d="M0,100 C150,110 300,70 450,90 C600,110 750,130 900,110 C1050,90 1200,110 1200,110 L1200,120 L0,120 Z"></path>
+            <path fill="currentColor" class="text-stone-50" d="M0,100 C200,60 400,60 600,100 C800,140 1000,100 1200,60 L1200,120 L0,120 Z"></path>
         </svg>
     </div>
 </section>
@@ -462,23 +462,23 @@
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
     }
-    @keyframes wave {
-        0%, 100% { transform: translateX(0); }
-        50% { transform: translateX(-20px); }
+    @keyframes wave-flow {
+        0%, 100% { transform: translateX(0) skewY(0deg); }
+        50% { transform: translateX(-30px) skewY(0.5deg); }
     }
     .animate-spin-slow {
         animation: spin-slow 12s linear infinite;
     }
-    .animate-wave-slow {
-        animation: wave 10s ease-in-out infinite;
+    .animate-wave-very-slow {
+        animation: wave-flow 15s ease-in-out infinite;
     }
     .animate-wave-mid {
-        animation: wave 7s ease-in-out infinite;
+        animation: wave-flow 10s ease-in-out infinite;
     }
 </style>
 
     
-    <section class="py-32 bg-stone-50 overflow-hidden relative border-t border-gray-100">
+    <section class="py-32 bg-stone-50 overflow-hidden relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-20 items-start">
             

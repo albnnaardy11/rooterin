@@ -72,10 +72,30 @@
         </div>
     </div>
 
-    <!-- Section Transition Curve (Improved Wave) -->
-    <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[80px] text-white fill-current">
-            <path d="M0,0 C300,120 900,120 1200,0 L1200,120 L0,120 Z"></path>
+    <!-- Section Transition (Ultra-Smooth Fluid Wave - Gallery Style) -->
+    <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-20 translate-y-[1px]">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[120px] sm:h-[180px]">
+            <!-- Layer 1: Soft Accent Ambient -->
+            <path fill="var(--color-accent)" opacity="0.1" d="M0,60 C300,120 900,0 1200,60 L1200,120 L0,120 Z" class="animate-wave-very-slow"></path>
+            
+            <!-- Layer 2: Soft Primary Ambient -->
+            <path fill="var(--color-primary)" opacity="0.1" d="M0,80 C400,140 800,20 1200,80 L1200,120 L0,120 Z" class="animate-wave-mid"></path>
+            
+            <!-- Layer 3: Main Surface (White) -->
+            <path fill="currentColor" class="text-white" d="M0,100 C200,60 400,60 600,100 C800,140 1000,100 1200,60 L1200,120 L0,120 Z"></path>
         </svg>
     </div>
 </section>
+
+<style>
+    @keyframes wave-flow {
+        0%, 100% { transform: translateX(0) skewY(0deg); }
+        50% { transform: translateX(-30px) skewY(0.5deg); }
+    }
+    .animate-wave-very-slow {
+        animation: wave-flow 15s ease-in-out infinite;
+    }
+    .animate-wave-mid {
+        animation: wave-flow 10s ease-in-out infinite;
+    }
+</style>

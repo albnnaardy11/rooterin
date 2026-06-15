@@ -1,4 +1,4 @@
-<section class="py-32 bg-stone-50 overflow-hidden relative border-t border-gray-100">
+<section class="py-32 bg-stone-50 overflow-hidden relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row gap-20 items-start">
             
