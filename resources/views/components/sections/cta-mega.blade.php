@@ -1,7 +1,7 @@
 @props([
     'title' => 'Saluran Pipa Masih Mampet? <br> <span class="text-accent italic">Plong-kan Sekarang!</span>',
     'ctaText' => 'Hubungi Teknisi via WhatsApp',
-    'ctaLink' => 'https://wa.me/' . preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281246668749')) . '?text=Halo%20Kak%2C%20mau%20order%20jasa%20dong',
+    'ctaLink' => 'https://wa.me/' . preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281292059125')) . '?text=Halo%20Kak%2C%20mau%20order%20jasa%20dong',
     'infoTitle' => 'Konsultasi Gratis',
     'infoDesc' => 'Jangan biarkan mampet semakin parah. Hubungi kami untuk diagnosa awal tanpa biaya.',
     'bgImage' => 'https://images.unsplash.com/photo-1542013936693-884638332954?w=1600&fit=crop'
@@ -46,7 +46,7 @@
                      <div class="flex items-center justify-center lg:justify-start gap-4">
                          <a href="{{ \App\Models\Setting::get('instagram', '#') }}" class="text-white hover:text-primary transition-colors"><i class="ri-instagram-line text-2xl"></i></a>
                          <a href="{{ \App\Models\Setting::get('facebook', '#') }}" class="text-white hover:text-primary transition-colors"><i class="ri-facebook-box-line text-2xl"></i></a>
-                         <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281246668749')) }}" class="text-white hover:text-primary transition-colors"><i class="ri-whatsapp-line text-2xl"></i></a>
+                         <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281292059125')) }}" class="text-white hover:text-primary transition-colors"><i class="ri-whatsapp-line text-2xl"></i></a>
                      </div>
                 </div>
             </div>

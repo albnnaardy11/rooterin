@@ -145,7 +145,7 @@
                                     <div class="relative z-10 text-center">
                                         <h3 class="text-white !mt-0 text-3xl sm:text-4xl mb-6 italic">Masalah {{ $entity->title }} Tak Kunjung Usai?</h3>
                                         <p class="text-gray-400 mb-10 max-w-xl mx-auto">Percayakan pada ahlinya. Tim RooterIn siap menangani masalah Anda dengan garansi tuntas dan tanpa bongkar.</p>
-                                        <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}?text=Halo%20RooterIn%2C%20saya%20ingin%20konsultasi%20terkait%20{{ $entity->title }}" class="inline-flex items-center gap-4 px-12 py-5 bg-primary text-white rounded-full font-black uppercase text-xs tracking-widest shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all">
+                                        <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281292059125') }}?text=Halo%20RooterIn%2C%20saya%20ingin%20konsultasi%20terkait%20{{ $entity->title }}" class="inline-flex items-center gap-4 px-12 py-5 bg-primary text-white rounded-full font-black uppercase text-xs tracking-widest shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all">
                                             <i class="ri-whatsapp-line text-2xl"></i>
                                             Panggil Teknisi Sekarang
                                         </a>
@@ -169,7 +169,7 @@
                                 </div>
                                 <h4 class="text-secondary font-black text-2xl mb-4 leading-tight">Bantuan Teknis <br><span class="text-primary italic">Ahli Plumbing</span></h4>
                                 <p class="text-gray-400 text-sm mb-8 leading-relaxed">Jangan mengambil risiko pada instalasi pipa Anda. Percayakan pada profesional.</p>
-                                <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}" class="flex items-center justify-center gap-3 w-full py-5 bg-secondary text-white rounded-[2rem] font-black uppercase text-[10px] tracking-widest hover:bg-primary transition-all shadow-xl shadow-secondary/10">
+                                <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281292059125') }}" class="flex items-center justify-center gap-3 w-full py-5 bg-secondary text-white rounded-[2rem] font-black uppercase text-[10px] tracking-widest hover:bg-primary transition-all shadow-xl shadow-secondary/10">
                                     Fast Response WA
                                 </a>
                             </div>
@@ -215,7 +215,7 @@
                         Kembalikan Aliran <br> 
                         <span class="text-primary italic">Pipa Anda Sekarang.</span>
                     </h2>
-                    <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}" 
+                    <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281292059125') }}" 
                        class="inline-flex items-center gap-4 sm:gap-6 bg-white px-8 sm:px-12 lg:px-16 py-4 sm:py-5 lg:py-7 rounded-full shadow-[0_30px_60px_rgba(0,0,0,0.4)] hover:bg-primary transition-all duration-500 group/btn active:scale-95">
                         <span class="text-primary group-hover/btn:text-white font-black text-xs sm:text-base lg:text-xl uppercase tracking-widest transition-colors flex items-center gap-3 sm:gap-4">
                             Minta Survey Gratis

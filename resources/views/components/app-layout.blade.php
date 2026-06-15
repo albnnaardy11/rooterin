@@ -19,15 +19,15 @@
          ================================================================ --}}
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": ["LocalBusiness", "PlumbingContractor"],
-      "@id": "{{ url('/') }}/#rooterin-business",
+      "@@context": "https://schema.org",
+      "@@type": ["LocalBusiness", "PlumbingContractor"],
+      "@@id": "{{ url('/') }}/#rooterin-business",
       "name": "RooterIN",
       "legalName": "RooterIN - Jasa Saluran Mampet Profesional",
       "description": "RooterIN adalah jasa plumbing & saluran mampet terpercaya yang melayani wilayah Jabodetabek, Bali, Bandung, Serang, Lampung dan kota-kota besar Indonesia. Teknisi tersertifikasi, fast response 24 jam.",
       "url": "{{ url('/') }}",
       "logo": {
-        "@type": "ImageObject",
+        "@@type": "ImageObject",
         "url": "{{ url('/images/logo.png') }}",
         "width": 200,
         "height": 60
@@ -35,13 +35,13 @@
       "image": [
         "{{ url('/images/logo.png') }}"
       ],
-      "telephone": "+62-812-4666-8749",
+      "telephone": "+62-812-9205-9125",
       "email": "hello@rooterin.com",
       "priceRange": "Rp 600.000 - Rp 2.500.000",
       "currenciesAccepted": "IDR",
       "paymentAccepted": "Cash, Transfer Bank, QRIS",
       "address": {
-        "@type": "PostalAddress",
+        "@@type": "PostalAddress",
         "streetAddress": "Jakarta Selatan",
         "addressLocality": "Jakarta",
         "addressRegion": "DKI Jakarta",
@@ -49,39 +49,39 @@
         "addressCountry": "ID"
       },
       "geo": {
-        "@type": "GeoCoordinates",
+        "@@type": "GeoCoordinates",
         "latitude": "-6.2088",
         "longitude": "106.8456"
       },
       "openingHoursSpecification": [
         {
-          "@type": "OpeningHoursSpecification",
+          "@@type": "OpeningHoursSpecification",
           "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
           "opens": "00:00",
           "closes": "23:59"
         }
       ],
       "areaServed": [
-        { "@type": "City", "name": "Jakarta" },
-        { "@type": "City", "name": "Bogor" },
-        { "@type": "City", "name": "Depok" },
-        { "@type": "City", "name": "Tangerang" },
-        { "@type": "City", "name": "Bekasi" },
-        { "@type": "City", "name": "Bandung" },
-        { "@type": "City", "name": "Serang" },
-        { "@type": "City", "name": "Lampung" },
-        { "@type": "City", "name": "Denpasar" },
-        { "@type": "City", "name": "Badung" },
-        { "@type": "City", "name": "Gianyar" },
-        { "@type": "State", "name": "DKI Jakarta" },
-        { "@type": "State", "name": "Jawa Barat" },
-        { "@type": "State", "name": "Banten" },
-        { "@type": "State", "name": "Bali" }
+        { "@@type": "City", "name": "Jakarta" },
+        { "@@type": "City", "name": "Bogor" },
+        { "@@type": "City", "name": "Depok" },
+        { "@@type": "City", "name": "Tangerang" },
+        { "@@type": "City", "name": "Bekasi" },
+        { "@@type": "City", "name": "Bandung" },
+        { "@@type": "City", "name": "Serang" },
+        { "@@type": "City", "name": "Lampung" },
+        { "@@type": "City", "name": "Denpasar" },
+        { "@@type": "City", "name": "Badung" },
+        { "@@type": "City", "name": "Gianyar" },
+        { "@@type": "State", "name": "DKI Jakarta" },
+        { "@@type": "State", "name": "Jawa Barat" },
+        { "@@type": "State", "name": "Banten" },
+        { "@@type": "State", "name": "Bali" }
       ],
       "serviceArea": {
-        "@type": "GeoCircle",
+        "@@type": "GeoCircle",
         "geoMidpoint": {
-          "@type": "GeoCoordinates",
+          "@@type": "GeoCoordinates",
           "latitude": "-6.2088",
           "longitude": "106.8456"
         },
@@ -91,10 +91,10 @@
         "https://www.instagram.com/rooterin",
         "https://www.facebook.com/rooterin",
         "https://www.tiktok.com/@rooterin",
-        "https://wa.me/6281246668749"
+        "https://wa.me/6281292059125"
       ],
       "aggregateRating": {
-        "@type": "AggregateRating",
+        "@@type": "AggregateRating",
         "ratingValue": "4.9",
         "bestRating": "5",
         "worstRating": "1",
@@ -102,13 +102,13 @@
         "reviewCount": "189"
       },
       "hasOfferCatalog": {
-        "@type": "OfferCatalog",
+        "@@type": "OfferCatalog",
         "name": "Jasa Plumbing & Saluran Mampet",
         "itemListElement": [
           {
-            "@type": "Offer",
+            "@@type": "Offer",
             "itemOffered": {
-              "@type": "Service",
+              "@@type": "Service",
               "name": "Jasa Saluran Mampet",
               "description": "Bersihkan saluran pembuangan mampet dengan mesin spiral modern tanpa bongkar."
             },
@@ -117,9 +117,9 @@
             "availability": "https://schema.org/InStock"
           },
           {
-            "@type": "Offer",
+            "@@type": "Offer",
             "itemOffered": {
-              "@type": "Service",
+              "@@type": "Service",
               "name": "Cuci Toren & Tangki Air",
               "description": "Sterilisasi tangki air bersih dari lumut dan sedimentasi."
             },
@@ -128,16 +128,16 @@
             "availability": "https://schema.org/InStock"
           },
           {
-            "@type": "Offer",
+            "@@type": "Offer",
             "itemOffered": {
-              "@type": "Service",
+              "@@type": "Service",
               "name": "Instalasi Sanitary & Pipa",
               "description": "Pemasangan kloset, kran, dan jalur pipa baru dengan standar profesional."
             },
             "price": "0",
             "priceCurrency": "IDR",
             "priceSpecification": {
-              "@type": "PriceSpecification",
+              "@@type": "PriceSpecification",
               "description": "Harga berdasarkan survey lokasi"
             },
             "availability": "https://schema.org/InStock"
@@ -149,7 +149,7 @@
         "Cuci Toren", "Grease Trap", "Septic Tank", "Hydro Jetting"
       ],
       "founder": {
-        "@type": "Person",
+        "@@type": "Person",
         "name": "Tim Ahli RooterIN",
         "jobTitle": "Master Plumber"
       }

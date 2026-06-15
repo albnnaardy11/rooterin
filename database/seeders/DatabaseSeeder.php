@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
         // --- Settings Seeder ---
         $settings = [
             ['key' => 'site_name', 'value' => 'RooterIn', 'group' => 'general'],
-            ['key' => 'whatsapp_number', 'value' => '6281246668749', 'group' => 'contact'],
+            ['key' => 'whatsapp_number', 'value' => '6281292059125', 'group' => 'contact'],
             ['key' => 'email', 'value' => 'hello@rooterin.com', 'group' => 'contact'],
             ['key' => 'address', 'value' => 'Denpasar, Bali', 'group' => 'contact'],
             ['key' => 'instagram', 'value' => 'https://instagram.com/rooterin', 'group' => 'social'],

@@ -18,8 +18,8 @@
 
                 <div class="grid grid-cols-1 gap-4 sm:gap-6">
                     @foreach([
-                        ['icon' => 'ri-whatsapp-fill', 'title' => 'WhatsApp Desktop', 'value' => \App\Models\Setting::get('whatsapp_number', '0812-4666-8749'), 'sub' => 'Fast Response 24/7', 'link' => 'https://wa.me/' . preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281246668749'))],
-                        ['icon' => 'ri-phone-fill', 'title' => 'Emergency Call', 'value' => \App\Models\Setting::get('whatsapp_number', '0812-4666-8749'), 'sub' => 'Siap Berangkat Sekarang', 'link' => 'tel:' . preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281246668749'))],
+                        ['icon' => 'ri-whatsapp-fill', 'title' => 'WhatsApp Desktop', 'value' => \App\Models\Setting::get('whatsapp_number', '0812-9205-9125'), 'sub' => 'Fast Response 24/7', 'link' => 'https://wa.me/' . preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281292059125'))],
+                        ['icon' => 'ri-phone-fill', 'title' => 'Emergency Call', 'value' => \App\Models\Setting::get('whatsapp_number', '0812-9205-9125'), 'sub' => 'Siap Berangkat Sekarang', 'link' => 'tel:' . preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281292059125'))],
                         ['icon' => 'ri-mail-send-fill', 'title' => 'Email Inquiry', 'value' => \App\Models\Setting::get('email', 'rooterin@gmail.com'), 'sub' => 'Penawaran & Kerjasama Gedung', 'link' => 'mailto:' . \App\Models\Setting::get('email', 'rooterin@gmail.com')],
                         ['icon' => 'ri-map-pin-2-fill', 'title' => 'Wilayah Operasional', 'value' => \App\Models\Setting::get('address', 'Seluruh Jabodetabek'), 'sub' => 'Jakarta, Bogor, Depok, Tangerang, Bekasi', 'link' => '#']
                     ] as $contact)
@@ -49,7 +49,7 @@
                         <p class="text-gray-300 text-xs sm:text-sm font-medium leading-relaxed mb-6 sm:mb-8">
                             Jangan biarkan masalah pipa mampet merusak kenyamanan rumah Anda. Tim kami siap memberikan solusi permanen.
                         </p>
-                        <a href="https://wa.me/6281246668749" class="inline-flex items-center justify-center gap-3 sm:gap-4 bg-primary px-6 sm:px-8 py-3 sm:py-4 rounded-full text-white font-black text-[10px] sm:text-xs uppercase tracking-widest hover:bg-white hover:text-primary transition-all duration-500 w-full sm:w-auto">
+                        <a href="https://wa.me/6281292059125" class="inline-flex items-center justify-center gap-3 sm:gap-4 bg-primary px-6 sm:px-8 py-3 sm:py-4 rounded-full text-white font-black text-[10px] sm:text-xs uppercase tracking-widest hover:bg-white hover:text-primary transition-all duration-500 w-full sm:w-auto">
                             Mulai Chat Sekarang
                             <i class="ri-arrow-right-line"></i>
                         </a>

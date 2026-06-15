@@ -405,7 +405,7 @@
                                 </div>
                                 <h3 class="text-white font-heading font-black text-2xl mb-4 leading-tight">Pipa Mampet Parah?<br><span class="text-primary italic">Jangan Bongkar Sendiri!</span></h3>
                                 <p class="text-gray-400 text-sm mb-8">Tindakan salah bisa merusak struktur pipa. Hubungi teknisi ahli kami sekarang juga.</p>
-                                <x-button href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}" variant="primary" class="w-full !py-5 !rounded-2xl group/btn overflow-hidden transition-all hover:scale-[1.02] active:scale-95">
+                                <x-button href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281292059125') }}" variant="primary" class="w-full !py-5 !rounded-2xl group/btn overflow-hidden transition-all hover:scale-[1.02] active:scale-95">
                                     <span class="flex items-center justify-center gap-3">
                                         <i class="ri-whatsapp-line text-xl"></i>
                                         <span class="font-black uppercase tracking-widest text-xs">Panggil Bantuan</span>
@@ -470,7 +470,7 @@
                 </h2>
                 
                 <!-- Large Prominent White Pill Button (Separate Named Group) -->
-                <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}" 
+                <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281292059125') }}" 
                    class="inline-flex items-center gap-4 sm:gap-6 bg-white px-8 sm:px-12 lg:px-16 py-4 sm:py-5 lg:py-7 rounded-full shadow-[0_30px_60px_rgba(0,0,0,0.4)] hover:bg-primary transition-all duration-500 group/btn active:scale-95">
                     <span class="text-primary group-hover/btn:text-white font-black text-xs sm:text-base lg:text-xl uppercase tracking-widest transition-colors flex items-center gap-3 sm:gap-4">
                         Hubungi Tim Kami

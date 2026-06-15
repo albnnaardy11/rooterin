@@ -6,10 +6,10 @@
                 foreach($faqs as $faq) {
                     $faqEntities[] = [
                         "@type" => "Question",
-                        "name" => is_array($faq) ? $faq['question'] : $faq->question,
+                        "name" => is_array($faq) ? ($faq['q'] ?? $faq['question'] ?? '') : ($faq->question ?? ''),
                         "acceptedAnswer" => [
                             "@type" => "Answer",
-                            "text" => strip_tags(is_array($faq) ? $faq['answer'] : $faq->answer)
+                            "text" => strip_tags(is_array($faq) ? ($faq['a'] ?? $faq['answer'] ?? '') : ($faq->answer ?? ''))
                         ]
                     ];
                 }

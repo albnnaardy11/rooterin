@@ -74,13 +74,13 @@
                     </h4>
                     <div class="flex flex-col gap-4">
                         <!-- WhatsApp Card -->
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281246668749')) }}" class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5 hover:border-primary/30 transition-all duration-300 group cursor-pointer">
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281292059125')) }}" class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5 hover:border-primary/30 transition-all duration-300 group cursor-pointer">
                             <div class="w-11 h-11 bg-primary/10 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">
                                 <i class="ri-whatsapp-line text-xl"></i>
                             </div>
                             <div>
                                 <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Call & WA</div>
-                                <div class="text-white font-black text-sm tracking-wide leading-none">{{ \App\Models\Setting::get('whatsapp_number', '0812-4666-8749') }}</div>
+                                <div class="text-white font-black text-sm tracking-wide leading-none">{{ \App\Models\Setting::get('whatsapp_number', '0812-9205-9125') }}</div>
                             </div>
                         </a>
                         <!-- Response Card -->

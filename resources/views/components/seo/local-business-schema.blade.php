@@ -5,7 +5,7 @@
         ->name('Rooterin - Solusi Saluran Mampet')
         ->description('Jasa pembersihan saluran pipa mampet teknologi modern tanpa bongkar bergaransi.')
         ->url(url('/'))
-        ->telephone(\App\Models\Setting::get('whatsapp_number', '6281246668749'))
+        ->telephone(\App\Models\Setting::get('whatsapp_number', '6281292059125'))
         ->address(Schema::postalAddress()
             ->streetAddress('Jl. Raya Rooterin No. 123')
             ->addressLocality('Jakarta')

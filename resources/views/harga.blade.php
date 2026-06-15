@@ -9,7 +9,7 @@
             "@type" => "LocalBusiness",
             "name" => "RooterIN",
             "image" => url('/images/logo.png'),
-            "telephone" => "+62-812-4666-8749",
+            "telephone" => "+62-812-9205-9125",
             "priceRange" => "Rp 600.000 - Rp 2.500.000",
             "address" => [
                 "@type" => "PostalAddress",
@@ -199,7 +199,7 @@
                             </li>
                         </ul>
                     </div>
-                    <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}?text=Halo%20RooterIN,%20saya%20ingin%20memesan%20Jasa%20Saluran%20Mampet%20Rumah%20Hunian" class="w-full py-4 text-center bg-secondary text-white font-black uppercase text-[10px] tracking-widest rounded-2xl hover:bg-primary transition-colors shadow-lg shadow-secondary/10">Pesan Sekarang</a>
+                    <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281292059125') }}?text=Halo%20RooterIN,%20saya%20ingin%20memesan%20Jasa%20Saluran%20Mampet%20Rumah%20Hunian" class="w-full py-4 text-center bg-secondary text-white font-black uppercase text-[10px] tracking-widest rounded-2xl hover:bg-primary transition-colors shadow-lg shadow-secondary/10">Pesan Sekarang</a>
                 </div>
 
                 <!-- Card 2: Saluran Mampet Komersial (Popular) -->
@@ -244,7 +244,7 @@
                             </li>
                         </ul>
                     </div>
-                    <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}?text=Halo%20RooterIN,%20saya%20ingin%20memesan%20Jasa%20Saluran%20Mampet%20Komersial" class="w-full py-4 text-center bg-primary text-white font-black uppercase text-[10px] tracking-widest rounded-2xl hover:bg-white hover:text-secondary transition-all shadow-xl shadow-primary/20">Pesan Sekarang</a>
+                    <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281292059125') }}?text=Halo%20RooterIN,%20saya%20ingin%20memesan%20Jasa%20Saluran%20Mampet%20Komersial" class="w-full py-4 text-center bg-primary text-white font-black uppercase text-[10px] tracking-widest rounded-2xl hover:bg-white hover:text-secondary transition-all shadow-xl shadow-primary/20">Pesan Sekarang</a>
                 </div>
 
                 <!-- Card 3: Air Bersih & Cuci Toren -->
@@ -286,7 +286,7 @@
                             </li>
                         </ul>
                     </div>
-                    <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}?text=Halo%20RooterIN,%20saya%20ingin%20memesan%20Jasa%20Cuci%20Toren%20Air" class="w-full py-4 text-center bg-secondary text-white font-black uppercase text-[10px] tracking-widest rounded-2xl hover:bg-primary transition-colors shadow-lg shadow-secondary/10">Pesan Sekarang</a>
+                    <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281292059125') }}?text=Halo%20RooterIN,%20saya%20ingin%20memesan%20Jasa%20Cuci%20Toren%20Air" class="w-full py-4 text-center bg-secondary text-white font-black uppercase text-[10px] tracking-widest rounded-2xl hover:bg-primary transition-colors shadow-lg shadow-secondary/10">Pesan Sekarang</a>
                 </div>
             </div>
         </div>
@@ -369,7 +369,7 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <h2 class="text-3xl sm:text-5xl font-heading font-black text-white leading-tight mb-6">Konsultasikan Masalah Pipa Anda Gratis!</h2>
             <p class="text-gray-400 text-base sm:text-lg mb-10 max-w-xl mx-auto">Kirimkan video atau foto masalah pipa Anda ke tim ahli kami untuk mendapatkan estimasi biaya yang presisi.</p>
-            <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}?text=Halo%20RooterIN,%20saya%20mau%20konsultasi%20masalah%20pipa%20mampet" class="inline-flex items-center gap-4 bg-primary px-10 py-5 rounded-full shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all text-white font-black uppercase tracking-widest text-xs">
+            <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281292059125') }}?text=Halo%20RooterIN,%20saya%20mau%20konsultasi%20masalah%20pipa%20mampet" class="inline-flex items-center gap-4 bg-primary px-10 py-5 rounded-full shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all text-white font-black uppercase tracking-widest text-xs">
                 Hubungi via WhatsApp
                 <i class="ri-whatsapp-line text-lg"></i>
             </a>

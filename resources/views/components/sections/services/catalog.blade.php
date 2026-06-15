@@ -168,7 +168,7 @@
                                     </div>
 
                                     <div class="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center gap-6">
-                                        <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}" class="w-full flex-1 bg-primary py-5 sm:py-6 rounded-2xl flex items-center justify-center gap-4 text-white font-black uppercase tracking-widest text-xs hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20">
+                                        <a href="https://wa.me/{{ \App\Models\Setting::get('whatsapp_number', '6281292059125') }}" class="w-full flex-1 bg-primary py-5 sm:py-6 rounded-2xl flex items-center justify-center gap-4 text-white font-black uppercase tracking-widest text-xs hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20">
                                             <i class="ri-whatsapp-line text-xl"></i>
                                             <span>Start Solution Now</span>
                                         </a>

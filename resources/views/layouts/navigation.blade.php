@@ -107,7 +107,7 @@
             </div>
 
             <!-- WA Button - Desktop/Tablet Only -->
-            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281246668749')) }}" 
+            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281292059125')) }}" 
                class="hidden md:flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 px-3 sm:px-4 xl:px-6 py-2 sm:py-2.5 xl:py-3 rounded-2xl transition-all duration-300 group">
                 <div class="hidden xl:block text-right">
                     <div class="text-[9px] text-gray-400 font-black uppercase tracking-widest leading-none mb-1.5">Butuh Bantuan?</div>
@@ -229,7 +229,7 @@
                     <span class="text-[8px] text-gray-400 font-black tracking-[0.3em] uppercase">Emergency Support Hub</span>
                 </div>
                 <div class="pl-4">
-                    <a href="tel:{{ \App\Models\Setting::get('whatsapp_number', '6281246668749') }}" class="text-xl sm:text-2xl font-black text-white hover:text-primary transition-all duration-300 inline-block tracking-tighter">{{ \App\Models\Setting::get('whatsapp_number', '0812-4666-8749') }}</a>
+                    <a href="tel:{{ \App\Models\Setting::get('whatsapp_number', '6281292059125') }}" class="text-xl sm:text-2xl font-black text-white hover:text-primary transition-all duration-300 inline-block tracking-tighter">{{ \App\Models\Setting::get('whatsapp_number', '0812-9205-9125') }}</a>
                 </div>
             </div>
         </div>
