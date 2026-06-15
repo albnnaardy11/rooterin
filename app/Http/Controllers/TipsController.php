@@ -36,6 +36,7 @@ class TipsController extends Controller
                 'img' => $post->featured_image,
                 'date' => $post->created_at->format('d M Y'),
                 'featured' => (bool)$post->is_featured,
+                'author' => $post->author ?? 'RooterIN Expert',
             ];
         });
         

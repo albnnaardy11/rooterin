@@ -43,8 +43,8 @@ Route::get('/layanan', [\App\Http\Controllers\ServiceLandingController::class, '
 Route::get('/galeri', [\App\Http\Controllers\GalleryLandingController::class, 'index'])->name('gallery');
 
 Route::get('/tips', [\App\Http\Controllers\TipsController::class, 'index'])->name('tips');
-
 Route::get('/tips/{slug}', [\App\Http\Controllers\TipsController::class, 'show'])->name('tips.detail');
+Route::get('/harga', [\App\Http\Controllers\HargaController::class, 'index'])->name('harga');
 
 Route::get('/kontak', function () {
     return view('kontak');

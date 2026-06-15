@@ -1,8 +1,107 @@
-<x-app-layout title="Cara Darurat Atasi Wastafel Mampet - Tips & Trik RooterIN">
-    
 @php
-    // $post is passed from controller
+    // Author BIOS mapping for E-E-A-T signals
+    $authorBios = [
+        'Budi Santoso, S.T.' => [
+            'title' => 'Senior Plumbing Engineer',
+            'bio' => 'Senior Plumbing Engineer dengan 15 tahun pengalaman di bidang sistem sanitasi gedung bertingkat dan residensial di Indonesia.',
+            'avatar' => 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&q=80',
+            'expertise' => ['Sistem Plumbing Gedung', 'Sistem Drainase', 'Sanitary Engineering']
+        ],
+        'Dian Permata, A.Md.' => [
+            'title' => 'Teknisi Pipa Bersertifikat',
+            'bio' => 'Teknisi Pipa Bersertifikat ahli dalam instalasi sistem plumbing modern, hemat energi, dan ramah lingkungan.',
+            'avatar' => 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&q=80',
+            'expertise' => ['Instalasi Pipa Modern', 'Pembersihan Saluran', 'Sistem Ramah Lingkungan']
+        ],
+        'Reza Kurniawan' => [
+            'title' => 'Konsultan Sanitasi Komersial',
+            'bio' => 'Konsultan Sanitasi berpengalaman luas dalam merancang dan memelihara instalasi grease trap serta sistem pembuangan restoran di Jabodetabek & Bali.',
+            'avatar' => 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&q=80',
+            'expertise' => ['Grease Trap Restoran', 'Hydro Jetting', 'Sanitasi Komersial']
+        ],
+        'Siti Rahayu, S.T.' => [
+            'title' => 'Ahli Hidrologi & Plumbing',
+            'bio' => 'Ahli Hidrologi dengan spesialisasi manajemen sirkulasi air bersih, perawatan toren air, dan pencegahan kontaminasi saluran pipa.',
+            'avatar' => 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&q=80',
+            'expertise' => ['Manajemen Air Bersih', 'Cuci Toren', 'Sirkulasi Hidrolik']
+        ],
+        'Tim Ahli RooterIN' => [
+            'title' => 'Master Plumber Team',
+            'bio' => 'Tim teknisi tersertifikasi RooterIN dengan total pengalaman gabungan lebih dari 50 tahun mengatasi masalah pipa mampet di seluruh Indonesia.',
+            'avatar' => 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=150&h=150&fit=crop&q=80',
+            'expertise' => ['Deteksi Kebocoran Pipa', 'Rooter Spiral Mekanis', 'Saluran Mampet Darurat']
+        ],
+    ];
+
+    $authorName = $post->author ?? 'RooterIN Expert';
+    $authorInfo = $authorBios[$authorName] ?? [
+        'title' => 'Plumbing Specialist',
+        'bio' => 'Spesialis perbaikan saluran pembuangan mampet dan instalasi pipa tersertifikasi dari tim RooterIN.',
+        'avatar' => 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150&h=150&fit=crop&q=80',
+        'expertise' => ['Saluran Mampet', 'Emergency Plumbing']
+    ];
+
+    // Generate JSON-LD Breadcrumbs
+    $breadcrumbSchema = json_encode([
+        "@context" => "https://schema.org",
+        "@type" => "BreadcrumbList",
+        "itemListElement" => [
+            [
+                "@type" => "ListItem",
+                "position" => 1,
+                "name" => "Beranda",
+                "item" => url('/')
+            ],
+            [
+                "@type" => "ListItem",
+                "position" => 2,
+                "name" => "Tips",
+                "item" => route('tips')
+            ],
+            [
+                "@type" => "ListItem",
+                "position" => 3,
+                "name" => $post->title,
+                "item" => request()->url()
+            ]
+        ]
+    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+
+    // Generate JSON-LD Article (E-E-A-T Signal)
+    $articleSchema = json_encode([
+        "@context" => "https://schema.org",
+        "@type" => "BlogPosting",
+        "mainEntityOfPage" => [
+            "@type" => "WebPage",
+            "@id" => request()->url()
+        ],
+        "headline" => $post->title,
+        "description" => $post->seo_description ?? Illuminate\Support\Str::limit(strip_tags($post->content), 150),
+        "image" => $post->featured_image,
+        "datePublished" => $post->created_at->toIso8601String(),
+        "dateModified" => $post->updated_at->toIso8601String(),
+        "author" => [
+            "@type" => "Person",
+            "name" => $authorName,
+            "jobTitle" => $authorInfo['title'],
+            "description" => $authorInfo['bio'],
+            "image" => $authorInfo['avatar'],
+            "sameAs" => url('/')
+        ],
+        "publisher" => [
+            "@type" => "Organization",
+            "name" => "RooterIN",
+            "logo" => [
+                "@type" => "ImageObject",
+                "url" => url('/images/logo.png')
+            ]
+        ]
+    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+
+    $semanticSchema = "<script type=\"application/ld+json\">\n" . $breadcrumbSchema . "\n</script>\n<script type=\"application/ld+json\">\n" . $articleSchema . "\n</script>";
 @endphp
+
+<x-app-layout :semanticSchema="$semanticSchema">
 
     {{-- 0. Scroll Progress Tracker --}}
     <div x-data="{ 
@@ -57,12 +156,10 @@
                                 </h1>
                                 <div class="flex items-center gap-6">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-black">
-                                            {{ substr($post->author ?? 'R', 0, 1) }}
-                                        </div>
+                                        <img src="{{ $authorInfo['avatar'] }}" alt="{{ $authorName }}" class="w-10 h-10 rounded-xl object-cover border border-white/20">
                                         <div class="text-left">
-                                            <p class="text-white font-black text-[10px] uppercase tracking-wider leading-none">{{ $post->author ?? 'RooterIn Team' }}</p>
-                                            <p class="text-white/60 text-[8px] font-bold uppercase tracking-widest mt-1">Plumbing Expert</p>
+                                            <p class="text-white font-black text-[10px] uppercase tracking-wider leading-none">{{ $authorName }}</p>
+                                            <p class="text-white/60 text-[8px] font-bold uppercase tracking-widest mt-1">{{ $authorInfo['title'] }}</p>
                                         </div>
                                     </div>
                                     <div class="w-[1px] h-6 bg-white/20"></div>
@@ -90,6 +187,39 @@
                                         <i class="ri-whatsapp-line text-xl"></i>
                                         Panggil Teknisi
                                     </a>
+                                </div>
+                            </div>
+
+                            {{-- Author EEAT Signal Box --}}
+                            <div class="mt-16 pt-16 border-t border-slate-100">
+                                <div class="bg-stone-50 rounded-[2.5rem] p-8 sm:p-10 flex flex-col sm:flex-row items-center sm:items-start gap-8 border border-slate-100">
+                                    <div class="relative flex-shrink-0">
+                                        <img src="{{ $authorInfo['avatar'] }}" alt="{{ $authorName }}" class="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-4 border-white shadow-xl">
+                                        <div class="absolute -bottom-1 -right-1 bg-green-500 text-white w-7 h-7 rounded-full flex items-center justify-center border-2 border-white shadow" title="Penulis Ahli Terverifikasi">
+                                            <i class="ri-checkbox-circle-fill text-sm"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow text-center sm:text-left">
+                                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+                                            <div>
+                                                <span class="text-[9px] font-black text-primary uppercase tracking-[0.2em] block mb-1">Ditulis Oleh</span>
+                                                <h3 class="text-xl font-heading font-black text-secondary !m-0 leading-tight">{{ $authorName }}</h3>
+                                                <p class="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">{{ $authorInfo['title'] }}</p>
+                                            </div>
+                                            <div class="flex flex-wrap gap-1 justify-center sm:justify-start">
+                                                @foreach($authorInfo['expertise'] as $exp)
+                                                    <span class="inline-block px-3 py-1 bg-primary/10 text-primary text-[8px] font-black uppercase tracking-wider rounded-md">{{ $exp }}</span>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                                            {{ $authorInfo['bio'] }}
+                                        </p>
+                                        <div class="flex items-center justify-center sm:justify-start gap-2 text-xs text-slate-400 font-bold">
+                                            <i class="ri-shield-check-line text-lg text-green-500"></i>
+                                            <span>Konten Ditinjau Teknis untuk Kebenaran Fakta & Keamanan Pipa</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

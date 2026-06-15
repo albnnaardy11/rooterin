@@ -152,5 +152,7 @@ class DatabaseSeeder extends Seeder
         foreach ($testimonials as $testimonial) {
             \App\Models\Testimonial::create($testimonial);
         }
+
+        $this->call(TipsBulkSeeder::class);
     }
 }

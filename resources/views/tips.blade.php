@@ -308,7 +308,7 @@
                                             </div>
                                             <div>
                                                 <p class="text-[10px] font-black uppercase tracking-widest text-secondary">Author</p>
-                                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">RooterIN Expert</p>
+                                                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest" x-text="featuredPost.author"></p>
                                             </div>
                                         </div>
                                         
@@ -355,9 +355,15 @@
                                     <h3 x-text="post.title" class="text-2xl font-heading font-black text-secondary mb-5 group-hover:text-primary transition-all duration-300 leading-tight"></h3>
                                     <p x-text="post.excerpt" class="text-gray-500 text-sm leading-relaxed mb-10 line-clamp-2 italic"></p>
                                     <div class="flex items-center justify-between pt-8 shadow-[0_-20px_40px_-10px_white]">
-                                        <div class="flex items-center gap-2 text-gray-400 font-bold text-[9px] uppercase tracking-widest">
-                                            <i class="ri-time-line text-primary text-base"></i>
-                                            <span x-text="post.readTime"></span>
+                                        <div class="flex flex-col gap-1.5 text-gray-400 font-bold text-[9px] uppercase tracking-widest">
+                                            <div class="flex items-center gap-2">
+                                                <i class="ri-time-line text-primary text-sm"></i>
+                                                <span x-text="post.readTime"></span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-slate-500">
+                                                <i class="ri-user-star-line text-primary text-sm"></i>
+                                                <span x-text="post.author"></span>
+                                            </div>
                                         </div>
                                         <a :href="'/tips/' + post.slug" class="btn-circle-premium w-14 h-14 rounded-2xl bg-stone-50 flex items-center justify-center text-secondary shadow-[0_0_20px_white]">
                                             <i class="ri-arrow-right-up-line text-xl hover-arrow hover-arrow-up"></i>

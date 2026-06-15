@@ -5,6 +5,16 @@
 
     RewriteEngine On
 
+    # Redirect static docs pages to canonical Laravel routes (301 Permanent Redirect)
+    RewriteRule ^docs/index\.html$ / [R=301,L]
+    RewriteRule ^docs/about\.html$ /tentang [R=301,L]
+    RewriteRule ^docs/galeri\.html$ /galeri [R=301,L]
+    RewriteRule ^docs/kontak\.html$ /kontak [R=301,L]
+    RewriteRule ^docs/layanan\.html$ /layanan [R=301,L]
+    RewriteRule ^docs/tips\.html$ /tips [R=301,L]
+    RewriteRule ^docs/wiki\.html$ /wiki [R=301,L]
+    RewriteRule ^docs/?$ / [R=301,L]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
