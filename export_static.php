@@ -21,7 +21,6 @@ $pages = [
     '/layanan' => 'layanan.html',
     '/galeri' => 'galeri.html',
     '/tips' => 'tips.html',
-    '/ai-diagnostic' => 'ai-diagnostic.html',
     '/wiki' => 'wiki.html',
     '/kontak' => 'kontak.html',
 ];
@@ -51,7 +50,6 @@ foreach ($pages as $uri => $filename) {
     $html = str_replace($baseUrl . '/layanan', 'layanan.html', $html);
     $html = str_replace($baseUrl . '/galeri', 'galeri.html', $html);
     $html = str_replace($baseUrl . '/tips', 'tips.html', $html);
-    $html = str_replace($baseUrl . '/ai-diagnostic', 'ai-diagnostic.html', $html);
     $html = str_replace($baseUrl . '/wiki', 'wiki.html', $html);
     $html = str_replace($baseUrl . '/kontak', 'kontak.html', $html);
     $html = str_replace($baseUrl . '/', 'index.html', $html);

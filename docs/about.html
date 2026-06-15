@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
 
-    <title>RooterIn - Promo Akhir Pekan: Deteksi Kamera AI Gratis!</title>
-<meta property="og:title" content="RooterIn - Promo Akhir Pekan: Deteksi Kamera AI Gratis!">
+    <title>RooterIn - Diskon 25% Khusus Hari Ini & Garansi 1 Tahun!</title>
+<meta property="og:title" content="RooterIn - Diskon 25% Khusus Hari Ini &amp; Garansi 1 Tahun!">
 <meta property="og:site_name" content="RooterIn">
 
 
@@ -44,13 +44,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Scripts -->
-    <link rel="preload" as="style" href="build/assets/app-C-qWWT_L.css" /><link rel="modulepreload" as="script" href="build/assets/app-eFH5NDVu.js" /><link rel="stylesheet" href="build/assets/app-C-qWWT_L.css" /><script type="module" src="build/assets/app-eFH5NDVu.js"></script>
+    <link rel="preload" as="style" href="build/assets/app-D5-9DoAX.css" /><link rel="modulepreload" as="script" href="build/assets/app-eFH5NDVu.js" /><link rel="stylesheet" href="build/assets/app-D5-9DoAX.css" /><script type="module" src="build/assets/app-eFH5NDVu.js"></script>
     
     <script type="speculationrules">
     {
       "prerender": [{
         "source": "list",
-        "urls": ["", "layanan.html", "ai-diagnostic.html"]
+        "urls": ["", "layanan.html"]
       }, {
         "source": "document",
         "where": { "and": [
@@ -74,12 +74,12 @@
           class="mx-auto bg-secondary/95 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-[1.75rem] shadow-[0_25px_50px_rgba(0,0,0,0.35)] transition-all duration-500 px-6 lg:px-9 flex items-center justify-between relative">
         
         <!-- Logo Area -->
-        <div class="flex-shrink-0 flex items-center gap-4 group cursor-pointer relative">
-            <div class="relative w-10 h-10 sm:w-12 sm:h-12 bg-primary flex items-center justify-center rounded-2xl shadow-lg shadow-primary/20 transition-all duration-500 group-hover:scale-105">
-                <i class="ri-flashlight-fill text-white text-2xl sm:text-2xl"></i>
+        <div class="flex-shrink-0 flex items-center gap-3 sm:gap-4 group cursor-pointer relative">
+            <div class="relative w-9 h-9 sm:w-12 sm:h-12 bg-primary flex items-center justify-center rounded-xl sm:rounded-2xl shadow-lg shadow-primary/20 transition-all duration-500 group-hover:scale-105">
+                <i class="ri-flashlight-fill text-white text-xl sm:text-2xl"></i>
             </div>
             <div class="relative flex flex-col">
-                <span class="font-heading font-black text-xl sm:text-2xl text-white tracking-widest leading-none">ROOTER<span class="text-primary">IN</span></span>
+                                <span class="font-heading font-black text-lg sm:text-2xl text-white tracking-widest leading-none">ROOTER<span class="text-primary">IN</span></span>
                 <span class="hidden sm:block text-[9px] text-gray-500 font-black tracking-[0.4em] uppercase mt-1.5">Organic Plumbing Hub</span>
             </div>
         </div>
@@ -102,10 +102,6 @@
                             <a href="galeri.html" 
                    class="relative px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 text-gray-400 hover:text-white">
                     Gallery
-                                    </a>
-                            <a href="ai-diagnostic.html" 
-                   class="relative px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 text-gray-400 hover:text-white">
-                    AI Diagnostic
                                     </a>
             
             <!-- Branched Menu (Pengetahuan) -->
@@ -141,8 +137,8 @@
 
         <!-- Action Area -->
         <div class="flex items-center gap-2 sm:gap-4">
-            <!-- Ghostwriting Search Component -->
-            <div x-data="ghostSearch()" class="flex items-center relative">
+            <!-- Ghostwriting Search Component (Desktop Only) -->
+            <div x-data="ghostSearch()" class="hidden md:flex items-center relative">
                 <div x-show="searchOpen" class="absolute right-0 top-full mt-4 w-[280px] sm:w-[400px] bg-secondary/95 backdrop-blur-3xl border border-white/10 rounded-3xl p-6 shadow-3xl z-[100]" x-cloak @click.away="searchOpen = false">
                     <input type="text" x-model="query" @input.debounce.300ms="fetchSuggestions" placeholder="Cari masalah pipa anda..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white text-sm focus:outline-none focus:border-primary transition-all">
                     
@@ -162,7 +158,6 @@
                                         <p class="text-slate-500 text-[10px] italic mt-1" x-text="item.snippet"></p>
                                     </a>
                                 </template>
-                                <div x-show="results.length === 0 && query.length > 2" class="text-slate-500 text-xs italic text-center py-4">Tidak ada saran cepat...</div>
                             </div>
                         </template>
                     </div>
@@ -173,8 +168,9 @@
                 </button>
             </div>
 
-            <a href="https://wa.me/6281234567890" 
-               class="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 px-3 sm:px-4 xl:px-6 py-2 sm:py-2.5 xl:py-3 rounded-2xl transition-all duration-300 group">
+            <!-- WA Button - Desktop/Tablet Only -->
+            <a href="https://wa.me/6281246668749" 
+               class="hidden md:flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 px-3 sm:px-4 xl:px-6 py-2 sm:py-2.5 xl:py-3 rounded-2xl transition-all duration-300 group">
                 <div class="hidden xl:block text-right">
                     <div class="text-[9px] text-gray-400 font-black uppercase tracking-widest leading-none mb-1.5">Butuh Bantuan?</div>
                     <div class="text-white font-black text-[11px] uppercase tracking-widest leading-none">WhatsApp SOS</div>
@@ -186,14 +182,14 @@
 
             <!-- Pop-out Hamburger -->
             <button @click="open = ! open" 
-                    class="relative xl:hidden w-11 h-11 flex items-center justify-center rounded-2xl transition-all duration-500 z-[70]"
+                    class="relative xl:hidden w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-xl sm:rounded-2xl transition-all duration-500 z-[70]"
                     :class="open ? 'bg-primary scale-110 shadow-[0_10px_25px_rgba(31,175,90,0.4)]' : 'bg-white/10'">
                 <div class="relative w-6 h-5 flex items-center justify-center">
-                    <span class="absolute h-[3px] bg-white rounded-full transition-all duration-500 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)]"
+                    <span class="absolute h-[2.5px] bg-white rounded-full transition-all duration-500 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)]"
                           :class="open ? 'w-6 rotate-45' : 'w-6 -translate-y-2'"></span>
-                    <span class="absolute h-[3px] bg-white rounded-full transition-all duration-300"
+                    <span class="absolute h-[2.5px] bg-white rounded-full transition-all duration-300"
                           :class="open ? 'w-0 opacity-0 translate-x-4' : 'w-4 translate-x-1.5'"></span>
-                    <span class="absolute h-[3px] bg-white rounded-full transition-all duration-500 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)]"
+                    <span class="absolute h-[2.5px] bg-white rounded-full transition-all duration-500 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)]"
                           :class="open ? 'w-6 -rotate-45' : 'w-6 translate-y-2'"></span>
                 </div>
             </button>
@@ -208,8 +204,28 @@
          x-transition:leave="transition ease-in duration-400"
          x-transition:leave-start="opacity-100 translate-y-0 scale-100"
          x-transition:leave-end="opacity-0 translate-y-10 scale-95"
-         class="xl:hidden absolute top-[90px] sm:top-[120px] left-4 right-4 sm:left-8 sm:right-8 bg-secondary/98 backdrop-blur-3xl border border-white/10 rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-8 shadow-[0_40px_100px_rgba(0,0,0,0.5)] max-h-[calc(100vh-140px)] overflow-y-auto no-scrollbar">
+         class="xl:hidden absolute top-[85px] sm:top-[120px] left-4 right-4 sm:left-8 sm:right-8 bg-secondary/98 backdrop-blur-3xl border border-white/10 rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 shadow-[0_40px_100px_rgba(0,0,0,0.5)] max-h-[calc(100vh-120px)] overflow-y-auto no-scrollbar">
         
+        <!-- Mobile Search Area -->
+        <div class="mb-8 md:hidden" x-data="ghostSearch()">
+            <div class="relative">
+                <input type="text" x-model="query" @input.debounce.300ms="fetchSuggestions" placeholder="Cari masalah pipa anda..." class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white text-sm focus:outline-none focus:border-primary transition-all">
+                <i class="ri-search-line absolute right-5 top-1/2 -translate-y-1/2 text-gray-500"></i>
+            </div>
+            
+            <div x-show="query.length >= 3" class="mt-4 space-y-3">
+                <div x-show="loading" class="flex justify-center py-4">
+                    <div class="w-5 h-5 border-2 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+                </div>
+                <template x-for="item in results" :key="item.title">
+                    <a :href="item.url" class="block p-3 rounded-xl bg-white/5 border border-transparent hover:border-white/10">
+                        <span class="text-[7px] font-black text-primary uppercase" x-text="item.type"></span>
+                        <h4 class="text-white font-bold text-xs" x-text="item.title"></h4>
+                    </a>
+                </template>
+            </div>
+        </div>
+
         <div class="relative flex flex-col gap-1 z-20">
                         
                             <div x-show="open"
@@ -252,18 +268,6 @@
                      x-transition:enter="transition ease-out duration-600 delay-[240ms]"
                      x-transition:enter-start="opacity-0 translate-x-10 rotate-3"
                      x-transition:enter-end="opacity-100 translate-x-0 rotate-0">
-                    <a @click="open = false" href="ai-diagnostic.html" 
-                       class="text-base sm:text-lg font-black text-white py-2.5 sm:py-3.5 flex items-center justify-between border-b border-white/5 group">
-                        <span class="group-hover:text-primary transition-all duration-300 group-hover:translate-x-2">AI Diagnostic</span>
-                        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-primary transition-all duration-500 shadow-sm group-hover:shadow-primary/30">
-                            <i class="ri-arrow-right-line text-gray-400 group-hover:text-white text-base transition-transform group-hover:translate-x-1"></i>
-                        </div>
-                    </a>
-                </div>
-                                            <div x-show="open"
-                     x-transition:enter="transition ease-out duration-600 delay-[300ms]"
-                     x-transition:enter-start="opacity-0 translate-x-10 rotate-3"
-                     x-transition:enter-end="opacity-100 translate-x-0 rotate-0">
                     <a @click="open = false" href="galeri.html" 
                        class="text-base sm:text-lg font-black text-white py-2.5 sm:py-3.5 flex items-center justify-between border-b border-white/5 group">
                         <span class="group-hover:text-primary transition-all duration-300 group-hover:translate-x-2">Project Gallery</span>
@@ -273,7 +277,7 @@
                     </a>
                 </div>
                                             <div x-show="open"
-                     x-transition:enter="transition ease-out duration-600 delay-[360ms]"
+                     x-transition:enter="transition ease-out duration-600 delay-[300ms]"
                      x-transition:enter-start="opacity-0 translate-x-10 rotate-3"
                      x-transition:enter-end="opacity-100 translate-x-0 rotate-0">
                     <a @click="open = false" href="kontak.html" 
@@ -840,6 +844,1667 @@
 </section>
 
     
+    <section id="complex-faq" class="py-24 sm:py-32 bg-stone-50 relative overflow-hidden">
+    <!-- Decorative Accents -->
+    <div class="absolute top-0 right-0 w-1/3 h-1/3 bg-primary/5 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-1/4 h-1/4 bg-accent/5 blur-[100px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="mb-20">
+            <div class="text-left mb-16 sm:mb-20">
+            <span class="text-primary font-black tracking-[0.3em] uppercase text-[10px] sm:text-xs block mb-4 animate-fade-in-up">
+            KESELURUHAN DETAIL
+        </span>
+        <h2 class="text-3xl sm:text-4xl md:text-6xl font-heading font-black text-secondary leading-[1.1] tracking-tight mb-6">
+        Pusat <span class="text-primary italic">Informasi & Bantuan.</span>
+    </h2>
+    <div class="flex justify-start">
+        <div class="h-1.5 w-16 bg-primary rounded-full relative overflow-hidden">
+            <div class="absolute inset-0 bg-white/30 skew-x-[45deg] animate-pulse"></div>
+        </div>
+    </div>
+</div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-12 lg:gap-20" 
+             x-data="{ 
+                activeCat: 'teknis-layanan', 
+                activeFaq: null,
+                currentPage: 1,
+                itemsPerPage: 5,
+                counts: {
+                                            'teknis-layanan': 10,
+                                            'harga-pembayaran': 10,
+                                            'garansi-klaim': 10,
+                                            'bisnis-gedung': 10,
+                                    },
+                get totalPages() { return Math.ceil(this.counts[this.activeCat] / this.itemsPerPage) },
+                nextPage() { if(this.currentPage < this.totalPages) this.currentPage++ },
+                prevPage() { if(this.currentPage > 1) this.currentPage-- },
+                switchCat(catId) {
+                    this.activeCat = catId;
+                    this.currentPage = 1;
+                    this.activeFaq = null;
+                }
+             }">
+            
+            <!-- LEFT COLUMN: Categories & Contact -->
+            <div class="lg:w-1/3 flex flex-col h-full">
+                <!-- Sidebar Category Navigation -->
+                <div class="flex lg:flex-col overflow-x-auto lg:overflow-visible no-scrollbar gap-4 pb-4 lg:pb-0">
+                                            <button 
+                            @click="switchCat('teknis-layanan')"
+                            class="flex items-center gap-5 px-8 py-6 rounded-[2rem] border-2 transition-all duration-500 whitespace-nowrap lg:whitespace-normal group text-left min-w-[240px] lg:min-w-full"
+                            :class="activeCat === 'teknis-layanan' ? 'bg-secondary border-secondary text-white shadow-2xl shadow-secondary/20' : 'bg-white border-transparent text-gray-500 hover:border-gray-200'"
+                        >
+                            <div 
+                                class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 shrink-0"
+                                :class="activeCat === 'teknis-layanan' ? 'bg-primary text-white' : 'bg-stone-50 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                            >
+                                <i class="ri-tools-fill text-xl"></i>
+                            </div>
+                            <div>
+                                <span class="block font-black text-sm uppercase tracking-widest">Teknis &amp; Layanan</span>
+                                <span class="text-[10px] opacity-60 font-medium" :class="activeCat === 'teknis-layanan' ? 'text-gray-300' : 'text-gray-400'">
+                                    10 Pertanyaan Umum
+                                </span>
+                            </div>
+                        </button>
+                                            <button 
+                            @click="switchCat('harga-pembayaran')"
+                            class="flex items-center gap-5 px-8 py-6 rounded-[2rem] border-2 transition-all duration-500 whitespace-nowrap lg:whitespace-normal group text-left min-w-[240px] lg:min-w-full"
+                            :class="activeCat === 'harga-pembayaran' ? 'bg-secondary border-secondary text-white shadow-2xl shadow-secondary/20' : 'bg-white border-transparent text-gray-500 hover:border-gray-200'"
+                        >
+                            <div 
+                                class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 shrink-0"
+                                :class="activeCat === 'harga-pembayaran' ? 'bg-primary text-white' : 'bg-stone-50 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                            >
+                                <i class="ri-price-tag-3-fill text-xl"></i>
+                            </div>
+                            <div>
+                                <span class="block font-black text-sm uppercase tracking-widest">Harga &amp; Pembayaran</span>
+                                <span class="text-[10px] opacity-60 font-medium" :class="activeCat === 'harga-pembayaran' ? 'text-gray-300' : 'text-gray-400'">
+                                    10 Pertanyaan Umum
+                                </span>
+                            </div>
+                        </button>
+                                            <button 
+                            @click="switchCat('garansi-klaim')"
+                            class="flex items-center gap-5 px-8 py-6 rounded-[2rem] border-2 transition-all duration-500 whitespace-nowrap lg:whitespace-normal group text-left min-w-[240px] lg:min-w-full"
+                            :class="activeCat === 'garansi-klaim' ? 'bg-secondary border-secondary text-white shadow-2xl shadow-secondary/20' : 'bg-white border-transparent text-gray-500 hover:border-gray-200'"
+                        >
+                            <div 
+                                class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 shrink-0"
+                                :class="activeCat === 'garansi-klaim' ? 'bg-primary text-white' : 'bg-stone-50 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                            >
+                                <i class="ri-shield-check-fill text-xl"></i>
+                            </div>
+                            <div>
+                                <span class="block font-black text-sm uppercase tracking-widest">Garansi &amp; Klaim</span>
+                                <span class="text-[10px] opacity-60 font-medium" :class="activeCat === 'garansi-klaim' ? 'text-gray-300' : 'text-gray-400'">
+                                    10 Pertanyaan Umum
+                                </span>
+                            </div>
+                        </button>
+                                            <button 
+                            @click="switchCat('bisnis-gedung')"
+                            class="flex items-center gap-5 px-8 py-6 rounded-[2rem] border-2 transition-all duration-500 whitespace-nowrap lg:whitespace-normal group text-left min-w-[240px] lg:min-w-full"
+                            :class="activeCat === 'bisnis-gedung' ? 'bg-secondary border-secondary text-white shadow-2xl shadow-secondary/20' : 'bg-white border-transparent text-gray-500 hover:border-gray-200'"
+                        >
+                            <div 
+                                class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 shrink-0"
+                                :class="activeCat === 'bisnis-gedung' ? 'bg-primary text-white' : 'bg-stone-50 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                            >
+                                <i class="ri-hotel-fill text-xl"></i>
+                            </div>
+                            <div>
+                                <span class="block font-black text-sm uppercase tracking-widest">Bisnis &amp; Gedung</span>
+                                <span class="text-[10px] opacity-60 font-medium" :class="activeCat === 'bisnis-gedung' ? 'text-gray-300' : 'text-gray-400'">
+                                    10 Pertanyaan Umum
+                                </span>
+                            </div>
+                        </button>
+                                    </div>
+
+                <!-- Quick Contact Card (Left Bottom) -->
+                <div class="mt-12 p-10 bg-primary rounded-[3rem] relative overflow-hidden group min-h-[300px] flex flex-col justify-center">
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+                    <h4 class="text-white font-black text-2xl mb-4 relative z-10 leading-tight">Ada pertanyaan spesifik?</h4>
+                    <p class="text-white/80 text-sm mb-8 relative z-10">Tim teknis kami siap membantu menjelaskan detail pengerjaan secara gratis.</p>
+                    <a href="https://wa.me/6281234567890" class="inline-flex items-center justify-center gap-3 bg-white text-primary px-8 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-secondary hover:text-white transition-all duration-500 relative z-10 group/btn shadow-xl shadow-black/5">
+                        Chat WhatsApp
+                        <i class="ri-whatsapp-line text-lg group-hover/btn:rotate-12 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: FAQ Content & Pagination -->
+            <div class="lg:w-2/3 flex flex-col">
+                <!-- MAIN FAQ CARD -->
+                <div class="bg-white rounded-[3.5rem] p-6 sm:p-10 shadow-3xl shadow-black/5 border border-gray-100 flex-grow relative overflow-hidden">
+                                            <div 
+                            x-show="activeCat === 'teknis-layanan'" 
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            class="space-y-4"
+                        >
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((0 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'teknis-layanan-0' ? activeFaq = null : activeFaq = 'teknis-layanan-0'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'teknis-layanan-0' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Bagaimana cara kerja metode &quot;Tanpa Bongkar&quot;?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'teknis-layanan-0' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'teknis-layanan-0' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'teknis-layanan-0'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Kami menggunakan mesin drain cleaning dengan kabel spiral fleksibel yang masuk ke dalam pipa. Ujung kabel memiliki mata pisau/pemotong khusus yang berputar untuk menghancurkan lemak, menarik rambut, atau mendorong benda keras penyebab mampet tanpa melukai dinding pipa PVC.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((1 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'teknis-layanan-1' ? activeFaq = null : activeFaq = 'teknis-layanan-1'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'teknis-layanan-1' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah pipa yang sudah tua/getas aman dibersihkan?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'teknis-layanan-1' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'teknis-layanan-1' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'teknis-layanan-1'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Teknisi kami akan melakukan survey awal terlebih dahulu. Jika pipa dinilai terlalu rapuh atau sudah pecah di dalam tanah, kami akan menginformasikan risikonya. Namun secara umum, putaran mesin kami didesain aman untuk pipa standar industri.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((2 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'teknis-layanan-2' ? activeFaq = null : activeFaq = 'teknis-layanan-2'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'teknis-layanan-2' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Jenis pipa apa saja yang bisa ditangani?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'teknis-layanan-2' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'teknis-layanan-2' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'teknis-layanan-2'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Kami menangani pipa pembuangan (air kotor), wastafel, bak kontrol, saluran air hujan (floor drain), hingga pipa limbah lemak (grease trap) di dapur komersial.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((3 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'teknis-layanan-3' ? activeFaq = null : activeFaq = 'teknis-layanan-3'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'teknis-layanan-3' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Berapa lama waktu yang dibutuhkan untuk pengerjaan standar?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'teknis-layanan-3' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'teknis-layanan-3' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'teknis-layanan-3'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Untuk satu titik mampet dengan tingkat kesulitan normal, biasanya memakan waktu 1-2 jam pengerjaan.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((4 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'teknis-layanan-4' ? activeFaq = null : activeFaq = 'teknis-layanan-4'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'teknis-layanan-4' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah metode ini menggunakan bahan kimia berbahaya?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'teknis-layanan-4' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'teknis-layanan-4' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'teknis-layanan-4'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Tidak. Kami menggunakan sistem mekanik murni (kabel spiral) yang jauh lebih aman bagi kesehatan manusia dan keutuhan pipa dibandingkan cairan asam/kimia keras.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((5 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'teknis-layanan-5' ? activeFaq = null : activeFaq = 'teknis-layanan-5'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'teknis-layanan-5' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah teknisi membawa semua perlengkapan sendiri?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'teknis-layanan-5' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'teknis-layanan-5' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'teknis-layanan-5'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Ya, tim kami datang lengkap dengan mesin, genset (jika diperlukan), dan alat kebersihan pendukung lainnya.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((6 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'teknis-layanan-6' ? activeFaq = null : activeFaq = 'teknis-layanan-6'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'teknis-layanan-6' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah RooterIn melayani jasa sedot tinja atau hanya mampet?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'teknis-layanan-6' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'teknis-layanan-6' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'teknis-layanan-6'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Fokus utama kami adalah perbaikan saluran mampet dan pembersihan pipa. Namun, kami bekerja sama dengan mitra terpercaya jika Anda membutuhkan layanan sedot septic tank secara bersamaan.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((7 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'teknis-layanan-7' ? activeFaq = null : activeFaq = 'teknis-layanan-7'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'teknis-layanan-7' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apa perbedaan mesin Rooter dengan alat tembak angin biasa?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'teknis-layanan-7' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'teknis-layanan-7' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'teknis-layanan-7'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Alat tembak angin hanya memberikan tekanan sesaat, sementara mesin Rooter kami mengikis habis kerak lemak dan kotoran di dinding pipa hingga bersih total kembali ke diameter semula.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((8 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'teknis-layanan-8' ? activeFaq = null : activeFaq = 'teknis-layanan-8'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'teknis-layanan-8' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Berapa lama estimasi waktu kedatangan teknisi setelah pemesanan?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'teknis-layanan-8' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'teknis-layanan-8' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'teknis-layanan-8'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Untuk jadwal darurat, kami mengusahakan teknisi sampai di lokasi dalam waktu 1-3 jam setelah konfirmasi (tergantung antrean dan kondisi lalu lintas).
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((9 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'teknis-layanan-9' ? activeFaq = null : activeFaq = 'teknis-layanan-9'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'teknis-layanan-9' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah ada suara bising yang mengganggu saat pengerjaan?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'teknis-layanan-9' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'teknis-layanan-9' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'teknis-layanan-9'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Mesin Rooter kami menggunakan motor listrik yang suaranya relatif halus, kurang lebih setara dengan suara mesin cuci, sehingga tidak akan mengganggu tetangga atau kenyamanan rumah.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                    </div>
+                                            <div 
+                            x-show="activeCat === 'harga-pembayaran'" 
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            class="space-y-4"
+                        >
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((0 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'harga-pembayaran-0' ? activeFaq = null : activeFaq = 'harga-pembayaran-0'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'harga-pembayaran-0' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Bagaimana sistem penentuan harganya?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'harga-pembayaran-0' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'harga-pembayaran-0' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'harga-pembayaran-0'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Harga kami bersifat transparan. Biasanya ditentukan berdasarkan jumlah titik mampet dan tingkat kesulitan. Untuk pengerjaan skala besar/gedung, kami menggunakan hitungan per meter atau paket borongan tuntas.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((1 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'harga-pembayaran-1' ? activeFaq = null : activeFaq = 'harga-pembayaran-1'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'harga-pembayaran-1' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah ada biaya jika survey dilakukan tapi pengerjaan batal?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'harga-pembayaran-1' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'harga-pembayaran-1' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'harga-pembayaran-1'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Untuk wilayah tertentu di area cakupan utama, survey awal adalah GRATIS. Jika ada biaya kunjungan untuk area jauh, akan kami informasikan di awal melalui WhatsApp.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((2 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'harga-pembayaran-2' ? activeFaq = null : activeFaq = 'harga-pembayaran-2'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'harga-pembayaran-2' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Metode pembayaran apa saja yang tersedia?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'harga-pembayaran-2' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'harga-pembayaran-2' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'harga-pembayaran-2'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Kami menerima Pembayaran Tunai (Cash), Transfer Bank, dan untuk klien korporat/bisnis bisa menggunakan sistem Invoice dengan termin yang disepakati.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((3 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'harga-pembayaran-3' ? activeFaq = null : activeFaq = 'harga-pembayaran-3'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'harga-pembayaran-3' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah harga sudah termasuk biaya transport?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'harga-pembayaran-3' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'harga-pembayaran-3' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'harga-pembayaran-3'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Ya, untuk wilayah dalam cakupan utama (Jabodetabek, Bandung, Lampung), harga yang diberikan sudah termasuk biaya operasional tim.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((4 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'harga-pembayaran-4' ? activeFaq = null : activeFaq = 'harga-pembayaran-4'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'harga-pembayaran-4' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah ada perbedaan biaya antar hari libur dan hari kerja?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'harga-pembayaran-4' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'harga-pembayaran-4' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'harga-pembayaran-4'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Harga kami tetap standar dan kompetitif baik di hari kerja maupun hari libur (Sabtu/Minggu) untuk layanan darurat.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((5 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'harga-pembayaran-5' ? activeFaq = null : activeFaq = 'harga-pembayaran-5'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'harga-pembayaran-5' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah ada paket khusus untuk langganan rutin?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'harga-pembayaran-5' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'harga-pembayaran-5' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'harga-pembayaran-5'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Ada. Kami menawarkan paket kontrak maintenance untuk kustomer komersial dengan harga yang jauh lebih hemat dibanding pengerjaan per-panggilan.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((6 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'harga-pembayaran-6' ? activeFaq = null : activeFaq = 'harga-pembayaran-6'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'harga-pembayaran-6' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah ada biaya tersembunyi seperti biaya alat atau bahan?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'harga-pembayaran-6' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'harga-pembayaran-6' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'harga-pembayaran-6'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Tidak ada. Harga yang disepakati di awal sudah mencakup penggunaan mesin, tenaga ahli, dan jaminan pengerjaan sampai tuntas.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((7 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'harga-pembayaran-7' ? activeFaq = null : activeFaq = 'harga-pembayaran-7'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'harga-pembayaran-7' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Bagaimana jika pengerjaan memakan waktu lebih lama dari estimasi?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'harga-pembayaran-7' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'harga-pembayaran-7' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'harga-pembayaran-7'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Biaya tetap sesuai kesepakatan awal meskipun pengerjaan memakan waktu lebih lama karena kerumitan di lapangan. Kami tidak menerapkan biaya per jam.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((8 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'harga-pembayaran-8' ? activeFaq = null : activeFaq = 'harga-pembayaran-8'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'harga-pembayaran-8' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Bagaimana saya mendapatkan informasi promo atau potongan harga?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'harga-pembayaran-8' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'harga-pembayaran-8' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'harga-pembayaran-8'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Anda bisa mengikuti akun Instagram kami atau bertanya langsung kepada admin WhatsApp saat melakukan konsultasi untuk mengetahui promo yang sedang berlangsung.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((9 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'harga-pembayaran-9' ? activeFaq = null : activeFaq = 'harga-pembayaran-9'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'harga-pembayaran-9' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah ada diskon jika mengerjakan lebih dari 3 titik sekaligus?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'harga-pembayaran-9' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'harga-pembayaran-9' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'harga-pembayaran-9'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Tentu. Kami memberikan diskon volume bagi kustomer yang melakukan pengerjaan lebih dari 3 titik mampet dalam satu kali kunjungan.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                    </div>
+                                            <div 
+                            x-show="activeCat === 'garansi-klaim'" 
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            class="space-y-4"
+                        >
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((0 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'garansi-klaim-0' ? activeFaq = null : activeFaq = 'garansi-klaim-0'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'garansi-klaim-0' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apa saja syarat untuk klaim garansi 7 hari?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'garansi-klaim-0' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'garansi-klaim-0' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'garansi-klaim-0'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Cukup tunjukkan bukti nota pengerjaan atau riwayat chat WhatsApp. Garansi berlaku jika saluran mampet kembali pada titik yang sama dengan penyebab yang sama (misal: endapan lemak lama yang belum tuntas).
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((1 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'garansi-klaim-1' ? activeFaq = null : activeFaq = 'garansi-klaim-1'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'garansi-klaim-1' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apa yang tidak ditanggung oleh garansi?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'garansi-klaim-1' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'garansi-klaim-1' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'garansi-klaim-1'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Garansi gugur jika ditemukan benda asing &quot;baru&quot; yang masuk setelah teknisi selesai bekerja (misal: kain/mainan yang baru jatuh ke lubang pipa) atau jika terjadi kerusakan struktur tanah yang menyebabkan pipa patah.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((2 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'garansi-klaim-2' ? activeFaq = null : activeFaq = 'garansi-klaim-2'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'garansi-klaim-2' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Berapa kali batas maksimal klaim garansi?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'garansi-klaim-2' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'garansi-klaim-2' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'garansi-klaim-2'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Kami akan datang sampai masalah tuntas selama masih dalam masa garansi dan bukan disebabkan oleh sumbatan baru.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((3 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'garansi-klaim-3' ? activeFaq = null : activeFaq = 'garansi-klaim-3'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'garansi-klaim-3' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah garansi mencakup seluruh pipa di rumah?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'garansi-klaim-3' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'garansi-klaim-3' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'garansi-klaim-3'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Garansi hanya mencakup titik/jalur pipa yang dikerjakan oleh teknisi kami sesuai dengan yang tertera di nota.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((4 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'garansi-klaim-4' ? activeFaq = null : activeFaq = 'garansi-klaim-4'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'garansi-klaim-4' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Kapan masa garansi mulai dihitung?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'garansi-klaim-4' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'garansi-klaim-4' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'garansi-klaim-4'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Masa garansi 7 hari dihitung tepat sejak pengerjaan dinyatakan selesai dan serah terima dilakukan kepada kustomer.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((5 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'garansi-klaim-5' ? activeFaq = null : activeFaq = 'garansi-klaim-5'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'garansi-klaim-5' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Bagaimana cara cepat untuk klaim garansi?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'garansi-klaim-5' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'garansi-klaim-5' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'garansi-klaim-5'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Anda bisa langsung menghubungi nomor WhatsApp admin kami dengan mengirimkan foto nota atau bukti transfer pengerjaan sebelumnya.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((6 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'garansi-klaim-6' ? activeFaq = null : activeFaq = 'garansi-klaim-6'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'garansi-klaim-6' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah garansi berlaku jika saya mencoba memperbaiki sendiri setelah teknisi pergi?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'garansi-klaim-6' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'garansi-klaim-6' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'garansi-klaim-6'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Kami menyarankan untuk tidak memasukkan alat atau bahan kimia lain selama masa garansi agar kami bisa menganalisa penyebab mampet kembali secara akurat.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((7 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'garansi-klaim-7' ? activeFaq = null : activeFaq = 'garansi-klaim-7'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'garansi-klaim-7' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah biaya transportasi tetap gratis saat klaim garansi?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'garansi-klaim-7' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'garansi-klaim-7' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'garansi-klaim-7'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Ya, kunjungan untuk klaim garansi di wilayah cakupan kami sepenuhnya gratis tanpa biaya transport tambahan.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((8 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'garansi-klaim-8' ? activeFaq = null : activeFaq = 'garansi-klaim-8'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'garansi-klaim-8' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Berapa lama respon tim teknis untuk jadwal kunjungan garansi?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'garansi-klaim-8' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'garansi-klaim-8' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'garansi-klaim-8'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Klaim garansi kami prioritaskan dan biasanya dijadwalkan dalam waktu maksimal 24 jam setelah laporan diterima.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((9 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'garansi-klaim-9' ? activeFaq = null : activeFaq = 'garansi-klaim-9'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'garansi-klaim-9' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah garansi 7 hari bisa diperpanjang?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'garansi-klaim-9' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'garansi-klaim-9' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'garansi-klaim-9'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Untuk kustomer komersial (pabrik/restoran), kami memiliki kebijakan perpanjangan garansi khusus yang bisa dinegosiasikan sesuai kontrak.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                    </div>
+                                            <div 
+                            x-show="activeCat === 'bisnis-gedung'" 
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            class="space-y-4"
+                        >
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((0 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'bisnis-gedung-0' ? activeFaq = null : activeFaq = 'bisnis-gedung-0'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'bisnis-gedung-0' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah RooterIn memiliki legalitas resmi untuk vendor perusahaan?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'bisnis-gedung-0' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'bisnis-gedung-0' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'bisnis-gedung-0'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Ya, kami berada di bawah naungan perusahaan resmi yang dapat mengeluarkan Invoice dan Faktur Pajak jika diperlukan untuk kebutuhan administrasi perusahaan atau pengelola gedung.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((1 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'bisnis-gedung-1' ? activeFaq = null : activeFaq = 'bisnis-gedung-1'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'bisnis-gedung-1' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah tersedia layanan maintenance rutin?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'bisnis-gedung-1' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'bisnis-gedung-1' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'bisnis-gedung-1'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Tersedia. Kami memiliki program &quot;Preventive Maintenance&quot; bulanan atau per 3 bulan untuk Restoran, Hotel, dan Pabrik guna mencegah terjadinya mampet total yang bisa mengganggu operasional bisnis.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((2 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'bisnis-gedung-2' ? activeFaq = null : activeFaq = 'bisnis-gedung-2'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'bisnis-gedung-2' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah sanggup mengerjakan pipa dengan diameter besar?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'bisnis-gedung-2' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'bisnis-gedung-2' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'bisnis-gedung-2'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Sanggup. Kami memiliki mesin Rooter industri yang mampu membersihkan pipa berdiameter besar yang biasa ditemukan di gedung bertingkat atau area publik.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((3 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'bisnis-gedung-3' ? activeFaq = null : activeFaq = 'bisnis-gedung-3'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'bisnis-gedung-3' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Dapatkah RooterIn bekerja di luar jam operasional bisnis?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'bisnis-gedung-3' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'bisnis-gedung-3' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'bisnis-gedung-3'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Bisa. Kami melayani pengerjaan malam hari (after hours) untuk restoran atau kantor agar tidak mengganggu jalannya bisnis Anda.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((4 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'bisnis-gedung-4' ? activeFaq = null : activeFaq = 'bisnis-gedung-4'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'bisnis-gedung-4' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah ada laporan pengerjaan tertulis (Berita Acara)?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'bisnis-gedung-4' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'bisnis-gedung-4' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'bisnis-gedung-4'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Ya, untuk setiap pengerjaan komersial, kami menyediakan Berita Acara Pengerjaan dan dokumentasi sebelum/sesudah pengerjaan jika diminta.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((5 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'bisnis-gedung-5' ? activeFaq = null : activeFaq = 'bisnis-gedung-5'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'bisnis-gedung-5' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah melayani survei teknis untuk tender proyek?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'bisnis-gedung-5' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'bisnis-gedung-5' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'bisnis-gedung-5'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Kami terbuka untuk survei teknis dan memberikan penawaran harga (Quotation) untuk pengadaan jasa vendor tahunan.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((6 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'bisnis-gedung-6' ? activeFaq = null : activeFaq = 'bisnis-gedung-6'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'bisnis-gedung-6' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah teknisi memiliki APD lengkap untuk standar safety K3 di pabrik?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'bisnis-gedung-6' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'bisnis-gedung-6' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'bisnis-gedung-6'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Ya, teknisi kami dibekali dengan Alat Pelindung Diri (APD) standar seperti helm, rompi, sepatu safety, dan sarung tangan untuk memenuhi protokol keamanan area industri.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((7 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'bisnis-gedung-7' ? activeFaq = null : activeFaq = 'bisnis-gedung-7'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'bisnis-gedung-7' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah tersedia kerja sama sistem kontrak tahunan dengan harga flat?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'bisnis-gedung-7' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'bisnis-gedung-7' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'bisnis-gedung-7'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Kami menyediakan opsi kontrak Fixed Rate tahunan bagi pengelola gedung yang ingin menjaga anggaran perbaikan tetap stabil sepanjang tahun.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((8 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'bisnis-gedung-8' ? activeFaq = null : activeFaq = 'bisnis-gedung-8'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'bisnis-gedung-8' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah RooterIn melayani pengerjaan di area industri/pabrik luar kota?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'bisnis-gedung-8' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'bisnis-gedung-8' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'bisnis-gedung-8'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Ya, kami melayani proyek skala industri di seluruh wilayah Jawa dan sebagian Sumatera untuk kebutuhan pembersihan sistem plumbing pabrik.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                                                            <div 
+                                    class="group border-b border-gray-100 last:border-0"
+                                    x-show="Math.ceil((9 + 1) / itemsPerPage) === currentPage"
+                                >
+                                    <div class="transition-all duration-500">
+                                        <button 
+                                            @click="activeFaq === 'bisnis-gedung-9' ? activeFaq = null : activeFaq = 'bisnis-gedung-9'"
+                                            class="w-full py-7 flex items-center justify-between text-left focus:outline-none"
+                                        >
+                                            <span 
+                                                class="text-base sm:text-lg font-black transition-colors duration-300 pr-8"
+                                                :class="activeFaq === 'bisnis-gedung-9' ? 'text-primary' : 'text-secondary group-hover:text-primary'"
+                                            >
+                                                Apakah tersedia tim teknis yang standby 24 jam untuk gedung?
+                                            </span>
+                                            <div 
+                                                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 shrink-0"
+                                                :class="activeFaq === 'bisnis-gedung-9' ? 'bg-primary text-white rotate-90' : 'bg-stone-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'"
+                                            >
+                                                <i :class="activeFaq === 'bisnis-gedung-9' ? 'ri-subtract-line' : 'ri-add-line'" class="text-lg"></i>
+                                            </div>
+                                        </button>
+
+                                        <div 
+                                            x-show="activeFaq === 'bisnis-gedung-9'" 
+                                            x-collapse 
+                                            x-cloak
+                                        >
+                                            <div class="pb-8">
+                                                <p class="text-gray-500 text-sm sm:text-base leading-relaxed font-medium">
+                                                    Kami menyediakan layanan On-Call 24 Jam khusus untuk pengelola gedung yang memiliki kontrak kerjasama eksklusif dengan kami.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                    </div>
+                                    </div>
+
+                <!-- PAGINATION BAR (Sejajar dengan Quick Contact Card) -->
+                <div class="mt-12 flex items-center justify-between px-6">
+                    <div class="flex items-center gap-4">
+                        <button 
+                            @click="prevPage()" 
+                            class="w-14 h-14 rounded-full flex items-center justify-center border-2 transition-all duration-300 disabled:opacity-20 disabled:cursor-not-allowed group shadow-sm bg-white"
+                            :class="currentPage > 1 ? 'border-secondary text-secondary hover:bg-secondary hover:text-white' : 'border-gray-200 text-gray-300'"
+                            :disabled="currentPage === 1"
+                        >
+                            <i class="ri-arrow-left-s-line text-2xl group-hover:-translate-x-1 transition-transform"></i>
+                        </button>
+                        
+                        <div class="flex items-center gap-2">
+                            <template x-for="p in totalPages">
+                                <button 
+                                    @click="currentPage = p"
+                                    class="w-3 h-3 rounded-full transition-all duration-500"
+                                    :class="currentPage === p ? 'bg-primary w-8' : 'bg-gray-200 hover:bg-gray-300'"
+                                ></button>
+                            </template>
+                        </div>
+
+                        <button 
+                            @click="nextPage()" 
+                            class="w-14 h-14 rounded-full flex items-center justify-center border-2 transition-all duration-300 disabled:opacity-20 disabled:cursor-not-allowed group shadow-sm bg-white"
+                            :class="currentPage < totalPages ? 'border-secondary text-secondary hover:bg-secondary hover:text-white' : 'border-gray-200 text-gray-300'"
+                            :disabled="currentPage === totalPages"
+                        >
+                            <i class="ri-arrow-right-s-line text-2xl group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+
+                    <div class="text-right">
+                        <span class="text-gray-400 font-black text-[10px] uppercase tracking-widest block">Halaman</span>
+                        <span class="text-secondary font-black text-2xl leading-none">
+                            <span x-text="currentPage"></span>
+                            <span class="text-gray-300 mx-1 text-lg">/</span>
+                            <span class="text-gray-400 text-lg" x-text="totalPages"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+    
     <section class="py-12 sm:py-20 bg-stone-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- The High-Impact CTA Card (Named Group for Isolation) -->
@@ -902,7 +2567,7 @@
                     <div class="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20 transition-transform duration-500 group-hover:rotate-12">
                         <i class="ri-flashlight-fill text-white text-2xl"></i>
                     </div>
-                    <span class="font-heading font-black text-3xl tracking-tighter uppercase">ROOTER<span class="text-primary italic">IN</span></span>
+                                        <span class="font-heading font-black text-3xl tracking-tighter uppercase">ROOTER<span class="text-primary italic">IN</span></span>
                 </div>
                 <h2 class="text-3xl sm:text-4xl font-heading font-black text-white leading-tight mb-8">
                     Solusi <span class="text-primary italic">Pipa Lancar</span> <br>Tanpa <span class="text-gray-400 italic">Bongkar!</span>
@@ -912,13 +2577,13 @@
                 </p>
                 <!-- Social Links with Animation -->
                 <div class="flex gap-4">
-                    <a href="#" class="w-12 h-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-primary hover:border-primary transition-all duration-500 group">
+                    <a href="https://instagram.com/rooterin" class="w-12 h-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-primary hover:border-primary transition-all duration-500 group">
                         <i class="ri-instagram-line text-xl text-gray-400 group-hover:text-white transition-colors"></i>
                     </a>
-                    <a href="#" class="w-12 h-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-primary hover:border-primary transition-all duration-500 group">
+                    <a href="https://tiktok.com/@rooterin" class="w-12 h-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-primary hover:border-primary transition-all duration-500 group">
                         <i class="ri-tiktok-fill text-xl text-gray-400 group-hover:text-white transition-colors"></i>
                     </a>
-                    <a href="#" class="w-12 h-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-primary hover:border-primary transition-all duration-500 group">
+                    <a href="https://facebook.com/rooterin" class="w-12 h-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-primary hover:border-primary transition-all duration-500 group">
                         <i class="ri-facebook-box-fill text-xl text-gray-400 group-hover:text-white transition-colors"></i>
                     </a>
                 </div>
@@ -955,15 +2620,15 @@
                     </h4>
                     <div class="flex flex-col gap-4">
                         <!-- WhatsApp Card -->
-                        <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5 hover:border-primary/30 transition-all duration-300 group cursor-pointer">
+                        <a href="https://wa.me/6281246668749" class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5 hover:border-primary/30 transition-all duration-300 group cursor-pointer">
                             <div class="w-11 h-11 bg-primary/10 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm">
                                 <i class="ri-whatsapp-line text-xl"></i>
                             </div>
                             <div>
                                 <div class="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Call & WA</div>
-                                <div class="text-white font-black text-sm tracking-wide leading-none">0812-4666-8749</div>
+                                <div class="text-white font-black text-sm tracking-wide leading-none">6281246668749</div>
                             </div>
-                        </div>
+                        </a>
                         <!-- Response Card -->
                         <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5 hover:border-accent/30 transition-all duration-300 group cursor-pointer">
                             <div class="w-11 h-11 bg-accent/10 rounded-xl flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all duration-500 shadow-sm">
@@ -1023,7 +2688,7 @@
         <div class="hidden md:block bg-white text-secondary py-2 px-4 rounded-full shadow-lg border border-gray-100 font-medium text-sm animate-bounce-soft">
             Konsultasi Gratis, Kak 👋
         </div>
-        <a href="https://wa.me/6281234567890?text=Halo%20Kak%2C%20mau%20tanya%20jasa%20pipa%20dong" 
+        <a href="https://wa.me/6281246668749?text=Halo%20Kak%2C%20mau%20tanya%20jasa%20pipa%20dong" 
            onclick="trackWhatsAppClick('sticky')"
            target="_blank"
            class="flex items-center justify-center w-14 h-14 bg-[#25D366] hover:bg-[#20b85a] text-white rounded-full shadow-[0_4px_20px_rgba(37,211,102,0.4)] transition-all duration-300 transform hover:scale-110 group relative">

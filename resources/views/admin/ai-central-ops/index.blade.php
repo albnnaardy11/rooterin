@@ -92,7 +92,7 @@
                         <i class="ri-node-tree text-blue-500 text-lg"></i> Neural Pool Nodes
                     </h3>
                     <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase bg-blue-500/10 text-blue-500 border border-blue-500/20">
-                        {{ $aiMetrics['pool_size'] }} ACTIVE / 10
+                        {{ $aiMetrics['pool_size'] }} ACTIVE / 11
                     </span>
                 </div>
 
@@ -101,18 +101,18 @@
                     <div class="p-4 bg-white/5 border border-white/5 rounded-2xl flex items-center justify-between hover:border-blue-500/30 transition-all cursor-crosshair">
                         <div class="flex items-center gap-4">
                             <div class="w-8 h-8 rounded-full bg-slate-950 flex items-center justify-center border border-white/10 shadow-inner">
-                                <span class="text-[10px] font-black italic">{{ $keyIndex + 1 }}</span>
+                                <span class="text-[10px] font-black italic">{{ str_contains($node['node'], 'GROQ') ? 'G' : ($keyIndex + 1) }}</span>
                             </div>
                             <div>
                                 <p class="text-[10px] font-bold text-white uppercase tracking-wider">{{ $node['node'] }}</p>
-                                <p class="text-[8px] text-slate-500 font-mono mt-0.5 max-w-[120px] truncate group-hover:whitespace-normal">gemini-2.0-flash (Round-Robin)</p>
+                                <p class="text-[8px] {{ str_contains($node['model'] ?? '', 'llama') ? 'text-primary' : 'text-slate-500' }} font-mono mt-0.5 max-w-[120px] truncate group-hover:whitespace-normal">{{ $node['model'] ?? 'gemini-2.0-flash (Round-Robin)' }}</p>
                             </div>
                         </div>
                         <div class="text-right">
-                            <p class="text-xs font-black {{ $node['status'] == 'ACTIVE' ? 'text-green-500' : 'text-orange-500' }} italic">{{ $node['status'] }}</p>
+                            <p class="text-xs font-black {{ str_contains($node['status'], 'ACTIVE') ? 'text-green-500' : (str_contains($node['status'], 'STANDBY') ? 'text-blue-400' : 'text-orange-500') }} italic">{{ $node['status'] }}</p>
                             <p class="text-[8px] font-bold text-slate-500 uppercase flex items-center justify-end gap-1 mt-0.5">
-                                @if($node['status'] == 'ACTIVE')
-                                    <i class="ri-speed-up-line text-blue-400"></i> {{ $node['latency'] }} | {{ $node['rpm_limit'] }}
+                                @if(str_contains($node['status'], 'ACTIVE') || str_contains($node['status'], 'STANDBY'))
+                                    <i class="ri-speed-up-line {{ str_contains($node['status'], 'STANDBY') ? 'text-primary' : 'text-blue-400' }}"></i> {{ $node['latency'] }} | {{ $node['rpm_limit'] }}
                                 @else
                                     <i class="ri-timer-flash-line text-orange-500"></i> {{ $node['rpm_limit'] }}
                                 @endif
@@ -121,8 +121,9 @@
                     </div>
                     @endforeach
                     
-                    <!-- Inactive visual placeholders to always show 10 slots -->
-                    @for($i = count($aiMetrics['keys_status']) + 1; $i <= 10; $i++)
+                    <!-- Inactive visual placeholders for missing gemini slots -->
+                    @php $missingGemini = 10 - collect($aiMetrics['keys_status'])->where(fn($k) => str_contains($k['node'], 'NODE-'))->where(fn($k) => !str_contains($k['node'], 'FALLBACK'))->count(); @endphp
+                    @for($i = 10 - $missingGemini + 1; $i <= 10; $i++)
                     <div class="p-4 bg-transparent border border-white/5 border-dashed rounded-2xl flex items-center justify-between opacity-30">
                         <div class="flex items-center gap-4">
                             <div class="w-8 h-8 rounded-full bg-slate-950 flex items-center justify-center border border-white/10 shadow-inner">
@@ -138,6 +139,24 @@
                         </div>
                     </div>
                     @endfor
+                    
+                    <!-- Inactive placeholder for Groq if empty -->
+                    @if(!collect($aiMetrics['keys_status'])->contains(fn($k) => str_contains($k['node'], 'GROQ')))
+                    <div class="p-4 bg-transparent border border-white/5 border-dashed rounded-2xl flex items-center justify-between opacity-30 mt-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-8 h-8 rounded-full bg-slate-950 flex items-center justify-center border border-white/10 shadow-inner">
+                                <span class="text-[10px] font-black italic">G</span>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-white uppercase tracking-wider">NODE-FALLBACK (UNPLUGGED)</p>
+                                <p class="text-[8px] text-slate-500 font-mono mt-0.5">Missing GROQ_API_KEY (Llama 3.3)</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] font-black text-slate-500 italic">OFFLINE</p>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
 
@@ -216,11 +235,27 @@
             </div>
         </div>
 
-        <!-- System Settings Integrity Map -->
         <div class="bg-slate-900/50 border border-white/5 rounded-3xl p-8 mt-8">
             <h3 class="text-xs font-black text-white uppercase tracking-widest flex items-center gap-2 mb-6">
                 <i class="ri-cpu-line text-primary text-lg"></i> Layer 1 Sentinel Verification (Gatekeeper Logic)
             </h3>
+
+            @if($aiMetrics['pool_size'] <= 2)
+            <div class="mb-8 p-5 rounded-2xl bg-amber-500/5 border border-amber-500/10 flex items-start gap-5">
+                <div class="p-3 rounded-xl bg-amber-500/10 text-amber-500">
+                    <i class="fas fa-microchip text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="text-amber-500 text-sm font-black uppercase tracking-tighter mb-1">CRITICAL: REDUNDANSI RENDAH</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed max-w-2xl">
+                        Sistem AI Anda saat ini berjalan dengan jatah kuota yang sangat tipis (Pool Size: {{ $aiMetrics['pool_size'] }}). 
+                        Kami sangat merekomendasikan penambahan minimal 3 API Key Gemini baru di berkas <code>.env</code> 
+                        untuk menjamin ketersediaan diagnosa 24/7 tanpa Error 429 (Daily Limit).
+                    </p>
+                </div>
+            </div>
+            @endif
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Zero-Redundancy Metric -->
                 <div class="border-l-2 border-green-500/30 pl-4">

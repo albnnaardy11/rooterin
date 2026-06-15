@@ -21,12 +21,13 @@ class AiCentralOpsController extends Controller
         $apiKeysCount = 0;
         $keysStatus = [];
         try {
-            for ($i = 1; $i <= 10; $i++) {
-                $keyName = $i === 1 ? 'GEMINI_API_KEY' : "GEMINI_API_KEY_{$i}";
-                if (env($keyName)) {
+            $geminiKeys = config('ai.gemini_keys', []);
+            foreach ($geminiKeys as $index => $keyString) {
+                if ($keyString) {
                     $apiKeysCount++;
+                    $displayIndex = $index + 1;
                     
-                    $isLimit = Cache::has("gemini_limit_{$i}");
+                    $isLimit = Cache::has("gemini_limit_{$displayIndex}");
                     $statusFlag = 'ACTIVE';
                     $rpmText = '15/min';
                     $latency = rand(800, 1500) . 'ms';
@@ -34,11 +35,11 @@ class AiCentralOpsController extends Controller
                     if ($isLimit) {
                         try {
                             $statusFlag = 'LIMIT 429';
-                            $limitTime = Cache::get("gemini_limit_{$i}"); // ISO8601 String
+                            $limitTime = Cache::get("gemini_limit_{$displayIndex}");
                             $target = Carbon::parse($limitTime);
                             
                             if ($target->isPast()) {
-                                Cache::forget("gemini_limit_{$i}");
+                                Cache::forget("gemini_limit_{$displayIndex}");
                                 $statusFlag = 'ACTIVE';
                             } else {
                                 $diff = now()->diff($target);
@@ -47,18 +48,31 @@ class AiCentralOpsController extends Controller
                                 $latency = '0ms';
                             }
                         } catch (\Exception $e) {
-                            $statusFlag = 'ACTIVE'; // Fallback if parse fails
-                            Cache::forget("gemini_limit_{$i}");
+                            $statusFlag = 'ACTIVE';
+                            Cache::forget("gemini_limit_{$displayIndex}");
                         }
                     }
 
                     $keysStatus[] = [
-                        'node' => "NODE-{$i}",
+                        'node' => "NODE-{$displayIndex}",
                         'status' => $statusFlag,
                         'rpm_limit' => $rpmText,
-                        'latency' => $latency
+                        'latency' => $latency,
+                        'model' => 'gemini-2.0-flash (Round-Robin)'
                     ];
                 }
+            }
+            
+            // Add Groq Fallback Node
+            if (config('ai.groq_key')) {
+                $apiKeysCount++;
+                $keysStatus[] = [
+                    'node' => "NODE-FALLBACK (GROQ)",
+                    'status' => 'STANDBY (READY)',
+                    'rpm_limit' => '30/min',
+                    'latency' => rand(180, 250) . 'ms',
+                    'model' => 'llama-3.3-70b-versatile (Cloud)'
+                ];
             }
         } catch (\Exception $e) {
             Log::error('Neural Pool Loop Error: ' . $e->getMessage());
@@ -118,10 +132,12 @@ class AiCentralOpsController extends Controller
      */
     public function flushNodes()
     {
-        for ($i = 1; $i <= 10; $i++) {
-            Cache::forget("gemini_limit_{$i}");
+        Cache::forget('sentinel_ai_current_key_index');
+        
+        for ($i = 0; $i <= 10; $i++) {
+            Cache::forget("sentinel_ai_key_blocked_at_{$i}");
+            Cache::forget("gemini_limit_" . ($i + 1));
         }
-        Cache::forget('sentinel_key_index');
 
         return redirect()->back()->with('success', 'Neural Pool Memory Flushed. All nodes returned to ACTIVE state.');
     }

@@ -9,7 +9,12 @@ use Illuminate\Support\Facades\Cache;
 class GeminiVisionService
 {
     protected $apiKeys = [];
-    protected $endpointTemplate = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+    protected $models = [
+        'gemini-2.0-flash',
+        'gemini-2.5-flash',
+        'gemini-flash-latest',
+        'gemini-pro-latest'
+    ];
 
     /**
      * UNICORP-GRADE: Neural Core (Centralized AI Gatekeeper)
@@ -30,9 +35,12 @@ class GeminiVisionService
      */
     public function analyzePipeImage(string $base64Image, string $mimeType, string $material, string $location): ?array
     {
-        if (empty($this->apiKeys)) {
-            Log::error('Gemini API Key is missing.');
-            throw new \Exception('Neural Pool Exhausted (429): No API keys configured.');
+        $guard = app(\App\Services\Ai\AiQuotaGuardService::class);
+        $keys = $guard->getKeys();
+        
+        if (empty($keys) && !config('ai.groq_key')) {
+            Log::error('Neural Pool Exhausted: No API keys (Gemini/Groq) configured.');
+            throw new \Exception('429');
         }
 
         $materialLabel = match(strtolower($material)) {
@@ -87,7 +95,7 @@ PENTING: Hanya berikan JSON valid berikut, TANPA teks di luar JSON:
 PROMPT;
 
         $attempts = 0;
-        $maxAttempts = count($this->apiKeys);
+        $maxAttempts = count($keys);
         $lastException = null;
 
         while ($attempts < $maxAttempts) {
@@ -100,63 +108,138 @@ PROMPT;
             $keyFingerprint = substr($apiKey, 0, 8) . '...';
 
             try {
-                Log::info("[SENTINEL] Executing Inference via NODE-{$nodeId} (Fingerprint: $keyFingerprint)");
-                $response = Http::timeout(45)->withHeaders([
-                    'Content-Type' => 'application/json',
-                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/' . rand(110, 120) . '.0.0.0 Safari/537.36',
-                ])->post("{$this->endpointTemplate}?key={$apiKey}", [
-                    'contents' => [
-                        [
-                            'parts' => [
-                                ['text' => $prompt],
-                                ['inline_data' => ['mime_type' => $mimeType, 'data' => $base64Image]]
-                            ]
-                        ]
-                    ],
-                    'generationConfig' => ['temperature' => 0.1, 'topK' => 16, 'topP' => 0.6]
-                ]);
+                // HYPER-RESILIENT MULTI-MODEL FAILOVER (Per Node)
+                foreach ($this->models as $modelName) {
+                    Log::info("[SENTINEL] Inference Attempt via NODE-{$nodeId} Model: {$modelName}");
+                    $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{$modelName}:generateContent";
+                    
+                    $response = $this->callGemini($apiKey, $endpoint, $prompt, $mimeType, $base64Image);
 
-                if ($response->successful()) {
-                    $result = $response->json();
-                    if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
-                        $rawText = $result['candidates'][0]['content']['parts'][0]['text'];
-                        if (preg_match('/\{.*\}/s', $rawText, $matches)) {
-                            $data = json_decode($matches[0], true);
-                            if (json_last_error() === JSON_ERROR_NONE) {
-                                $data['performance'] = [
-                                    'latency_ms' => (int)((microtime(true) - $startTime) * 1000),
-                                    'key_used'   => "NODE-{$nodeId}",
-                                    'timestamp'  => now()->toIso8601String(),
-                                    'status'     => $attempts > 0 ? 'FAILOVER_STABLE' : 'STABLE'
-                                ];
-                                return $data;
+                    if ($response->successful()) {
+                        $result = $response->json();
+                        if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
+                            $rawText = $result['candidates'][0]['content']['parts'][0]['text'];
+                            if (preg_match('/\{.*\}/s', $rawText, $matches)) {
+                                $data = json_decode($matches[0], true);
+                                if (json_last_error() === JSON_ERROR_NONE) {
+                                    $data['performance'] = [
+                                        'latency_ms' => (int)((microtime(true) - $startTime) * 1000),
+                                        'key_used'   => "NODE-{$nodeId} ($modelName)",
+                                        'timestamp'  => now()->toIso8601String(),
+                                        'status'     => $attempts > 0 ? 'FAILOVER_STABLE' : 'STABLE'
+                                    ];
+                                    return $data;
+                                }
                             }
                         }
                     }
+
+                    // Log failure but continue to next model on same key if not 429
+                    if ($response->status() !== 429) {
+                        Log::warning("[SENTINEL] NODE-{$nodeId} Model {$modelName} failed ($response->status()). Swapping model...");
+                        continue;
+                    } else {
+                        // If 429, don't spam other models on same key, move to next node
+                        break; 
+                    }
                 }
 
+                // If we reach here, this key (all models) failed or hit 429
+                $attempts++;
+                
+                // Track 429 Block if last response was 429
                 if ($response->status() === 429) {
                     $errMsg = strtolower($response->json('error.message') ?? '');
-                    $cooldownMinutes = (str_contains($errMsg, 'quota') || str_contains($errMsg, 'exhausted')) ? 60 : 2;
+                    $cooldownMinutes = (str_contains($errMsg, 'quota') || str_contains($errMsg, 'exhausted')) ? 5 : 1;
                     $until = now()->addMinutes($cooldownMinutes);
                     
-                    cache()->put("gemini_limit_{$nodeId}", $until->toIso8601String(), $until);
-                    Log::warning("[SENTINEL] NODE-{$nodeId} hit 429. Cooling down... Failover in 2s.");
+                    Cache::put("sentinel_ai_key_blocked_at_" . ($nodeId - 1), $until, $until);
+                    Cache::put("gemini_limit_{$nodeId}", $until->toIso8601String(), $until);
+                    Log::warning("[SENTINEL] NODE-{$nodeId} hit 429 Quota. Cooldown for {$cooldownMinutes}m.");
                     
-                    sleep(2); // Circuit breaker delay
-                    $attempts++;
+                    usleep(300000); // Wait 0.3s before trying next key
                     continue; 
                 }
 
-                throw new \Exception("Node-{$nodeId} Error: " . ($response->json('error.message') ?? 'Unknown Error'));
+                throw new \Exception("Node-{$nodeId} Exhuasted: " . ($response->json('error.message') ?? 'Unknown Error'));
 
             } catch (\Exception $e) {
                 $lastException = $e;
-                Log::error("[SENTINEL] Attempt {$attempts} failed on NODE-{$nodeId}: " . $e->getMessage());
+                Log::error("[SENTINEL] Fatal Attempt {$attempts} on NODE-{$nodeId}: " . $e->getMessage());
                 $attempts++;
             }
         }
 
+        // --- ULTIMATE FAILOVER: Groq Cloud (Vision Protocol) ---
+        $groqKey = config('ai.groq_key');
+        if ($groqKey) {
+            $models = ['llama-3.2-90b-vision-preview', 'llama-3.2-11b-vision-preview'];
+            
+            foreach ($models as $currentModel) {
+                try {
+                    Log::info("[SENTINEL] PROCEEDING TO ULTIMATE FAILOVER: GROQ NODE ({$currentModel})");
+                    $startTime = microtime(true);
+                    
+                    $response = Http::timeout(35)->withToken($groqKey)->post("https://api.groq.com/openai/v1/chat/completions", [
+                        'model' => $currentModel,
+                        'messages' => [
+                            [
+                                'role' => 'user', 
+                                'content' => [
+                                    ['type' => 'text', 'text' => $prompt],
+                                    ['type' => 'image_url', 'image_url' => ['url' => "data:$mimeType;base64,$base64Image"]]
+                                ]
+                            ]
+                        ],
+                        'response_format' => ['type' => 'json_object'],
+                        'temperature' => 0.1
+                    ]);
+
+                    if ($response->successful()) {
+                        $data = $response->json('choices.0.message.content');
+                        if (is_string($data)) $data = json_decode($data, true);
+                        
+                        if ($data) {
+                            $data['performance'] = [
+                                'latency_ms' => (int)((microtime(true) - $startTime) * 1000),
+                                'key_used'   => "GROQ-FALLBACK ({$currentModel})",
+                                'timestamp'  => now()->toIso8601String(),
+                                'status'     => 'FAILOVER_STABLE'
+                            ];
+                            return $data;
+                        }
+                    }
+                    
+                    Log::error("[SENTINEL] Groq ({$currentModel}) Error: " . ($response->json('error.message') ?: $response->body()));
+                    
+                    // If model decommissioning is the error, try next model
+                    if ($response->status() !== 429) continue;
+                    else break; // If rate limit on Groq, don't spam other models
+
+                } catch (\Exception $e) {
+                    Log::error("[SENTINEL] Groq ({$currentModel}) Exception: " . $e->getMessage());
+                }
+            }
+        }
+
         throw $lastException ?? new \Exception('429');
+    }
+
+    protected function callGemini($apiKey, $endpoint, $prompt, $mimeType, $base64Image)
+    {
+        return Http::timeout(45)->withHeaders([
+            'Content-Type' => 'application/json',
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/' . rand(110, 120) . '.0.0.0 Safari/537.36',
+        ])->post("{$endpoint}?key={$apiKey}", [
+            'contents' => [
+                [
+                    'parts' => [
+                        ['text' => $prompt],
+                        ['inline_data' => ['mime_type' => $mimeType, 'data' => $base64Image]]
+                    ]
+                ]
+            ],
+            'generationConfig' => ['temperature' => 0.1, 'topK' => 16, 'topP' => 0.6]
+        ]);
     }
 }

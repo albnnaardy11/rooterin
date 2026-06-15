@@ -31,7 +31,6 @@ class ExportStaticPages extends Command
             '/layanan' => 'layanan.html',
             '/galeri' => 'galeri.html',
             '/tips' => 'tips.html',
-            '/ai-diagnostic' => 'ai-diagnostic.html',
             '/wiki' => 'wiki.html',
             '/kontak' => 'kontak.html',
         ];
@@ -155,7 +154,6 @@ class ExportStaticPages extends Command
             'layanan' => 'layanan.html',
             'galeri' => 'galeri.html',
             'tips' => 'tips.html',
-            'ai-diagnostic' => 'ai-diagnostic.html',
             'wiki' => 'wiki.html',
             'kontak' => 'kontak.html'
         ];

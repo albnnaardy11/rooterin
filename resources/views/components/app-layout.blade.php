@@ -42,7 +42,7 @@
     {
       "prerender": [{
         "source": "list",
-        "urls": ["{{ route('home') }}", "{{ route('services') }}", "{{ route('ai.diagnostic') }}"]
+        "urls": ["{{ route('home') }}", "{{ route('services') }}"]
       }, {
         "source": "document",
         "where": { "and": [

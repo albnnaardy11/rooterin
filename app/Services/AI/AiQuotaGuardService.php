@@ -17,16 +17,18 @@ class AiQuotaGuardService
 
     protected function initializeKeyPool()
     {
-        // UNICORP-GRADE: High Availability Key Pool (Sentinel Protocol)
-        $primary = env('GEMINI_API_KEY');
-        if ($primary) $this->keys[] = $primary;
-
-        for ($i = 2; $i <= 10; $i++) {
-            $key = env("GEMINI_API_KEY_$i");
-            if ($key) $this->keys[] = $key;
-        }
+        // UNICORP-GRADE: Config-based Key Pool (Reliable on Caching)
+        $this->keys = collect(config('ai.gemini_keys', []))
+            ->filter()
+            ->values()
+            ->toArray();
 
         $this->currentKeyIndex = Cache::get('sentinel_ai_current_key_index', 0);
+    }
+
+    public function getKeys()
+    {
+        return $this->keys;
     }
 
     /**
@@ -81,8 +83,8 @@ class AiQuotaGuardService
      */
     public function reportFailure()
     {
-        // Block for 1 hour
-        Cache::put('sentinel_ai_key_blocked_at_' . $this->currentKeyIndex, now()->addHour(), 3600);
+        // Block for 5 minutes (Don't be too aggressive for free tier spikes)
+        Cache::put('sentinel_ai_key_blocked_at_' . $this->currentKeyIndex, now()->addMinutes(5), 300);
         $this->rotateKey();
         
         $this->sendWhatsAppAlert("AI-QUOTA: Key Index " . $this->currentKeyIndex . " reached its limit. Self-healing rotation engaged.");
