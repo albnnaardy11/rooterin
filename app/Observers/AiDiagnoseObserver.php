@@ -31,7 +31,7 @@ class AiDiagnoseObserver
         // 2. Ping Google (if location is detected)
         if ($aiDiagnose->city_location && $aiDiagnose->city_location !== 'Auto Detect') {
             // Ideally we'd ping the landing page for this diagnostic or city
-            $url = url('/ai-diagnostic'); // Or specific result page if it exists
+            $url = url('/'); // Or specific result page if it exists
             $this->indexingService->notifyUpdate($url);
         }
     }

@@ -29,7 +29,6 @@
                 'About' => route('about'),
                 'Layanan' => route('services'), 
                 'Gallery' => route('gallery'),
-                'AI Diagnostic' => route('ai.diagnostic'), 
             ] as $label => $link)
                 <a href="{{ $link }}" 
                    class="relative px-3 py-2 text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 {{ request()->url() == $link ? 'text-primary' : 'text-gray-400 hover:text-white' }}">
@@ -172,7 +171,6 @@
                     'Home' => route('home'), 
                     'About Us' => route('about'), 
                     'Services' => route('services'), 
-                    'AI Diagnostic' => route('ai.diagnostic'),
                     'Project Gallery' => route('gallery'), 
                     'Contact' => route('contact')
                 ];

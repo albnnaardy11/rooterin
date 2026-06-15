@@ -197,7 +197,7 @@ function wikiForm() {
         },
 
         async autoInference() {
-            if (!this.name) return alert('Identitas objek master diperlukan sebelum pemrosesan neural.');
+            if (!this.name) return CMS.toast.show('Validasi Gagal', 'Identitas objek master diperlukan sebelum pemrosesan neural.', 'warning');
             
             this.loading = true;
             try {
@@ -223,7 +223,7 @@ function wikiForm() {
                 this.attributes = JSON.stringify(data.attributes, null, 4);
                 this.runSeoAudit();
             } catch (e) {
-                alert('Neural Network Disruption. Sceduling manual input protocol.');
+                CMS.toast.show('Kesalahan Sistem', 'Neural Network Disruption. Menyediakan protokol input manual.', 'error');
             } finally {
                 this.loading = false;
             }

@@ -34,16 +34,16 @@ class AiMultiModelService
             }
         }
 
-        // 2. Secondary Attempt (OpenAI Fallback if configured)
-        $openAiKey = env('OPENAI_API_KEY');
-        if ($openAiKey) {
+        // 2. Secondary Attempt (Groq Cloud Fallback if configured)
+        $groqKey = config('ai.groq_key');
+        if ($groqKey) {
             try {
-                $response = $this->callOpenAi($openAiKey, $prompt, $systemInstruction);
+                $response = $this->callGroq($groqKey, $prompt, $systemInstruction);
                 if ($response && $this->isValidOutput($response, $format)) {
                     return $response;
                 }
             } catch (\Exception $e) {
-                Log::error("[SENTINEL-AI] OpenAI Fallback Failure: " . $e->getMessage());
+                Log::error("[SENTINEL-AI] Groq Fallback Failure: " . $e->getMessage());
             }
         }
 
@@ -66,10 +66,10 @@ class AiMultiModelService
         throw new \Exception("Gemini HTTP Error: " . $response->status());
     }
 
-    protected function callOpenAi($key, $prompt, $systemInstruction)
+    protected function callGroq($key, $prompt, $systemInstruction)
     {
-        $response = Http::timeout(30)->withToken($key)->post("https://api.openai.com/v1/chat/completions", [
-            'model' => 'gpt-4-turbo-preview',
+        $response = Http::timeout(30)->withToken($key)->post("https://api.groq.com/openai/v1/chat/completions", [
+            'model' => 'llama-3.3-70b-versatile', // Llama 3.3 dari Meta (70B parameter, sangat cepat)
             'messages' => [
                 ['role' => 'system', 'content' => $systemInstruction],
                 ['role' => 'user', 'content' => $prompt]
@@ -80,7 +80,7 @@ class AiMultiModelService
             return $response->json('choices.0.message.content');
         }
 
-        throw new \Exception("OpenAI HTTP Error: " . $response->status());
+        throw new \Exception("Groq Web HTTP Error: " . $response->status() . " - " . $response->body());
     }
 
     /**
