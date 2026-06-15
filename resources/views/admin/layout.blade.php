@@ -122,10 +122,7 @@
                     <i class="ri-lock-2-line text-xl"></i>
                     <span class="text-sm font-bold">Vault Access</span>
                 </a>
-                <a href="{{ route('admin.ai.central.ops.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('admin.ai.central.ops.*') ? 'bg-rose-900/20 text-rose-500 border-l-4 border-rose-500' : 'hover:bg-white/5 text-slate-400 hover:text-white' }}">
-                    <i class="ri-brain-line text-xl"></i>
-                    <span class="text-sm font-bold">AI Central Ops</span>
-                </a>
+
                 <a href="{{ route('admin.sentinel.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('admin.sentinel.*') ? 'bg-rose-900/20 text-rose-500 border-l-4 border-rose-500' : 'hover:bg-white/5 text-slate-400 hover:text-white' }}">
                     <i class="ri-radar-line text-xl"></i>
                     <span class="text-sm font-bold">System Sentinel</span>

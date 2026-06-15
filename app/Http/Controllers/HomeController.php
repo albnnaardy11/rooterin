@@ -13,16 +13,14 @@ class HomeController extends Controller
     {
         $services = Service::where('is_active', true)->take(3)->get()->map(function ($s, $index) {
             $colors = ['primary', 'accent', 'secondary'];
+            $gallery = is_array($s->gallery) ? $s->gallery : json_decode($s->gallery, true) ?? [];
+            $img = !empty($gallery) ? $gallery[0] : '/images/placeholder.jpg';
 
             return [
                 'title' => $s->name,
                 'tagline' => 'TEKNOLOGI MODERN',
                 'desc' => $s->description_short,
-                'img' => [
-                    'https://images.unsplash.com/photo-1585955123058-930415956a69?w=800&fit=crop',
-                    'https://images.unsplash.com/photo-1542013936693-884638332954?w=800&fit=crop',
-                    'https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=800&fit=crop'
-                ][$index % 3], 
+                'img' => $img, 
                 'color' => $colors[$index % 3],
             ];
         });

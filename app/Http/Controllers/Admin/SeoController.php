@@ -82,7 +82,7 @@ class SeoController extends Controller
             ->get();
 
         // REAL DATA: Fetch from Google Search Console
-        $gscData = $gscService->getPerformanceData();
+        $gscData = $gscService->getPerformanceStats();
 
         $orphanPages = $orphanScanner->scan();
 
