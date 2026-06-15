@@ -17,11 +17,25 @@ class AiQuotaGuardService
 
     protected function initializeKeyPool()
     {
-        // UNICORP-GRADE: Config-based Key Pool (Reliable on Caching)
-        $this->keys = collect(config('ai.gemini_keys', []))
-            ->filter()
-            ->values()
-            ->toArray();
+        // UNICORP-GRADE: Database Settings Pool with Config Fallback
+        try {
+            $dbKeys = \App\Models\Setting::where('key', 'like', 'gemini_api_key_%')
+                ->pluck('value')
+                ->filter(function($val) { return !empty(trim($val)); })
+                ->values()
+                ->toArray();
+        } catch (\Exception $e) {
+            $dbKeys = [];
+        }
+
+        if (!empty($dbKeys)) {
+            $this->keys = $dbKeys;
+        } else {
+            $this->keys = collect(config('ai.gemini_keys', []))
+                ->filter()
+                ->values()
+                ->toArray();
+        }
 
         $this->currentKeyIndex = Cache::get('sentinel_ai_current_key_index', 0);
     }

@@ -55,7 +55,7 @@
                             
                             <div class="w-full sm:w-2/3 relative">
                                 <input 
-                                    type="text" 
+                                    type="{{ str_contains($setting->key, 'api_key') || str_contains($setting->key, 'secret') ? 'password' : 'text' }}" 
                                     name="settings[{{ $setting->id }}]" 
                                     value="{{ $setting->value }}"
                                     class="w-full bg-slate-950/60 border border-white/5 rounded-xl px-5 py-3.5 text-white font-bold text-sm focus:outline-none focus:border-primary/40 focus:bg-slate-950 transition-all shadow-inner"
