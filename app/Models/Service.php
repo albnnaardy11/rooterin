@@ -13,6 +13,7 @@ class Service extends Model
     protected $casts = [
         'items' => 'json',
         'pricing' => 'json',
+        'gallery' => 'json',
     ];
 
     public function getIconAttribute($value)

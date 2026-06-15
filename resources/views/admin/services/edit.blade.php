@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    <form action="{{ route('admin.services.update', $service->id) }}" method="POST" class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+    <form action="{{ route('admin.services.update', $service->id) }}" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 lg:grid-cols-3 gap-12">
         @csrf
         @method('PUT')
         <div class="lg:col-span-2 space-y-8">
@@ -43,10 +43,9 @@
                 <div>
                     <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6 flex items-center gap-2">
                         <span class="w-1 h-1 bg-primary rounded-full"></span>
-                        Remix Icon Class
+                        Service Icon
                     </label>
-                    <input type="text" name="icon" required value="{{ old('icon', $service->icon) }}"
-                           class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-primary/50 transition-all font-bold">
+                    <x-admin.icon-picker name="icon" value="{{ old('icon', $service->icon) }}" />
                 </div>
 
                 <div>
@@ -56,6 +55,29 @@
                     </label>
                     <input type="number" name="price" value="{{ old('price', $service->price) }}" 
                            class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-primary/50 transition-all font-bold">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6 flex items-center gap-2">
+                        <span class="w-1 h-1 bg-primary rounded-full"></span>
+                        Hover Image (Card Background)
+                    </label>
+                    @php
+                        $gallery = is_array($service->gallery) ? $service->gallery : json_decode($service->gallery, true) ?? [];
+                        $currentHoverImage = !empty($gallery) ? $gallery[0] : null;
+                    @endphp
+                    @if($currentHoverImage)
+                    <div class="mb-6 rounded-2xl overflow-hidden border border-white/10 relative h-32">
+                        <img src="{{ $currentHoverImage }}" class="w-full h-full object-cover">
+                    </div>
+                    @endif
+                    <div class="relative group">
+                        <input type="file" name="hover_image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        <div class="p-8 border-2 border-dashed border-white/10 rounded-2xl text-center group-hover:border-primary/50 transition-all">
+                            <i class="ri-image-edit-line text-3xl text-slate-600 group-hover:text-primary mb-2"></i>
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Change Hover Image</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="pt-6 border-t border-white/5">
