@@ -51,16 +51,24 @@
                         <span class="w-1 h-1 bg-primary rounded-full"></span>
                         Project Image
                     </label>
-                    @if($project->image_url)
-                    <div class="mb-6 rounded-2xl overflow-hidden border border-white/10">
-                        <img src="{{ $project->image_url }}" class="w-full h-40 object-cover">
-                    </div>
-                    @endif
-                    <div class="relative group">
-                        <input type="file" name="image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                        <div class="p-8 border-2 border-dashed border-white/10 rounded-2xl text-center group-hover:border-primary/50 transition-all">
-                            <i class="ri-image-edit-line text-3xl text-slate-600 group-hover:text-primary mb-2"></i>
-                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Change Photo</p>
+                    <div class="relative group" x-data="{ imageUrl: '{{ $project->image_url }}' }">
+                        <input type="file" name="image" accept="image/*" 
+                               @change="const file = $event.target.files[0]; if (file) { imageUrl = URL.createObjectURL(file) }"
+                               class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        
+                        <!-- Upload Placeholder -->
+                        <div x-show="!imageUrl" class="p-8 border-2 border-dashed border-white/10 rounded-2xl text-center group-hover:border-primary/50 transition-all" style="display: none;">
+                            <i class="ri-image-add-line text-3xl text-slate-600 group-hover:text-primary mb-2"></i>
+                            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Upload Photo</p>
+                        </div>
+
+                        <!-- Image Preview -->
+                        <div x-show="imageUrl" class="relative rounded-2xl overflow-hidden border border-white/10 aspect-video bg-slate-950 flex items-center justify-center group">
+                            <img :src="imageUrl" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center pointer-events-none">
+                                <i class="ri-edit-line text-2xl text-white mb-1"></i>
+                                <p class="text-[9px] font-black text-white uppercase tracking-widest">Change Photo</p>
+                            </div>
                         </div>
                     </div>
                 </div>
