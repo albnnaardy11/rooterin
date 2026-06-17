@@ -51,7 +51,10 @@ class ProjectController extends Controller
                 'category' => 'required|in:Residential,Commercial,Specialized',
                 'location' => 'nullable',
                 'image' => 'required|image|max:2048',
+                'is_featured' => 'nullable|boolean',
             ]);
+
+            $validated['is_featured'] = $request->boolean('is_featured');
 
             if ($request->hasFile('image')) {
                 $path = $this->imageService->optimize($request->file('image'), 'projects');
@@ -85,7 +88,10 @@ class ProjectController extends Controller
                 'category' => 'required|in:Residential,Commercial,Specialized',
                 'location' => 'nullable',
                 'image' => 'nullable|image|max:2048',
+                'is_featured' => 'nullable|boolean',
             ]);
+
+            $validated['is_featured'] = $request->boolean('is_featured');
 
             if ($request->hasFile('image')) {
                 // Delete old image
