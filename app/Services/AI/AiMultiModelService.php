@@ -35,7 +35,7 @@ class AiMultiModelService
         }
 
         // 2. Secondary Attempt (Groq Cloud Fallback if configured)
-        $groqKey = config('ai.groq_key');
+        $groqKey = \App\Models\Setting::get('groq_api_key', config('ai.groq_key'));
         if ($groqKey) {
             try {
                 $response = $this->callGroq($groqKey, $prompt, $systemInstruction);

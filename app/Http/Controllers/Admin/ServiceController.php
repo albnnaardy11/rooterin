@@ -42,6 +42,11 @@ class ServiceController extends Controller
             $validated['slug'] = Str::slug($request->name);
             $validated['is_active'] = $request->has('is_active');
 
+            if ($request->hasFile('hover_image')) {
+                $path = $request->file('hover_image')->store('services', 'public');
+                $validated['gallery'] = ['/storage/' . $path];
+            }
+
             $service = $this->serviceRepo->create($validated);
 
             if ($request->has('seo')) {
@@ -78,6 +83,11 @@ class ServiceController extends Controller
             $validated['slug'] = Str::slug($request->name);
             $validated['is_active'] = $request->has('is_active');
 
+            if ($request->hasFile('hover_image')) {
+                $path = $request->file('hover_image')->store('services', 'public');
+                $validated['gallery'] = ['/storage/' . $path];
+            }
+
             $this->serviceRepo->update($id, $validated);
 
             if ($request->has('seo')) {
@@ -98,7 +108,19 @@ class ServiceController extends Controller
             return redirect()->route('admin.services.index')->with('success', 'Service deleted successfully.');
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Service Delete Error: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Gagal menghapus layanan. Data mungkin sedang digunakan.');
+            return redirect()->back()->with('error', 'Gagal menghapus layanan.');
+        }
+    }
+
+    public function toggleActive($id)
+    {
+        try {
+            $service = $this->serviceRepo->find($id);
+            $this->serviceRepo->update($id, ['is_active' => !$service->is_active]);
+            return redirect()->back()->with('success', 'Status layanan berhasil diubah.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Service Toggle Error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal mengubah status.');
         }
     }
 }

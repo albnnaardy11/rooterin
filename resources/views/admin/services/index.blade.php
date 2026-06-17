@@ -41,9 +41,13 @@
                         <p class="text-sm font-bold text-white">Rp {{ number_format($service->price, 0, ',', '.') }}</p>
                     </td>
                     <td class="px-8 py-6">
-                        <span class="px-3 py-1 bg-white/5 rounded-full text-[8px] font-black uppercase tracking-widest {{ $service->is_active ? 'text-primary' : 'text-slate-500' }} border border-white/5">
-                            {{ $service->is_active ? 'Active' : 'Inactive' }}
-                        </span>
+                        <form action="{{ route('admin.services.toggle-active', $service->id) }}" method="POST" class="inline">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="px-3 py-1 bg-white/5 rounded-full text-[8px] font-black uppercase tracking-widest {{ $service->is_active ? 'text-primary' : 'text-slate-500' }} border border-white/5 hover:bg-white/10 transition-all cursor-pointer">
+                                {{ $service->is_active ? 'Active' : 'Inactive' }}
+                            </button>
+                        </form>
                     </td>
                     <td class="px-8 py-6 text-right">
                         <div class="flex items-center justify-end gap-2">

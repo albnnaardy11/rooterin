@@ -74,6 +74,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'audit', 'verified']
     Route::get('/services/{id}/edit', [\App\Http\Controllers\Admin\ServiceController::class, 'edit'])->name('services.edit');
     Route::put('/services/{id}', [\App\Http\Controllers\Admin\ServiceController::class, 'update'])->name('services.update');
     Route::delete('/services/{id}', [\App\Http\Controllers\Admin\ServiceController::class, 'destroy'])->name('services.destroy');
+    Route::patch('/services/{id}/toggle-active', [\App\Http\Controllers\Admin\ServiceController::class, 'toggleActive'])->name('services.toggle-active');
     
     Route::get('/projects', [\App\Http\Controllers\Admin\ProjectController::class, 'index'])->name('projects.index');
     Route::get('/projects/create', [\App\Http\Controllers\Admin\ProjectController::class, 'create'])->name('projects.create');
@@ -149,8 +150,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'audit', 'verified']
         Route::get('/ai-intelligence', [\App\Http\Controllers\Admin\AiIntelligenceController::class, 'index'])->name('ai.intelligence.index');
         Route::get('/ai-intelligence/export', [\App\Http\Controllers\Admin\AiIntelligenceController::class, 'export'])->name('ai.intelligence.export');
         
-        Route::get('/ai-central-ops', [\App\Http\Controllers\Admin\AiCentralOpsController::class, 'index'])->name('ai.central.ops.index');
-        Route::post('/ai-central-ops/flush', [\App\Http\Controllers\Admin\AiCentralOpsController::class, 'flushNodes'])->name('ai.central.ops.flush');
+
 
         Route::post('/seo/analyze', [\App\Http\Controllers\Admin\SeoController::class, 'analyze'])->name('seo.analyze');
         Route::post('/seo/scan-orphans', [\App\Http\Controllers\Admin\SeoController::class, 'scanOrphans'])->name('seo.scan-orphans');
