@@ -55,7 +55,7 @@
             <!-- Right Side Visual / Featured Card -->
             <div class="lg:w-2/5 relative animate-fade-in-up delay-150">
                 <div class="relative w-full aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl group border-8 border-white/5">
-                    <img src="{{ $featureImage }}" alt="Technician" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
+                    <img src="{{ asset('images/pages/home/hero1.webp') }}" alt="Technician" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
                     <div class="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-secondary via-secondary/20 to-transparent">
                         <div class="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl">
                             <div class="flex items-center gap-3 mb-3">

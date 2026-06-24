@@ -38,10 +38,10 @@
             <!-- Left Side: Layered Imagery -->
             <div class="lg:w-1/2 order-2 lg:order-1 relative">
                 <div class="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl skew-y-1 group">
-                    <img src="{{ $mainImage }}" class="w-full transition-transform duration-1000 group-hover:scale-105" alt="Feature Main">
+                    <img src="{{ asset('images/pages/home/solution_main.webp') }}" class="w-full transition-transform duration-1000 group-hover:scale-105" alt="Feature Main">
                 </div>
-                <div class="absolute -bottom-6 sm:-bottom-10 -right-6 sm:-right-10 w-2/3 z-20 rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden shadow-2xl border-4 sm:border-8 border-white group animate-bounce-soft">
-                    <img src="{{ $secondaryImage }}" alt="Feature Secondary" class="w-full h-full object-cover">
+                <div class="absolute -bottom-6 sm:-bottom-10 -right-6 sm:-right-10 w-48 sm:w-52 z-20 rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden shadow-2xl border-4 sm:border-8 border-white group animate-bounce-soft">
+                    <img src="{{ asset('images/pages/home/solution_sub.webp') }}" alt="Feature Secondary" class="w-full h-full object-cover">
                     <div class="absolute inset-x-0 bottom-0 p-2 sm:p-4 bg-primary text-white font-bold text-center text-[8px] sm:text-xs uppercase tracking-widest">
                         Pelaksanaan di Lokasi
                     </div>

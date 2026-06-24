@@ -3,12 +3,12 @@
     'subtitle' => 'PENYINGGAH TERDEKAT',
     'description' => 'Jaringan teknisi profesional kami tersebar luas untuk menjamin <span class="text-primary font-bold">Fast-Response 15 Menit</span> di setiap titik layanan.',
     'cities' => [
-        ['name' => 'JABODETABEK', 'img' => 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&fit=crop', 'tag' => 'Pusat Operasional'],
-        ['name' => 'CIREBON', 'img' => 'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&fit=crop', 'tag' => 'Jawa Barat Area'],
-        ['name' => 'SEMARANG', 'img' => 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=600&fit=crop', 'tag' => 'Jawa Tengah Area'],
-        ['name' => 'YOGYAKARTA', 'img' => 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&fit=crop', 'tag' => 'D.I. Yogyakarta'],
-        ['name' => 'LAMPUNG', 'img' => 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=600&fit=crop', 'tag' => 'Sumatera Area'],
-        ['name' => 'METRO', 'img' => 'https://images.unsplash.com/photo-1542013936693-884638332954?w=600&fit=crop', 'tag' => 'Sumatera Area'],
+        ['name' => 'JABODETABEK', 'img' => asset('images/pages/home/region/jabodetabek.png'), 'tag' => 'Pusat Operasional'],
+        ['name' => 'CIREBON', 'img' => asset('images/pages/home/region/cirebon.png'), 'tag' => 'Jawa Barat Area'],
+        ['name' => 'SEMARANG', 'img' => asset('images/pages/home/region/semarang.png'), 'tag' => 'Jawa Tengah Area'],
+        ['name' => 'YOGYAKARTA', 'img' => asset('images/pages/home/region/yogyakarta.png'), 'tag' => 'D.I. Yogyakarta'],
+        ['name' => 'LAMPUNG', 'img' => asset('images/pages/home/region/lampung.png'), 'tag' => 'Sumatera Area'],
+        ['name' => 'METRO', 'img' => asset('images/pages/home/region/metro.png'), 'tag' => 'Sumatera Area'],
     ]
 ])
 
