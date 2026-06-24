@@ -6,8 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
 
-    <title>RooterIn - Diskon 25% Khusus Hari Ini & Garansi 1 Tahun!</title>
-<meta property="og:title" content="RooterIn - Diskon 25% Khusus Hari Ini &amp; Garansi 1 Tahun!">
+    <title>RooterIn - Jasa Saluran Mampet & Pipa Cleaning Premium</title>
+    <meta name="description" content="RooterIn menyediakan jasa saluran mampet profesional, pembersihan pipa, cuci toren, dan instalasi sanitary tanpa proses bongkar dan bergaransi 30 hari.">
+    <meta property="og:title" content="RooterIn - Jasa Saluran Mampet & Pipa Cleaning Premium">
+    <meta property="og:description" content="Mengatasi pipa mampet, wastafel tersumbat, dan saluran pembuangan air kotor secara tuntas tanpa membongkar pipa Anda. Hubungi teknisi kami 24 jam!">
+    <meta property="og:image" content="images/logo.png">
+    <meta property="og:url" content="https://rafaelabimanyu.github.io/rooterin/">
+    <meta property="og:type" content="website">
 <meta property="og:site_name" content="RooterIn">
 
 
@@ -69,7 +74,8 @@
         <!-- Modern Floating Navbar -->
 <nav x-data="{ open: false, scrolled: false }" 
      @scroll.window="scrolled = (window.pageYOffset > 50)"
-     class="fixed top-0 left-0 right-0 z-50 pt-4 sm:pt-10 px-3 sm:px-4 transition-all duration-500 ease-in-out">
+     :class="scrolled ? 'fixed top-0 left-0 right-0 z-50 bg-[#0F2A44]/80 backdrop-blur-md py-3 shadow-lg' : 'fixed top-0 left-0 right-0 z-50 pt-4 sm:pt-10 px-3 sm:px-4'"
+     class="transition-all duration-500 ease-in-out">
     
     <div :class="scrolled ? 'max-w-7xl py-3' : 'max-w-[85rem] py-4.5 sm:py-5.5'"
           class="mx-auto bg-secondary/95 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-[1.75rem] shadow-[0_25px_50px_rgba(0,0,0,0.35)] transition-all duration-500 px-6 lg:px-9 flex items-center justify-between relative">
@@ -404,7 +410,7 @@
             <!-- Right Side Visual / Featured Card -->
             <div class="lg:w-2/5 relative animate-fade-in-up delay-150">
                 <div class="relative w-full aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl group border-8 border-white/5">
-                    <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&amp;fit=crop&amp;q=80&amp;w=1200" alt="Technician" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
+                    <img src="images/pages/hero1.webp" alt="Teknisi Rooterin melakukan inspeksi pipa menggunakan drain camera" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
                     <div class="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-secondary via-secondary/20 to-transparent">
                         <div class="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl">
                             <div class="flex items-center gap-3 mb-3">
@@ -507,10 +513,10 @@
             <!-- Left Side: Layered Imagery -->
             <div class="lg:w-1/2 order-2 lg:order-1 relative">
                 <div class="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl skew-y-1 group">
-                    <img src="https://images.unsplash.com/photo-1542013936693-884638332954?w=1200&amp;fit=crop" class="w-full transition-transform duration-1000 group-hover:scale-105" alt="Feature Main">
+                    <img src="images/pages/home/solution_main.webp" class="w-full transition-transform duration-1000 group-hover:scale-105" alt="Layanan Rooterin mengatasi saluran pipa mampet tanpa bongkar">
                 </div>
                 <div class="absolute -bottom-6 sm:-bottom-10 -right-6 sm:-right-10 w-2/3 z-20 rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden shadow-2xl border-4 sm:border-8 border-white group animate-bounce-soft">
-                    <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&amp;fit=crop" alt="Feature Secondary" class="w-full h-full object-cover">
+                    <img src="images/pages/home/solution_sub.webp" alt="Pembersihan saluran pipa mampet menggunakan alat modern oleh teknisi Rooterin" class="w-full h-full object-cover">
                     <div class="absolute inset-x-0 bottom-0 p-2 sm:p-4 bg-primary text-white font-bold text-center text-[8px] sm:text-xs uppercase tracking-widest">
                         Pelaksanaan di Lokasi
                     </div>
@@ -543,7 +549,7 @@
                                 <i class="ri-medal-fill text-2xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-black text-xl mb-2 transition-colors text-secondary group-hover:text-primary">Ahli &amp; Profesional</h4>
+                                <h3 class="font-black text-xl mb-2 transition-colors text-secondary group-hover:text-primary">Ahli &amp; Profesional</h3>
                                 <p class="text-gray-500 text-sm leading-relaxed">Teknisi tersertifikasi dengan jam terbang tinggi di bidang plumbing.</p>
                             </div>
                         </div>
@@ -552,7 +558,7 @@
                                 <i class="ri-chat-smile-3-fill text-2xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-black text-xl mb-2 transition-colors text-secondary group-hover:text-accent">Konsultasi Gratis</h4>
+                                <h3 class="font-black text-xl mb-2 transition-colors text-secondary group-hover:text-accent">Konsultasi Gratis</h3>
                                 <p class="text-gray-500 text-sm leading-relaxed">Tanya masalah pipa Anda kapan saja tanpa dipungut biaya sepeserpun.</p>
                             </div>
                         </div>
@@ -561,7 +567,7 @@
                                 <i class="ri-shield-check-fill text-2xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-black text-xl mb-2 transition-colors text-secondary group-hover:text-primary">Layanan Berkualitas</h4>
+                                <h3 class="font-black text-xl mb-2 transition-colors text-secondary group-hover:text-primary">Layanan Berkualitas</h3>
                                 <p class="text-gray-500 text-sm leading-relaxed">Pengerjaan rapi, bersih, dan menggunakan standar teknologi terbaru.</p>
                             </div>
                         </div>
@@ -570,7 +576,7 @@
                                 <i class="ri-price-tag-3-fill text-2xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-black text-xl mb-2 transition-colors text-secondary group-hover:text-accent">Harga Terbaik</h4>
+                                <h3 class="font-black text-xl mb-2 transition-colors text-secondary group-hover:text-accent">Harga Terbaik</h3>
                                 <p class="text-gray-500 text-sm leading-relaxed">Penawaran harga paling kompetitif dengan kualitas hasil bintang lima.</p>
                             </div>
                         </div>
@@ -589,8 +595,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
             <div class="lg:w-3/5 text-center lg:text-left">
-                <h2 class="text-3xl sm:text-5xl lg:text-7xl font-heading font-black text-white leading-[1.1] mb-8 sm:mb-12">
-                    Saluran Pipa Masih Mampet? <br> <span class="text-accent italic">Plong-kan Sekarang!</span>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-white leading-[1.1] mb-8 sm:mb-12">
+                    Saluran Pipa Masih Mampet? <br class="hidden md:inline"> <span class="text-accent italic">Plong-kan Sekarang!</span>
                 </h2>
                 <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 sm:gap-10">
                     <a href="https://wa.me/6281292059125?text=Halo%20Kak%2C%20mau%20order%20jasa%20dong" class="inline-flex items-center justify-center px-8 py-3.5 rounded-full font-heading font-bold text-base transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95 bg-primary text-white shadow-[0_4px_14px_0_rgba(31,175,90,0.39)] hover:bg-green-600 hover:shadow-[0_6px_20px_0_rgba(31,175,90,0.5)] relative z-10 !px-12 !py-6 shadow-2xl shadow-primary/40 !rounded-full overflow-hidden group/btn">
@@ -660,7 +666,7 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
-                            <div class="group relative flex flex-col bg-white rounded-[3.5rem] p-10 sm:p-12 border border-gray-100 hover:border-primary/20 transition-all duration-700 h-full hover:-translate-y-3 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] overflow-hidden">
+                            <div class="group relative flex flex-col bg-white rounded-[3.5rem] p-10 sm:p-12 border border-gray-100 h-full overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-2xl hover:border-[#1FAF5A]/50">
                     
                     <!-- Decorative Background Fade -->
                     <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
@@ -699,10 +705,10 @@
 
                     <!-- Subtle Preview Image -->
                     <div class="absolute -bottom-16 -right-16 w-64 h-64 opacity-0 group-hover:opacity-40 transition-all duration-1000 rotate-12 group-hover:rotate-0 pointer-events-none">
-                        <img src="https://images.unsplash.com/photo-1585955123058-930415956a69?w=800&amp;fit=crop" class="w-full h-full object-cover rounded-full" alt="Service Preview">
+                        <img src="https://images.unsplash.com/photo-1585955123058-930415956a69?w=800&amp;fit=crop" class="w-full h-full object-cover rounded-full" alt="Layanan Rooterin profesional">
                     </div>
                 </div>
-                            <div class="group relative flex flex-col bg-white rounded-[3.5rem] p-10 sm:p-12 border border-gray-100 hover:border-primary/20 transition-all duration-700 h-full hover:-translate-y-3 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] overflow-hidden">
+                            <div class="group relative flex flex-col bg-white rounded-[3.5rem] p-10 sm:p-12 border border-gray-100 h-full overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-2xl hover:border-[#1FAF5A]/50">
                     
                     <!-- Decorative Background Fade -->
                     <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
@@ -741,7 +747,7 @@
 
                     <!-- Subtle Preview Image -->
                     <div class="absolute -bottom-16 -right-16 w-64 h-64 opacity-0 group-hover:opacity-40 transition-all duration-1000 rotate-12 group-hover:rotate-0 pointer-events-none">
-                        <img src="https://images.unsplash.com/photo-1542013936693-884638332954?w=800&amp;fit=crop" class="w-full h-full object-cover rounded-full" alt="Service Preview">
+                        <img src="https://images.unsplash.com/photo-1542013936693-884638332954?w=800&amp;fit=crop" class="w-full h-full object-cover rounded-full" alt="Layanan Rooterin profesional">
                     </div>
                 </div>
                     </div>
@@ -2354,7 +2360,7 @@
         <div class="text-center mb-24">
             <div class="text-center mb-16 sm:mb-20">
             <span class="text-primary font-black tracking-[0.3em] uppercase text-[10px] sm:text-xs block mb-4 animate-fade-in-up">
-            PENYINGGAH TERDEKAT
+            Area Jangkauan Terdekat
         </span>
         <h2 class="text-3xl sm:text-4xl md:text-6xl font-heading font-black text-secondary leading-[1.1] tracking-tight mb-6">
         Melayani Seluruh Jantung Kota Anda
@@ -2372,78 +2378,78 @@
 
         <!-- City Network Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
-                            <div class="group relative bg-white border border-gray-100 rounded-[2.5rem] p-6 flex items-center gap-6 shadow-xl shadow-gray-100/50 hover:shadow-2xl hover:shadow-primary/5 hover:border-primary/20 hover:-translate-y-1 transition-all duration-500">
+                            <div class="group relative bg-white border border-gray-100 rounded-[2.5rem] p-6 flex items-center gap-6 shadow-xl shadow-gray-100/50 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-2xl hover:border-[#1FAF5A]/50">
                     <div class="w-20 h-20 rounded-2xl overflow-hidden shadow-md flex-shrink-0 group-hover:scale-105 transition-transform duration-500 bg-gray-100">
-                        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&amp;fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="JABODETABEK">
+                        <img src="images/pages/home/region/jabodetabek.png" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Tim teknisi Rooterin melayani area JABODETABEK dan sekitarnya">
                     </div>
                     <div>
                         <div class="text-primary font-bold text-[10px] uppercase tracking-widest mb-1">Pusat Operasional</div>
-                        <h4 class="text-secondary font-black text-xl tracking-tight leading-none mb-1">JABODETABEK</h4>
+                        <h3 class="text-secondary font-black text-xl tracking-tight leading-none mb-1">JABODETABEK</h3>
                         <div class="flex items-center gap-2">
                             <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_8px_#1FAF5A]"></span>
                             <span class="text-gray-400 text-[10px] font-bold uppercase tracking-tight">Active Team</span>
                         </div>
                     </div>
                 </div>
-                            <div class="group relative bg-white border border-gray-100 rounded-[2.5rem] p-6 flex items-center gap-6 shadow-xl shadow-gray-100/50 hover:shadow-2xl hover:shadow-primary/5 hover:border-primary/20 hover:-translate-y-1 transition-all duration-500">
+                            <div class="group relative bg-white border border-gray-100 rounded-[2.5rem] p-6 flex items-center gap-6 shadow-xl shadow-gray-100/50 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-2xl hover:border-[#1FAF5A]/50">
                     <div class="w-20 h-20 rounded-2xl overflow-hidden shadow-md flex-shrink-0 group-hover:scale-105 transition-transform duration-500 bg-gray-100">
-                        <img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&amp;fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="CIREBON">
+                        <img src="images/pages/home/region/cirebon.png" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Tim teknisi Rooterin melayani area CIREBON dan sekitarnya">
                     </div>
                     <div>
                         <div class="text-primary font-bold text-[10px] uppercase tracking-widest mb-1">Jawa Barat Area</div>
-                        <h4 class="text-secondary font-black text-xl tracking-tight leading-none mb-1">CIREBON</h4>
+                        <h3 class="text-secondary font-black text-xl tracking-tight leading-none mb-1">CIREBON</h3>
                         <div class="flex items-center gap-2">
                             <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_8px_#1FAF5A]"></span>
                             <span class="text-gray-400 text-[10px] font-bold uppercase tracking-tight">Active Team</span>
                         </div>
                     </div>
                 </div>
-                            <div class="group relative bg-white border border-gray-100 rounded-[2.5rem] p-6 flex items-center gap-6 shadow-xl shadow-gray-100/50 hover:shadow-2xl hover:shadow-primary/5 hover:border-primary/20 hover:-translate-y-1 transition-all duration-500">
+                            <div class="group relative bg-white border border-gray-100 rounded-[2.5rem] p-6 flex items-center gap-6 shadow-xl shadow-gray-100/50 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-2xl hover:border-[#1FAF5A]/50">
                     <div class="w-20 h-20 rounded-2xl overflow-hidden shadow-md flex-shrink-0 group-hover:scale-105 transition-transform duration-500 bg-gray-100">
-                        <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=600&amp;fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="SEMARANG">
+                        <img src="images/pages/home/region/semarang.png" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Tim teknisi Rooterin melayani area SEMARANG dan sekitarnya">
                     </div>
                     <div>
                         <div class="text-primary font-bold text-[10px] uppercase tracking-widest mb-1">Jawa Tengah Area</div>
-                        <h4 class="text-secondary font-black text-xl tracking-tight leading-none mb-1">SEMARANG</h4>
+                        <h3 class="text-secondary font-black text-xl tracking-tight leading-none mb-1">SEMARANG</h3>
                         <div class="flex items-center gap-2">
                             <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_8px_#1FAF5A]"></span>
                             <span class="text-gray-400 text-[10px] font-bold uppercase tracking-tight">Active Team</span>
                         </div>
                     </div>
                 </div>
-                            <div class="group relative bg-white border border-gray-100 rounded-[2.5rem] p-6 flex items-center gap-6 shadow-xl shadow-gray-100/50 hover:shadow-2xl hover:shadow-primary/5 hover:border-primary/20 hover:-translate-y-1 transition-all duration-500">
+                            <div class="group relative bg-white border border-gray-100 rounded-[2.5rem] p-6 flex items-center gap-6 shadow-xl shadow-gray-100/50 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-2xl hover:border-[#1FAF5A]/50">
                     <div class="w-20 h-20 rounded-2xl overflow-hidden shadow-md flex-shrink-0 group-hover:scale-105 transition-transform duration-500 bg-gray-100">
-                        <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&amp;fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="YOGYAKARTA">
+                        <img src="images/pages/home/region/yogyakarta.png" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Tim teknisi Rooterin melayani area YOGYAKARTA dan sekitarnya">
                     </div>
                     <div>
                         <div class="text-primary font-bold text-[10px] uppercase tracking-widest mb-1">D.I. Yogyakarta</div>
-                        <h4 class="text-secondary font-black text-xl tracking-tight leading-none mb-1">YOGYAKARTA</h4>
+                        <h3 class="text-secondary font-black text-xl tracking-tight leading-none mb-1">YOGYAKARTA</h3>
                         <div class="flex items-center gap-2">
                             <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_8px_#1FAF5A]"></span>
                             <span class="text-gray-400 text-[10px] font-bold uppercase tracking-tight">Active Team</span>
                         </div>
                     </div>
                 </div>
-                            <div class="group relative bg-white border border-gray-100 rounded-[2.5rem] p-6 flex items-center gap-6 shadow-xl shadow-gray-100/50 hover:shadow-2xl hover:shadow-primary/5 hover:border-primary/20 hover:-translate-y-1 transition-all duration-500">
+                            <div class="group relative bg-white border border-gray-100 rounded-[2.5rem] p-6 flex items-center gap-6 shadow-xl shadow-gray-100/50 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-2xl hover:border-[#1FAF5A]/50">
                     <div class="w-20 h-20 rounded-2xl overflow-hidden shadow-md flex-shrink-0 group-hover:scale-105 transition-transform duration-500 bg-gray-100">
-                        <img src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=600&amp;fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="LAMPUNG">
+                        <img src="images/pages/home/region/lampung.png" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Tim teknisi Rooterin melayani area LAMPUNG dan sekitarnya">
                     </div>
                     <div>
                         <div class="text-primary font-bold text-[10px] uppercase tracking-widest mb-1">Sumatera Area</div>
-                        <h4 class="text-secondary font-black text-xl tracking-tight leading-none mb-1">LAMPUNG</h4>
+                        <h3 class="text-secondary font-black text-xl tracking-tight leading-none mb-1">LAMPUNG</h3>
                         <div class="flex items-center gap-2">
                             <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_8px_#1FAF5A]"></span>
                             <span class="text-gray-400 text-[10px] font-bold uppercase tracking-tight">Active Team</span>
                         </div>
                     </div>
                 </div>
-                            <div class="group relative bg-white border border-gray-100 rounded-[2.5rem] p-6 flex items-center gap-6 shadow-xl shadow-gray-100/50 hover:shadow-2xl hover:shadow-primary/5 hover:border-primary/20 hover:-translate-y-1 transition-all duration-500">
+                            <div class="group relative bg-white border border-gray-100 rounded-[2.5rem] p-6 flex items-center gap-6 shadow-xl shadow-gray-100/50 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-2xl hover:border-[#1FAF5A]/50">
                     <div class="w-20 h-20 rounded-2xl overflow-hidden shadow-md flex-shrink-0 group-hover:scale-105 transition-transform duration-500 bg-gray-100">
-                        <img src="https://images.unsplash.com/photo-1542013936693-884638332954?w=600&amp;fit=crop" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="METRO">
+                        <img src="images/pages/home/region/metro.png" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Tim teknisi Rooterin melayani area METRO dan sekitarnya">
                     </div>
                     <div>
                         <div class="text-primary font-bold text-[10px] uppercase tracking-widest mb-1">Sumatera Area</div>
-                        <h4 class="text-secondary font-black text-xl tracking-tight leading-none mb-1">METRO</h4>
+                        <h3 class="text-secondary font-black text-xl tracking-tight leading-none mb-1">METRO</h3>
                         <div class="flex items-center gap-2">
                             <span class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_8px_#1FAF5A]"></span>
                             <span class="text-gray-400 text-[10px] font-bold uppercase tracking-tight">Active Team</span>
@@ -2537,7 +2543,7 @@
         <a href="https://wa.me/6281292059125?text=Halo%20Kak%2C%20mau%20tanya%20jasa%20pipa%20dong" 
            onclick="trackWhatsAppClick('sticky')"
            target="_blank"
-           class="flex items-center justify-center w-14 h-14 bg-[#25D366] hover:bg-[#20b85a] text-white rounded-full shadow-[0_4px_20px_rgba(37,211,102,0.4)] transition-all duration-300 transform hover:scale-110 group relative">
+           class="flex items-center justify-center w-14 h-14 bg-[#25D366] hover:bg-[#20b85a] text-white rounded-full shadow-[0_4px_20px_rgba(37,211,102,0.4)] transition-all duration-300 transform hover:scale-110 group relative animate-pulse">
             <span class="absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-30 animate-ping group-hover:opacity-50"></span>
             <i class="ri-whatsapp-line text-3xl relative z-10"></i>
         </a>
@@ -2683,7 +2689,7 @@
         <a href="https://wa.me/6281292059125?text=Halo%20Kak%2C%20mau%20tanya%20jasa%20pipa%20dong" 
            onclick="trackWhatsAppClick('sticky')"
            target="_blank"
-           class="flex items-center justify-center w-14 h-14 bg-[#25D366] hover:bg-[#20b85a] text-white rounded-full shadow-[0_4px_20px_rgba(37,211,102,0.4)] transition-all duration-300 transform hover:scale-110 group relative">
+           class="flex items-center justify-center w-14 h-14 bg-[#25D366] hover:bg-[#20b85a] text-white rounded-full shadow-[0_4px_20px_rgba(37,211,102,0.4)] transition-all duration-300 transform hover:scale-110 group relative animate-pulse">
             <span class="absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-30 animate-ping group-hover:opacity-50"></span>
             <i class="ri-whatsapp-line text-3xl relative z-10"></i>
         </a>
