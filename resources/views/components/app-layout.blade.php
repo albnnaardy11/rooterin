@@ -7,6 +7,14 @@
 
     {!! \Artesaos\SEOTools\Facades\SEOTools::generate() !!}
     
+    <!-- Open Graph / SEO Meta Tags -->
+    <meta name="description" content="RooterIn menyediakan jasa saluran mampet profesional, pembersihan pipa, cuci toren, dan instalasi sanitary tanpa proses bongkar dan bergaransi 30 hari.">
+    <meta property="og:title" content="RooterIn - Jasa Saluran Mampet & Pipe Cleaning Premium">
+    <meta property="og:description" content="Mengatasi pipa mampet, wastafel tersumbat, dan saluran pembuangan air kotor secara tuntas tanpa membongkar pipa Anda. Hubungi teknisi kami 24 jam!">
+    <meta property="og:image" content="{{ asset('images/logo.png') }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="website">
+    
     {{-- Hreflang Automator --}}
     {!! $hreflangTags ?? '' !!}
     

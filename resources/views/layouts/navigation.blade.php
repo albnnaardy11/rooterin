@@ -1,7 +1,8 @@
 <!-- Modern Floating Navbar -->
 <nav x-data="{ open: false, scrolled: false }" 
      @scroll.window="scrolled = (window.pageYOffset > 50)"
-     class="fixed top-0 left-0 right-0 z-50 pt-4 sm:pt-10 px-3 sm:px-4 transition-all duration-500 ease-in-out">
+     :class="scrolled ? 'fixed top-0 left-0 right-0 z-50 bg-[#0F2A44]/80 backdrop-blur-md py-3 shadow-lg' : 'fixed top-0 left-0 right-0 z-50 pt-4 sm:pt-10 px-3 sm:px-4'"
+     class="transition-all duration-500 ease-in-out">
     
     <div :class="scrolled ? 'max-w-7xl py-3' : 'max-w-[85rem] py-4.5 sm:py-5.5'"
           class="mx-auto bg-secondary/95 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-[1.75rem] shadow-[0_25px_50px_rgba(0,0,0,0.35)] transition-all duration-500 px-6 lg:px-9 flex items-center justify-between relative">

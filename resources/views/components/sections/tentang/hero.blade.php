@@ -51,7 +51,7 @@
                 <div class="relative w-full max-w-[500px] mx-auto">
                     <!-- The Main Portal Frame -->
                     <div class="relative aspect-[4/5] rounded-[4rem] overflow-hidden border-[12px] border-white/5 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] group">
-                        <img src="https://images.unsplash.com/photo-1542013936693-884638332954?q=80&w=1200&auto=format&fit=crop" 
+                        <img src="{{ asset('images/team/team.png') }}" 
                              class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110" 
                              alt="Modern Plumbing Specialist">
                         

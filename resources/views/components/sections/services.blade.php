@@ -29,7 +29,7 @@
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
             @foreach($services as $service)
-                <div class="group relative flex flex-col bg-white rounded-[3.5rem] p-10 sm:p-12 border border-gray-100 hover:border-primary/20 transition-all duration-700 h-full hover:-translate-y-3 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] overflow-hidden">
+                <div class="group relative flex flex-col bg-white rounded-[3.5rem] p-10 sm:p-12 border border-gray-100 h-full overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-2xl hover:border-[#1FAF5A]/50">
                     
                     <!-- Decorative Background Fade -->
                     <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
@@ -75,7 +75,7 @@
 
                     <!-- Subtle Preview Image -->
                     <div class="absolute -bottom-16 -right-16 w-64 h-64 opacity-0 group-hover:opacity-40 transition-all duration-1000 rotate-12 group-hover:rotate-0 pointer-events-none">
-                        <img src="{{ $service['img'] }}" class="w-full h-full object-cover rounded-full" alt="Service Preview">
+                        <img src="{{ $service['img'] }}" class="w-full h-full object-cover rounded-full" alt="Layanan Rooterin {{ $service['title'] }} profesional">
                     </div>
                 </div>
             @endforeach
@@ -89,21 +89,11 @@
                  <div class="absolute -top-1/2 -right-1/4 w-[50%] h-[200%] bg-primary/10 blur-[100px] rotate-45 pointer-events-none group-hover:translate-x-12 transition-transform duration-[3s]"></div>
                  
                  <div class="flex flex-col sm:flex-row items-center gap-10 px-6 relative z-10 text-center sm:text-left w-full lg:w-auto">
-                    <!-- Experts Stack with Online Indicator -->
+                    <!-- Corporate Icon -->
                     <div class="relative shrink-0">
-                        <div class="flex -space-x-5">
-                            @for($i=1; $i<=3; $i++)
-                                <div class="relative group/avatar">
-                                    <div class="absolute -inset-1 bg-gradient-to-tr from-primary to-accent rounded-full opacity-40 group-hover/avatar:opacity-100 blur-sm transition-opacity duration-500"></div>
-                                    <img src="https://i.pravatar.cc/100?u=tech{{ $i }}" class="relative w-16 h-16 rounded-full border-[6px] border-secondary shadow-2xl object-cover transition-transform duration-500 group-hover/avatar:scale-110" alt="Expert">
-                                </div>
-                            @endfor
-                        </div>
-                        <!-- Pulse Indicator -->
-                        <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-primary rounded-full border-[4px] border-secondary flex items-center justify-center">
-                            <span class="absolute w-full h-full bg-primary rounded-full animate-ping opacity-75"></span>
-                            <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
-                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-14 h-14 text-[#1FAF5A]">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 16.5h1.5m3 0H15" />
+                        </svg>
                     </div>
 
                     <div class="space-y-2">

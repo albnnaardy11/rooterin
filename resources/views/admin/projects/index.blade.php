@@ -25,7 +25,7 @@
     </div>
 
     <!-- Stats Intelligence Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         <div class="p-8 rounded-[2.5rem] bg-slate-900/40 border border-white/5 backdrop-blur-xl relative overflow-hidden group">
             <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-500">
                 <i class="ri-gallery-fill text-6xl text-white"></i>
@@ -64,6 +64,18 @@
 
         <div class="p-8 rounded-[2.5rem] bg-slate-900/40 border border-white/5 backdrop-blur-xl relative overflow-hidden group">
             <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-500">
+                <i class="ri-tools-fill text-6xl text-white"></i>
+            </div>
+            <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Specialized</p>
+            <h3 class="text-4xl font-heading font-black text-white tabular-nums">{{ $stats['specialized'] }}</h3>
+            <div class="mt-4 flex items-center gap-2 text-[10px] text-emerald-400 font-bold">
+                <span class="flex h-2 w-2 rounded-full bg-emerald-400"></span>
+                Sektor Khusus
+            </div>
+        </div>
+
+        <div class="p-8 rounded-[2.5rem] bg-slate-900/40 border border-white/5 backdrop-blur-xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-500">
                 <i class="ri-star-fill text-6xl text-white"></i>
             </div>
             <p class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">High Performance</p>
@@ -90,6 +102,12 @@
                 <i class="ri-building-4-fill text-lg"></i>
                 Commercial Segment
             </button>
+            <button @click="activeTab = 'specialized'" 
+                    :class="activeTab === 'specialized' ? 'bg-emerald-500 text-white shadow-xl shadow-emerald-500/20' : 'text-slate-500 hover:text-white'"
+                    class="px-8 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all duration-500 flex items-center gap-3">
+                <i class="ri-tools-fill text-lg"></i>
+                Specialized Segment
+            </button>
         </div>
 
         <!-- Tables Container -->
@@ -102,6 +120,11 @@
             <!-- Commercial Table -->
             <div x-show="activeTab === 'commercial'" x-cloak x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
                 @include('admin.projects.partials.table', ['projects' => $commercial, 'type' => 'Commercial'])
+            </div>
+
+            <!-- Specialized Table -->
+            <div x-show="activeTab === 'specialized'" x-cloak x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+                @include('admin.projects.partials.table', ['projects' => $specialized, 'type' => 'Specialized'])
             </div>
         </div>
     </div>

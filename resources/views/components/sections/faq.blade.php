@@ -56,10 +56,10 @@
                             </div>
                         </button>
 
-                        <!-- Answer Content (Alpine Collapse) -->
+                        <!-- Answer Content (Smooth Transition) -->
                         <div 
-                            x-show="activeFaq === {{ $index }}" 
-                            x-collapse
+                            class="transition-all duration-500 ease-in-out overflow-hidden"
+                            :class="activeFaq === {{ $index }} ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'"
                             x-cloak
                         >
                             <div class="px-8 pb-8 sm:px-10 sm:pb-10 -mt-2">

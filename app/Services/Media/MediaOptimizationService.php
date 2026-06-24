@@ -32,10 +32,10 @@ class MediaOptimizationService
             Log::info("[SENTINEL-MEDIA] Hardening asset: " . basename($path));
 
             // 1. Convert to WebP (Lossless/High Compression)
-            $image = $this->manager->read($path);
+            $image = $this->manager->decode($path);
             $webpPath = preg_replace('/\.(jpg|jpeg|png)$/i', '.webp', $path);
             
-            $image->toWebp(80)->save($webpPath);
+            $image->encode(new \Intervention\Image\Encoders\WebpEncoder(80))->save($webpPath);
 
             // 2. Generate AI Alt Tag & Long Description via Gemini Vision
             $aiResult = $this->generateAiAltTag($path);

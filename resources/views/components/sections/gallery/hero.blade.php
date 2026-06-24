@@ -9,10 +9,10 @@
             
             <!-- Floating Decorative Images (Left & Right) -->
             <div class="absolute -left-10 lg:-left-20 xl:-left-44 top-0 w-32 md:w-44 xl:w-64 aspect-[3/4] rounded-[2rem] xl:rounded-[2.5rem] overflow-hidden border-4 border-white/10 shadow-2xl rotate-[-15deg] hidden sm:block animate-bounce-soft">
-                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&fit=crop" class="w-full h-full object-cover">
+                <img src="{{ asset('images/pages/hero1.webp') }}" class="w-full h-full object-cover">
             </div>
             <div class="absolute -right-10 lg:-right-20 xl:-right-44 bottom-0 w-32 md:w-44 xl:w-64 aspect-[3/4] rounded-[2rem] xl:rounded-[2.5rem] overflow-hidden border-4 border-white/10 shadow-2xl rotate-[15deg] hidden sm:block animate-bounce-soft delay-700">
-                <img src="https://images.unsplash.com/photo-1542013936693-884638332954?w=600&fit=crop" class="w-full h-full object-cover">
+                <img src="{{ asset('images/pages/hero2.webp') }}" class="w-full h-full object-cover">
             </div>
 
             <!-- Content Area -->

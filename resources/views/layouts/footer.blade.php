@@ -100,7 +100,7 @@
         <!-- Bottom Bar -->
         <div class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
             <div class="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em]">© {{ date('Y') }} RooterIn Indonesia • Developed by Ardy Albanna</p>
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em]">© {{ date('Y') }} RooterIn Indonesia • Developed by Rafael Abimanyu & Ardy Albanna</p>
                 <div class="hidden md:block w-1.5 h-1.5 bg-white/10 rounded-full"></div>
                 <div class="flex gap-6 text-[10px] text-gray-500 font-black uppercase tracking-[0.2em]">
                     <a href="#" class="hover:text-white transition-colors">Privacy</a>

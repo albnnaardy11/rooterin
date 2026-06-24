@@ -25,15 +25,17 @@ class ProjectController extends Controller
     {
         $residential = Project::where('category', 'Residential')->latest()->paginate(10, ['*'], 'residential_page');
         $commercial = Project::where('category', 'Commercial')->latest()->paginate(10, ['*'], 'commercial_page');
+        $specialized = Project::where('category', 'Specialized')->latest()->paginate(10, ['*'], 'specialized_page');
         
         $stats = [
             'total' => Project::count(),
             'residential' => Project::where('category', 'Residential')->count(),
             'commercial' => Project::where('category', 'Commercial')->count(),
+            'specialized' => Project::where('category', 'Specialized')->count(),
             'featured' => Project::where('is_featured', true)->count()
         ];
 
-        return view('admin.projects.index', compact('residential', 'commercial', 'stats'));
+        return view('admin.projects.index', compact('residential', 'commercial', 'specialized', 'stats'));
     }
 
     public function create()
@@ -46,10 +48,13 @@ class ProjectController extends Controller
         try {
             $validated = $request->validate([
                 'title' => 'required|max:255',
-                'category' => 'required',
+                'category' => 'required|in:Residential,Commercial,Specialized',
                 'location' => 'nullable',
                 'image' => 'required|image|max:2048',
+                'is_featured' => 'nullable|boolean',
             ]);
+
+            $validated['is_featured'] = $request->boolean('is_featured');
 
             if ($request->hasFile('image')) {
                 $path = $this->imageService->optimize($request->file('image'), 'projects');
@@ -80,10 +85,13 @@ class ProjectController extends Controller
             
             $validated = $request->validate([
                 'title' => 'required|max:255',
-                'category' => 'required',
+                'category' => 'required|in:Residential,Commercial,Specialized',
                 'location' => 'nullable',
                 'image' => 'nullable|image|max:2048',
+                'is_featured' => 'nullable|boolean',
             ]);
+
+            $validated['is_featured'] = $request->boolean('is_featured');
 
             if ($request->hasFile('image')) {
                 // Delete old image

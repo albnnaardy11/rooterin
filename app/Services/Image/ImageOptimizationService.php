@@ -30,7 +30,7 @@ class ImageOptimizationService
         $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '_' . time() . '.webp';
         $path = $folder . '/' . $filename;
 
-        $image = $this->manager->read($file);
+        $image = $this->manager->decode($file);
         
         // Resize if width is larger than constraint
         if ($image->width() > $width) {
@@ -38,7 +38,7 @@ class ImageOptimizationService
         }
 
         // Convert to WebP and compress
-        $encoded = $image->toWebp($quality);
+        $encoded = $image->encode(new \Intervention\Image\Encoders\WebpEncoder($quality));
 
         // Save to storage
         Storage::disk('public')->put($path, (string) $encoded);
