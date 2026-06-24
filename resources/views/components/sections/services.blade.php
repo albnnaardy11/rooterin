@@ -29,7 +29,7 @@
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
             @foreach($services as $service)
-                <div class="group relative flex flex-col bg-white rounded-[3.5rem] p-10 sm:p-12 border border-gray-100 hover:border-primary/20 transition-all duration-700 h-full hover:-translate-y-3 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] overflow-hidden">
+                <div class="group relative flex flex-col bg-white rounded-[3.5rem] p-10 sm:p-12 border border-gray-100 h-full overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-2xl hover:border-[#1FAF5A]/50">
                     
                     <!-- Decorative Background Fade -->
                     <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
@@ -75,7 +75,7 @@
 
                     <!-- Subtle Preview Image -->
                     <div class="absolute -bottom-16 -right-16 w-64 h-64 opacity-0 group-hover:opacity-40 transition-all duration-1000 rotate-12 group-hover:rotate-0 pointer-events-none">
-                        <img src="{{ $service['img'] }}" class="w-full h-full object-cover rounded-full" alt="Service Preview">
+                        <img src="{{ $service['img'] }}" class="w-full h-full object-cover rounded-full" alt="Layanan Rooterin {{ $service['title'] }} profesional">
                     </div>
                 </div>
             @endforeach

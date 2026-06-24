@@ -72,6 +72,9 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
             <template x-for="(item, index) in filteredItems" :key="index">
                 <div @click="openModal(index)"
+                     x-transition:enter="transition ease-out duration-500"
+                     x-transition:enter-start="opacity-0 scale-95"
+                     x-transition:enter-end="opacity-100 scale-100"
                      class="group relative overflow-hidden rounded-[2rem] sm:rounded-[3rem] shadow-xl shadow-gray-200/50 hover:shadow-primary/30 transition-all duration-700 cursor-pointer bg-gray-100 aspect-square">
                     
                     <img :src="item.img" :alt="item.title" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" loading="lazy">
@@ -80,7 +83,7 @@
                     <div class="absolute inset-0 bg-gradient-to-t from-secondary/95 via-secondary/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-4 sm:p-8">
                         <div class="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
                             <span class="inline-block px-3 py-1 bg-primary/20 backdrop-blur-md rounded-full text-primary text-[8px] sm:text-[10px] font-black uppercase tracking-widest mb-2 sm:mb-3" x-text="item.category"></span>
-                            <h4 class="text-white font-heading font-black text-xs sm:text-xl tracking-tight leading-tight mb-2 sm:mb-4" x-text="item.title"></h4>
+                            <h3 class="text-white font-heading font-black text-xs sm:text-xl tracking-tight leading-tight mb-2 sm:mb-4" x-text="item.title"></h3>
                             
                             <div class="flex items-center gap-2 sm:gap-3 text-white/60 text-[8px] sm:text-[11px] font-bold uppercase tracking-widest group/btn border-t border-white/10 pt-3 sm:pt-4">
                                 <span class="w-6 sm:w-10 h-[1px] bg-white/20 group-hover/btn:w-16 transition-all duration-300"></span>

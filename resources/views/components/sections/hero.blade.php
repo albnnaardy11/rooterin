@@ -1,13 +1,13 @@
 @props([
-    'title' => 'Solusi Pintar <br> <span class="text-primary italic">Pipa Lancar</span> <br> Tanpa Bongkar!',
+    'title' => 'Solusi Pintar <br> <span class="text-primary italic">Saluran Lancar</span> <br> Tanpa Bongkar!',
     'subtitle' => 'Trusted Eco-Plumbing Service',
     'locationTag' => \App\Models\Setting::get('address', 'Jawa & Sumatera'),
-    'description' => 'Melayani dengan sepenuh hati di wilayah <span class="text-white font-bold">Jabodetabek, Bandung, Serang, Lampung, dan Metro.</span> Teknisi ahli, pengerjaan cepat, dan hasil maksimal.',
+    'description' => 'Melayani dengan sepenuh hati di wilayah pulau <span class="text-white font-bold">Jawa, Sumatera, Kalimantan, Dan Sulawesi.</span> Teknisi ahli, pengerjaan cepat, dan hasil maksimal.',
     'ctaText' => 'Pesan Sekarang - Plong!',
     'ctaLink' => 'https://wa.me/' . preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281292059125')) . '?text=Halo%20Kak%2C%20mau%20order%20jasa%20dong',
     'featureImage' => 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=1200',
     'guaranteeTitle' => 'Garansi Kepuasan',
-    'guaranteeDesc' => 'Pipa mampet mampet lagi dalam 7 hari? Kami perbaiki GRATIS tanpa biaya tambahan apapun.'
+    'guaranteeDesc' => 'Pipa mampet mampet lagi dalam 30 hari? Kami perbaiki GRATIS tanpa biaya tambahan apapun.'
 ])
 
 <section {{ $attributes->merge(['class' => 'relative bg-secondary min-h-[85vh] flex items-center overflow-hidden pt-36 sm:pt-44 lg:pt-48 pb-16 sm:pb-32']) }}>
@@ -55,7 +55,7 @@
             <!-- Right Side Visual / Featured Card -->
             <div class="lg:w-2/5 relative animate-fade-in-up delay-150">
                 <div class="relative w-full aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl group border-8 border-white/5">
-                    <img src="{{ asset('images/pages/home/hero1.webp') }}" alt="Technician" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
+                    <img src="{{ asset('images/pages/hero1.webp') }}" alt="Teknisi Rooterin melakukan inspeksi pipa menggunakan drain camera" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000">
                     <div class="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-secondary via-secondary/20 to-transparent">
                         <div class="bg-white/10 backdrop-blur-xl p-6 rounded-3xl border border-white/20 shadow-2xl">
                             <div class="flex items-center gap-3 mb-3">

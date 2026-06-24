@@ -1,5 +1,5 @@
 @props([
-    'title' => 'Saluran Pipa Masih Mampet? <br> <span class="text-accent italic">Plong-kan Sekarang!</span>',
+    'title' => 'Saluran Pipa Masih Mampet? <br class="hidden md:inline"> <span class="text-accent italic">Plong-kan Sekarang!</span>',
     'ctaText' => 'Hubungi Teknisi via WhatsApp',
     'ctaLink' => 'https://wa.me/' . preg_replace('/[^0-9]/', '', \App\Models\Setting::get('whatsapp_number', '6281292059125')) . '?text=Halo%20Kak%2C%20mau%20order%20jasa%20dong',
     'infoTitle' => 'Konsultasi Gratis',
@@ -15,7 +15,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
             <div class="lg:w-3/5 text-center lg:text-left">
-                <h2 class="text-3xl sm:text-5xl lg:text-7xl font-heading font-black text-white leading-[1.1] mb-8 sm:mb-12">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-white leading-[1.1] mb-8 sm:mb-12">
                     {!! $title !!}
                 </h2>
                 <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 sm:gap-10">
