@@ -16,39 +16,93 @@ class AiMultiModelService
     }
 
     /**
-     * UNICORP-GRADE: High-Availability Generation with Integrity Check
+     * UNICORP-GRADE: High-Availability Generation with Integrity Check & Telemetry
      */
-    public function generateWithFailover($prompt, $systemInstruction = '', $format = 'text')
+    public function generateWithFailover($prompt, $systemInstruction = '', $format = 'text', $featureName = 'general')
     {
-        // 1. Primary Attempt (Gemini Pool)
-        $geminiKey = $this->quotaGuard->getActiveKey();
-        if ($geminiKey) {
-            try {
-                $response = $this->callGemini($geminiKey, $prompt, $systemInstruction);
-                if ($response && $this->isValidOutput($response, $format)) {
-                    return $response;
+        // 1. Quota & Routing Check
+        $quota = \App\Models\AiQuota::firstOrCreate(
+            ['feature_name' => $featureName],
+            ['daily_limit' => 100, 'assigned_model' => 'gemini', 'last_reset_date' => today()]
+        );
+
+        if (!$quota->consume()) {
+            Log::warning("[AI-GATEWAY] Quota exceeded for feature: $featureName");
+            return null;
+        }
+
+        // 2. Caching Layer (Memoization)
+        $cacheKey = 'ai_resp_' . md5($prompt . $systemInstruction . $format);
+        if ($cached = \Illuminate\Support\Facades\Cache::get($cacheKey)) {
+            // Log Cache Hit
+            \App\Models\AiLog::create([
+                'feature_name' => $featureName,
+                'model_used' => 'cache',
+                'latency_ms' => 0,
+                'is_success' => true
+            ]);
+            return $cached;
+        }
+
+        $startTime = microtime(true);
+        $response = null;
+        $modelUsed = $quota->assigned_model;
+        $keyUsed = null;
+        $success = false;
+        $errorMsg = null;
+
+        try {
+            if ($modelUsed === 'gemini') {
+                $geminiKey = $this->quotaGuard->getActiveKey();
+                if ($geminiKey) {
+                    $keyUsed = 'gemini_' . $this->quotaGuard->getHealth()['active_index'];
+                    $response = $this->callGemini($geminiKey, $prompt, $systemInstruction);
+                    $success = true;
+                } else {
+                    // Failover to groq
+                    $modelUsed = 'groq';
                 }
-            } catch (\Exception $e) {
-                Log::warning("[SENTINEL-AI] Gemini Node Failure: " . $e->getMessage());
+            }
+
+            if ($modelUsed === 'groq') {
+                $groqKey = \App\Models\Setting::get('groq_api_key', config('ai.groq_key'));
+                if ($groqKey) {
+                    $keyUsed = 'groq_primary';
+                    $response = $this->callGroq($groqKey, $prompt, $systemInstruction);
+                    $success = true;
+                }
+            }
+        } catch (\Exception $e) {
+            $errorMsg = $e->getMessage();
+            Log::error("[AI-GATEWAY] $modelUsed Failure: " . $errorMsg);
+            if ($modelUsed === 'gemini') {
                 $this->quotaGuard->reportFailure();
             }
         }
 
-        // 2. Secondary Attempt (Groq Cloud Fallback if configured)
-        $groqKey = \App\Models\Setting::get('groq_api_key', config('ai.groq_key'));
-        if ($groqKey) {
-            try {
-                $response = $this->callGroq($groqKey, $prompt, $systemInstruction);
-                if ($response && $this->isValidOutput($response, $format)) {
-                    return $response;
-                }
-            } catch (\Exception $e) {
-                Log::error("[SENTINEL-AI] Groq Fallback Failure: " . $e->getMessage());
-            }
+        $latency = round((microtime(true) - $startTime) * 1000);
+
+        // 3. Output Validation & Integrity Check
+        if ($success && $response && $this->isValidOutput($response, $format)) {
+            // Cache successful response for 7 days
+            \Illuminate\Support\Facades\Cache::put($cacheKey, $response, now()->addDays(7));
+        } else {
+            $success = false;
+            $response = null;
+            if (!$errorMsg) $errorMsg = "Output validation failed or empty response";
         }
 
-        Log::emergency("[SENTINEL-AI] CRITICAL: All AI Models Failed. Entering Stasis.");
-        return null;
+        // 4. Telemetry Logging
+        \App\Models\AiLog::create([
+            'feature_name' => $featureName,
+            'model_used' => $modelUsed,
+            'api_key_index' => $keyUsed,
+            'latency_ms' => $latency,
+            'is_success' => $success,
+            'error_message' => substr($errorMsg, 0, 255)
+        ]);
+
+        return $response;
     }
 
     protected function callGemini($key, $prompt, $systemInstruction)
@@ -63,13 +117,13 @@ class AiMultiModelService
             return $response->json('candidates.0.content.parts.0.text');
         }
 
-        throw new \Exception("Gemini HTTP Error: " . $response->status());
+        throw new \Exception("Gemini HTTP Error: " . $response->status() . " " . $response->body());
     }
 
     protected function callGroq($key, $prompt, $systemInstruction)
     {
         $response = Http::timeout(30)->withToken($key)->post("https://api.groq.com/openai/v1/chat/completions", [
-            'model' => 'llama-3.3-70b-versatile', // Llama 3.3 dari Meta (70B parameter, sangat cepat)
+            'model' => 'llama-3.3-70b-versatile',
             'messages' => [
                 ['role' => 'system', 'content' => $systemInstruction],
                 ['role' => 'user', 'content' => $prompt]
@@ -80,7 +134,7 @@ class AiMultiModelService
             return $response->json('choices.0.message.content');
         }
 
-        throw new \Exception("Groq Web HTTP Error: " . $response->status() . " - " . $response->body());
+        throw new \Exception("Groq HTTP Error: " . $response->status() . " - " . $response->body());
     }
 
     /**
@@ -93,7 +147,6 @@ class AiMultiModelService
         if ($format === 'html') {
             libxml_use_internal_errors(true);
             $doc = new DOMDocument();
-            // Wrap in div to ensure single root for check if needed, but loadHTML is usually enough
             $valid = $doc->loadHTML('<?xml encoding="utf-8" ?><div>' . $content . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
             
             if (!$valid || count(libxml_get_errors()) > 0) {

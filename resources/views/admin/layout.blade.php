@@ -100,6 +100,10 @@
                     <i class="ri-radar-box-line text-xl"></i>
                     <span class="text-sm font-bold font-heading">AI Business Analytics</span>
                 </a>
+                <a href="{{ route('admin.ai-gateway.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('admin.ai-gateway.*') ? 'bg-emerald-500/10 text-emerald-500 border-l-4 border-emerald-500' : 'hover:bg-white/5 text-slate-400 hover:text-white' }}">
+                    <i class="ri-brain-line text-xl"></i>
+                    <span class="text-sm font-bold font-heading">AI Command Center</span>
+                </a>
                 <a href="{{ route('admin.messages.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('admin.messages.*') ? 'bg-primary/10 text-primary border-l-4 border-primary' : 'hover:bg-white/5 text-slate-400 hover:text-white' }}">
                     <i class="ri-mail-line text-xl"></i>
                     <span class="text-sm font-bold">Messages</span>

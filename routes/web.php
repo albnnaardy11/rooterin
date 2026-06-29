@@ -174,9 +174,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'audit', 'verified']
         Route::post('/vault/rotate-tokens', [\App\Http\Controllers\Admin\VaultController::class, 'rotateTokens'])->name('vault.rotate');
         Route::get('/vault/forensics/{id}', [\App\Http\Controllers\Admin\VaultController::class, 'viewForensics'])->name('vault.forensics');
         Route::post('/vault/genesis', [\App\Http\Controllers\Admin\VaultController::class, 'genesisRestoration'])->name('vault.genesis');
-        Route::get('/vault/reports/{id}', [\App\Http\Controllers\Admin\VaultController::class, 'viewPostMortem'])->name('vault.reports');
-        
-        // Sentinel Next-Gen Routes
+        Route::get('/vault/post-mortem/{id}', [\App\Http\Controllers\Admin\VaultController::class, 'viewPostMortem'])->name('vault.post-mortem');
+    
+    // AI Gateway / Command Center
+    Route::get('/ai-gateway', [\App\Http\Controllers\Admin\AiGatewayController::class, 'index'])->name('ai-gateway.index');
+    Route::put('/ai-gateway/quota/{id}', [\App\Http\Controllers\Admin\AiGatewayController::class, 'updateQuota'])->name('ai-gateway.quota.update');
+    
+    // Sentinel Next-Gen Routes
         Route::get('/sentinel/challenge', function() { return view('errors.sentinel-challenge'); })->name('sentinel.challenge');
         Route::post('/sentinel/challenge/verify', [\App\Http\Controllers\Admin\SentinelController::class, 'verifyChallenge'])->name('sentinel.challenge.verify');
         Route::get('/sentinel/heatmap', [\App\Http\Controllers\Admin\SentinelController::class, 'getHeatmapData'])->name('sentinel.heatmap');
